@@ -18,3 +18,5 @@
 **4.Core ERP (infrastructure/odoo-docker)**
 - Hệ thống: Odoo 16 (Community)
 - Database: PostgreSQL (chạy bằng Docker Compose)
+
+phin đã tham gia
