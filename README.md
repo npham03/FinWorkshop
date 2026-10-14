@@ -18,5 +18,11 @@
 **4.Core ERP (infrastructure/odoo-docker)**
 - Hệ thống: Odoo 16 (Community)
 - Database: PostgreSQL (chạy bằng Docker Compose)
+- **Thông tin Dev Local:**
+  - URL: `http://localhost:8069`
+  - Database: `finworkshop_db`
+  - Email: `admin@fin.com`
+  - Password: `admin`
+  - Master Password: `zwkf-33ca-fnjz`
 
 phin đã tham gia
