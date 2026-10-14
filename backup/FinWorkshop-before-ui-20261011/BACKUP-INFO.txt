@@ -1,0 +1,4 @@
+﻿Snapshot of tracked project files before the initial web UI implementation.
+Source commit: 
+63e0fa7ef5c451cc5345bdb688f2fda04ef650f6
+Restore by copying the contents of this folder back to the repository root.
