@@ -1,74 +1,72 @@
-# FinWorkshop API Contract
+# FinTax Middleware API Contract
 
-## 1. Mock Tax Authority API (`http://localhost:4000`)
+Base URL mặc định: `http://localhost:3001/api`. Frontend chỉ gọi middleware. Trừ health check và login, endpoint yêu cầu `Authorization: Bearer <JWT>`.
 
-### 1.1 Tra cứu trạng thái Doanh nghiệp / Mã số thuế
-- **Endpoint:** `GET /api/tax/check-mst/:mst`
-- **Mô tả:** Tra cứu thông tin người nộp thuế, phát hiện doanh nghiệp ngừng hoạt động, công ty ma.
-- **Query / Params:** `mst` (10 hoặc 13 chữ số)
-- **Response 200 (Thành công - Hoạt động bình thường):**
-  ```json
-  {
-    "success": true,
-    "data": {
-      "taxCode": "0101234567",
-      "name": "CÔNG TY TNHH CƠ KHÍ & THÉP HÀ NỘI",
-      "status": "ACTIVE",
-      "statusDescription": "NNT đang hoạt động (đã được cấp GCN ĐKT)",
-      "address": "Số 123 Đường Giải Phóng, Phường Đồng Tâm, Quận Hai Bà Trưng, Hà Nội",
-      "legalRepresentative": "Nguyễn Văn Hùng",
-      "taxOffice": "Chi cục Thuế Quận Hai Bà Trưng"
-    },
-    "isRisky": false
-  }
-  ```
-- **Response 200 (Cảnh báo rủi ro - Công ty ngừng hoạt động):**
-  ```json
-  {
-    "success": true,
-    "data": {
-      "taxCode": "0309999999",
-      "name": "CÔNG TY TNHH THƯƠNG MẠI & DỊCH VỤ MA ÁNH DƯƠNG",
-      "status": "SUSPENDED",
-      "statusDescription": "NNT ngừng hoạt động nhưng chưa hoàn thành thủ tục đóng MST (Bỏ địa chỉ kinh doanh)"
-    },
-    "isRisky": true
-  }
-  ```
+## Envelope và lỗi
 
-### 1.2 Xin cấp Mã cơ quan thuế cho Hóa đơn điện tử
-- **Endpoint:** `POST /api/tax/invoice/issue-code`
-- **Mô tả:** Middleware gửi dữ liệu hóa đơn để cơ quan thuế cấp mã trước khi lưu hóa đơn chính thức.
-- **Request Body:**
-  ```json
-  {
-    "sellerTaxCode": "0101234567",
-    "buyerTaxCode": "0317894561",
-    "invoiceNumber": "HD0001",
-    "invoiceDate": "2026-10-14",
-    "totalAmount": 15000000
-  }
-  ```
-- **Response 201 (Cấp mã thành công):**
-  ```json
-  {
-    "success": true,
-    "message": "Tổng cục Thuế: Cấp mã hóa đơn thành công",
-    "taxAuthorityCode": "C26-0708-7527A869",
-    "issuedAt": "2026-10-14T06:43:28.568Z",
-    "status": "APPROVED"
-  }
-  ```
-- **Response 422 (Từ chối cấp mã do vi phạm rủi ro thuế):**
-  ```json
-  {
-    "success": false,
-    "errorCode": "TAX_RISK_SELLER_SUSPENDED",
-    "message": "Từ chối cấp mã: Bên bán có trạng thái NNT ngừng hoạt động nhưng chưa hoàn thành thủ tục đóng MST!"
-  }
-  ```
+- GET danh sách trả về mảng JSON; GET chi tiết chưa triển khai.
+- POST/PUT/action trả về object JSON.
+- Lỗi trả `{ "error": "Thông báo tiếng Việt" }` cùng HTTP status phù hợp (400/401/403/404/409/415/500).
+- Danh sách hỗ trợ query `q` và `status`.
 
----
+## Endpoints
 
-## 2. Middleware API (`http://localhost:5000`) *(Đang hoàn thiện)*
-*(Sẽ bổ sung các endpoints cho Auth, CashFlow, Quotation, E-Invoice, Reconciliation và Dashboard)*
+| Method | Path | Quyền | Mô tả |
+| --- | --- | --- | --- |
+| GET | `/health` | Công khai | Kiểm tra middleware và MySQL |
+| POST | `/auth/login` | Công khai | Đăng nhập, trả JWT và user |
+| GET | `/auth/me` | Người dùng | Lấy user trong phiên hiện tại |
+| POST | `/auth/password` | Người dùng đã đăng nhập | Đổi mật khẩu phiên hiện tại |
+| GET/POST | `/users` | OWNER | Danh sách/tạo người dùng |
+| PATCH | `/users/:id/status` | OWNER | Mở/khóa tài khoản |
+| GET/PUT | `/role-permissions` và `/role-permissions/:role` | OWNER | Xem và lưu quyền theo vai trò |
+| GET | `/dashboard` | OWNER, ACCOUNTANT | KPI, biểu đồ, cảnh báo và bản ghi gần đây |
+| POST | `/transfers` | OWNER, ACCOUNTANT | Tạo cặp giao dịch chuyển tiền cân bằng giữa hai tài khoản |
+| GET | `/:entity` | Theo phân hệ và quyền `read` | Lấy danh sách bản ghi được phép xem |
+| POST | `/:entity` | Theo phân hệ và quyền `create` | Tạo bản ghi |
+| PUT | `/:entity/:id` | Theo phân hệ và quyền `update` | Sửa bản ghi; kỳ khóa không cho sửa trực tiếp |
+| DELETE | `/:entity/:id` | OWNER | Hủy mềm, không xóa cứng |
+| POST | `/:entity/:id/actions/:action` | Theo role/action | Gửi duyệt, duyệt, phân loại, mô phỏng mã, đối soát, khóa kỳ… |
+| POST | `/import/transactions/preview` | OWNER, ACCOUNTANT | Upload sao kê CSV/XLS/XLSX, chuẩn hóa và phát hiện trùng |
+| POST | `/import/transactions/:importId/commit` | OWNER, ACCOUNTANT | Ghi các dòng hợp lệ từ preview vào database |
+| POST | `/files` | Người dùng | Upload hóa đơn/chứng từ tối đa 15MB |
+| GET | `/files/:id` | Người dùng | Tải tệp đã upload |
+| GET | `/integrations/status` | Người dùng | Odoo, Mock Tax API và chế độ dữ liệu |
+| GET | `/integrations/odoo/status` | Người dùng | Trạng thái XML-RPC Odoo |
+| GET | `/integrations/odoo/queue` | OWNER | 100 tác vụ đồng bộ Odoo gần nhất |
+| POST | `/integrations/odoo/enqueue-unsynced` | OWNER | Xếp danh mục hiện có chưa đồng bộ vào hàng đợi; bỏ qua bản ghi đang chờ hoặc đã đồng bộ |
+| POST | `/integrations/odoo/sync-pending` | OWNER | Gửi tối đa 50 tác vụ đang chờ/thử lại sang Odoo qua XML-RPC |
+| GET | `/audit-logs` | OWNER | Nhật ký gần nhất |
+
+Entities hiện có: `branches`, `cash-accounts`, `customers`, `suppliers`, `materials`, `products`, `boms`, `quotations`, `production-orders`, `stock-movements`, `labor-logs`, `transactions`, `invoices`, `payments`, `payment-allocations`, `reconciliations`, `alerts`, `classification-rules`, `tax-rules`, `tax-periods`.
+
+Các action tiêu biểu: quotation `submit-for-approval`, `approve`, `reject`; invoice `simulate-code`; transaction `classify`; alert `resolve`; production-order `start`, `complete`; reconciliation `confirm`; tax-period `lock`, `unlock`.
+
+## Mock Tax API
+
+Base URL: `http://localhost:4000`. Đây là API mô phỏng; không kết nối cơ quan thuế và không có danh bạ doanh nghiệp hoặc hóa đơn mẫu được nạp sẵn.
+
+| Method | Path | Mô tả |
+| --- | --- | --- |
+| GET | `/health` | Kiểm tra dịch vụ |
+| GET | `/api/tax/check-mst/:mst` | Kiểm tra định dạng; MST hợp lệ trả `UNVERIFIED`, không khẳng định trạng thái doanh nghiệp |
+| POST | `/api/tax/invoice/issue-code` | Tạo mã hóa đơn mô phỏng |
+| GET | `/api/tax/invoice/verify/:code` | Tra cứu mã được tạo trong phiên hiện tại |
+| GET | `/api/tax/history` | Lịch sử mã trong bộ nhớ của phiên hiện tại |
+| POST | `/api/v1/invoices/issue` | Endpoint tương thích để middleware yêu cầu mã mô phỏng |
+
+Các mã và lịch sử do API này trả về chỉ phục vụ trình diễn; lịch sử bị xóa khi khởi động lại dịch vụ.
+
+Odoo đồng bộ `customers` và `suppliers` vào `res.partner`, `products` và `materials` vào `product.template`. Cần cài module **Product** trong database Odoo. Khóa ghép là mã số thuế cho đối tác, mã nội bộ cho sản phẩm/vật tư; nếu thiếu khóa thì dùng tên. Hóa đơn, bút toán kế toán, thanh toán và tồn kho chưa nằm trong mapping.
+
+Worker của middleware tự xử lý các tác vụ `PENDING` theo lô nền; lỗi kết nối chuyển sang `PENDING_RETRY`, không lặp yêu cầu liên tục. OWNER có thể thử lại từ màn hình Tích hợp hoặc gọi endpoint đồng bộ thủ công.
+
+## Quyền mặc định
+
+- `OWNER`: toàn quyền nghiệp vụ và quản trị.
+- `ACCOUNTANT`: nhập thu chi, danh mục, báo giá nháp, hóa đơn, công nợ, import và đối soát; không quản trị người dùng, duyệt báo giá, cấu hình TaxRules hoặc khóa kỳ.
+- `WORKSHOP`: xem lệnh được giao, ghi luân chuyển vật tư/giờ công và cập nhật tiến độ; API giới hạn dữ liệu theo lệnh phân công.
+
+Quyền cần được kiểm tra tại API; ẩn menu trên frontend không thay thế phân quyền backend.
+
+API kiểm tra quyền phân hệ và hành động read/create/update ở backend. Giao diện Workshop dùng riêng quyền record-movement và record-labor để ghi vật tư và giờ công.

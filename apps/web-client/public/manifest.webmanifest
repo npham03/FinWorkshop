@@ -1,0 +1,12 @@
+{
+  "name": "FinTax Workshop",
+  "short_name": "FinTax",
+  "description": "Không gian thao tác sản xuất và kho cho FinTax Automation",
+  "start_url": "/workshop",
+  "display": "standalone",
+  "background_color": "#f7f7f8",
+  "theme_color": "#a91517",
+  "icons": [
+    { "src": "/fintax-icon.png", "sizes": "any", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

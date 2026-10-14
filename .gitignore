@@ -1,5 +1,10 @@
-node_modules/
+﻿node_modules/
+dist/
 .env
-.DS_Store
-__pycache__/
-*.log
+.env.*.local
+apps/middleware-api/.env
+apps/mock-tax-api/.env
+apps/web-client/.env.local
+apps/middleware-api/uploads/*
+!apps/middleware-api/uploads/.gitkeep
+*.tsbuildinfo

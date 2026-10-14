@@ -1,0 +1,22 @@
+{
+  "name": "fintax-automation",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/web-client",
+    "apps/middleware-api",
+    "apps/mock-tax-api"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n api,tax,web -c blue,magenta,green \"npm:dev:api\" \"npm:dev:tax\" \"npm:dev:web\"",
+    "dev:web": "npm --workspace apps/web-client run dev -- --host 0.0.0.0",
+    "dev:api": "npm --workspace apps/middleware-api run dev",
+    "dev:tax": "npm --workspace apps/mock-tax-api run dev",
+    "build": "npm --workspace apps/web-client run build",
+    "start:api": "npm --workspace apps/middleware-api start",
+    "start:tax": "npm --workspace apps/mock-tax-api start"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

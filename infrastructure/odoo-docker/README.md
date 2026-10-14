@@ -7,8 +7,8 @@
 | **URL Web Odoo** | `http://localhost:8069` | Giao diện Odoo |
 | **Database Name** | `finworkshop_db` | Database chính của dự án |
 | **Email đăng nhập** | `admin@fin.com` | Tài khoản quản trị |
-| **Mật khẩu đăng nhập** | `admin` | Mật khẩu tài khoản quản trị |
-| **Master Password** | `zwkf-33ca-fnjz` | Dùng để backup, restore, tạo DB mới |
+| **Mật khẩu đăng nhập** | `FinTax@2026` | Tài khoản local đã khởi tạo cho đồ án |
+| **Master Password** | `admin` | Giá trị mặc định của ảnh Odoo trong môi trường local |
 
 ---
 
@@ -21,9 +21,11 @@ const ODOO_CONFIG = {
   url: process.env.ODOO_URL || 'http://localhost:8069',
   db: process.env.ODOO_DB || 'finworkshop_db',
   username: process.env.ODOO_USERNAME || 'admin@fin.com',
-  password: process.env.ODOO_PASSWORD || 'admin',
+  password: process.env.ODOO_PASSWORD || 'FinTax@2026',
 };
 ```
+
+Chỉ dùng các giá trị này cho môi trường Docker local của đồ án. Khi tạo database mới, thay đổi master password mặc định trước khi mở cổng Odoo ra ngoài máy local.
 
 ---
 
