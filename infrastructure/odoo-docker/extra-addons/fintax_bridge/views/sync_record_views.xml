@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_fintax_sync_record_tree" model="ir.ui.view">
+        <field name="name">fintax.sync.record.tree</field>
+        <field name="model">fintax.sync.record</field>
+        <field name="arch" type="xml">
+            <tree string="Dữ liệu FinTax" create="0" edit="0" delete="0">
+                <field name="entity"/>
+                <field name="source_id" optional="hide"/>
+                <field name="name"/>
+                <field name="reference"/>
+                <field name="status"/>
+                <field name="counterparty" optional="hide"/>
+                <field name="event_date"/>
+                <field name="amount" sum="Tổng"/>
+                <field name="synced_at" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_fintax_sync_record_form" model="ir.ui.view">
+        <field name="name">fintax.sync.record.form</field>
+        <field name="model">fintax.sync.record</field>
+        <field name="arch" type="xml">
+            <form string="Chi tiết dữ liệu FinTax" create="0" edit="0" delete="0">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Nguồn FinTax">
+                            <field name="entity"/>
+                            <field name="source_id"/>
+                            <field name="reference"/>
+                            <field name="status"/>
+                        </group>
+                        <group string="Thông tin nghiệp vụ">
+                            <field name="counterparty"/>
+                            <field name="event_date"/>
+                            <field name="amount"/>
+                            <field name="source_created_at"/>
+                            <field name="synced_at"/>
+                        </group>
+                    </group>
+                    <group string="Bản ghi chuẩn trong Odoo" col="4">
+                        <field name="native_model"/>
+                        <field name="native_id"/>
+                    </group>
+                    <group string="Tệp gốc" attrs="{'invisible': [('file_filename', '=', False)]}">
+                        <field name="file_content" filename="file_filename" widget="binary"/>
+                        <field name="file_filename" invisible="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Toàn bộ dữ liệu FinTax">
+                            <field name="payload_json" nolabel="1" widget="text"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_fintax_sync_record_search" model="ir.ui.view">
+        <field name="name">fintax.sync.record.search</field>
+        <field name="model">fintax.sync.record</field>
+        <field name="arch" type="xml">
+            <search string="Tìm dữ liệu FinTax">
+                <field name="name"/>
+                <field name="reference"/>
+                <field name="source_id"/>
+                <field name="counterparty"/>
+                <field name="entity"/>
+                <field name="status"/>
+                <filter name="with_status" string="Có trạng thái" domain="[('status', '!=', False)]"/>
+                <group expand="0" string="Nhóm theo">
+                    <filter name="group_entity" string="Phân hệ" context="{'group_by': 'entity'}"/>
+                    <filter name="group_status" string="Trạng thái" context="{'group_by': 'status'}"/>
+                    <filter name="group_date" string="Ngày nghiệp vụ" context="{'group_by': 'event_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_fintax_all" model="ir.actions.act_window">
+        <field name="name">Tất cả dữ liệu FinTax</field>
+        <field name="res_model">fintax.sync.record</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_fintax_sync_record_search"/>
+        <field name="help" type="html"><p class="o_view_nocontent_smiling_face">Dữ liệu FinTax sẽ xuất hiện tại đây sau khi đồng bộ.</p></field>
+    </record>
+
+    <record id="action_fintax_branches" model="ir.actions.act_window"><field name="name">Chi nhánh</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'branches')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_cash_accounts" model="ir.actions.act_window"><field name="name">Tài khoản tiền</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'cash-accounts')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_customers" model="ir.actions.act_window"><field name="name">Khách hàng</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'customers')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_suppliers" model="ir.actions.act_window"><field name="name">Nhà cung cấp</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'suppliers')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_materials" model="ir.actions.act_window"><field name="name">Vật tư</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'materials')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_products" model="ir.actions.act_window"><field name="name">Sản phẩm</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'products')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_boms" model="ir.actions.act_window"><field name="name">Định mức BOM</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'boms')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_quotations" model="ir.actions.act_window"><field name="name">Báo giá</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'quotations')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_production_orders" model="ir.actions.act_window"><field name="name">Lệnh sản xuất</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'production-orders')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_stock_movements" model="ir.actions.act_window"><field name="name">Phiếu kho</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'stock-movements')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_labor_logs" model="ir.actions.act_window"><field name="name">Nhật ký nhân công</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'labor-logs')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_transactions" model="ir.actions.act_window"><field name="name">Giao dịch tiền</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'transactions')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_invoices" model="ir.actions.act_window"><field name="name">Hóa đơn</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'invoices')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_payments" model="ir.actions.act_window"><field name="name">Thanh toán</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'payments')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_payment_allocations" model="ir.actions.act_window"><field name="name">Phân bổ thanh toán</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'payment-allocations')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_reconciliations" model="ir.actions.act_window"><field name="name">Đối soát</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'reconciliations')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_alerts" model="ir.actions.act_window"><field name="name">Cảnh báo</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'alerts')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_classification_rules" model="ir.actions.act_window"><field name="name">Quy tắc phân loại</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'classification-rules')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_tax_rules" model="ir.actions.act_window"><field name="name">Quy tắc thuế</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'tax-rules')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_tax_periods" model="ir.actions.act_window"><field name="name">Kỳ thuế</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'tax-periods')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_users" model="ir.actions.act_window"><field name="name">Người dùng FinTax</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'users')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_permissions" model="ir.actions.act_window"><field name="name">Phân quyền FinTax</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'role-permissions')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_audit_logs" model="ir.actions.act_window"><field name="name">Nhật ký kiểm toán</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'audit-logs')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+    <record id="action_fintax_files" model="ir.actions.act_window"><field name="name">Tệp đính kèm</field><field name="res_model">fintax.sync.record</field><field name="view_mode">tree,form</field><field name="domain">[('entity', '=', 'file-assets')]</field><field name="search_view_id" ref="view_fintax_sync_record_search"/></record>
+
+    <menuitem id="menu_fintax_bridge_root" name="FinTax" sequence="5" groups="base.group_system"/>
+    <menuitem id="menu_fintax_all" name="Tất cả dữ liệu" parent="menu_fintax_bridge_root" action="action_fintax_all" sequence="1" groups="base.group_system"/>
+    <menuitem id="menu_fintax_catalog" name="Danh mục" parent="menu_fintax_bridge_root" sequence="10" groups="base.group_system"/>
+    <menuitem id="menu_fintax_branches" name="Chi nhánh" parent="menu_fintax_catalog" action="action_fintax_branches" sequence="1" groups="base.group_system"/>
+    <menuitem id="menu_fintax_cash_accounts" name="Tài khoản tiền" parent="menu_fintax_catalog" action="action_fintax_cash_accounts" sequence="2" groups="base.group_system"/>
+    <menuitem id="menu_fintax_customers" name="Khách hàng" parent="menu_fintax_catalog" action="action_fintax_customers" sequence="3" groups="base.group_system"/>
+    <menuitem id="menu_fintax_suppliers" name="Nhà cung cấp" parent="menu_fintax_catalog" action="action_fintax_suppliers" sequence="4" groups="base.group_system"/>
+    <menuitem id="menu_fintax_products" name="Sản phẩm" parent="menu_fintax_catalog" action="action_fintax_products" sequence="5" groups="base.group_system"/>
+    <menuitem id="menu_fintax_materials" name="Vật tư" parent="menu_fintax_catalog" action="action_fintax_materials" sequence="6" groups="base.group_system"/>
+    <menuitem id="menu_fintax_boms" name="Định mức BOM" parent="menu_fintax_catalog" action="action_fintax_boms" sequence="7" groups="base.group_system"/>
+    <menuitem id="menu_fintax_operations" name="Vận hành" parent="menu_fintax_bridge_root" sequence="20" groups="base.group_system"/>
+    <menuitem id="menu_fintax_quotations" name="Báo giá" parent="menu_fintax_operations" action="action_fintax_quotations" sequence="1" groups="base.group_system"/>
+    <menuitem id="menu_fintax_production_orders" name="Lệnh sản xuất" parent="menu_fintax_operations" action="action_fintax_production_orders" sequence="2" groups="base.group_system"/>
+    <menuitem id="menu_fintax_stock_movements" name="Phiếu kho" parent="menu_fintax_operations" action="action_fintax_stock_movements" sequence="3" groups="base.group_system"/>
+    <menuitem id="menu_fintax_labor_logs" name="Nhật ký nhân công" parent="menu_fintax_operations" action="action_fintax_labor_logs" sequence="4" groups="base.group_system"/>
+    <menuitem id="menu_fintax_finance" name="Tài chính" parent="menu_fintax_bridge_root" sequence="30" groups="base.group_system"/>
+    <menuitem id="menu_fintax_transactions" name="Giao dịch tiền" parent="menu_fintax_finance" action="action_fintax_transactions" sequence="1" groups="base.group_system"/>
+    <menuitem id="menu_fintax_invoices" name="Hóa đơn" parent="menu_fintax_finance" action="action_fintax_invoices" sequence="2" groups="base.group_system"/>
+    <menuitem id="menu_fintax_payments" name="Thanh toán" parent="menu_fintax_finance" action="action_fintax_payments" sequence="3" groups="base.group_system"/>
+    <menuitem id="menu_fintax_payment_allocations" name="Phân bổ thanh toán" parent="menu_fintax_finance" action="action_fintax_payment_allocations" sequence="4" groups="base.group_system"/>
+    <menuitem id="menu_fintax_reconciliations" name="Đối soát" parent="menu_fintax_finance" action="action_fintax_reconciliations" sequence="5" groups="base.group_system"/>
+    <menuitem id="menu_fintax_tax" name="Thuế &amp; kiểm soát" parent="menu_fintax_bridge_root" sequence="40" groups="base.group_system"/>
+    <menuitem id="menu_fintax_tax_periods" name="Kỳ thuế" parent="menu_fintax_tax" action="action_fintax_tax_periods" sequence="1" groups="base.group_system"/>
+    <menuitem id="menu_fintax_tax_rules" name="Quy tắc thuế" parent="menu_fintax_tax" action="action_fintax_tax_rules" sequence="2" groups="base.group_system"/>
+    <menuitem id="menu_fintax_classification_rules" name="Quy tắc phân loại" parent="menu_fintax_tax" action="action_fintax_classification_rules" sequence="3" groups="base.group_system"/>
+    <menuitem id="menu_fintax_alerts" name="Cảnh báo" parent="menu_fintax_tax" action="action_fintax_alerts" sequence="4" groups="base.group_system"/>
+    <menuitem id="menu_fintax_admin" name="Quản trị &amp; nhật ký" parent="menu_fintax_bridge_root" sequence="50" groups="base.group_system"/>
+    <menuitem id="menu_fintax_users" name="Người dùng FinTax" parent="menu_fintax_admin" action="action_fintax_users" sequence="1" groups="base.group_system"/>
+    <menuitem id="menu_fintax_permissions" name="Phân quyền FinTax" parent="menu_fintax_admin" action="action_fintax_permissions" sequence="2" groups="base.group_system"/>
+    <menuitem id="menu_fintax_audit_logs" name="Nhật ký kiểm toán" parent="menu_fintax_admin" action="action_fintax_audit_logs" sequence="3" groups="base.group_system"/>
+    <menuitem id="menu_fintax_files" name="Tệp đính kèm" parent="menu_fintax_admin" action="action_fintax_files" sequence="4" groups="base.group_system"/>
+</odoo>

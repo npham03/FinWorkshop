@@ -9,10 +9,10 @@ import multer from 'multer';
 import * as XLSX from 'xlsx';
 import axios from 'axios';
 import { randomUUID } from 'node:crypto';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { initDb, getPool, listRecords, getRecord, getRecordForUpdate, saveRecord, createAudit, decodeData } from './db.js';
+import { initDb, getPool, listRecords, getRecord, getRecordForUpdate, saveRecord, createAudit, decodeData, enqueueOdooSync, odooSyncEntities } from './db.js';
 import { seedDemoData } from './seed.js';
 import { executeOdoo, odooStatus } from './odoo.js';
 
@@ -190,32 +190,112 @@ async function syncSystemAlert(alertCode, condition, details) {
 }
 async function syncOdooJob(job) {
   const data = decodeData(job.payload);
-  let model; let values;
+  if (!odooSyncEntities.includes(job.entity)) {
+    const error = new Error(`No Odoo mirror mapping for ${job.entity}.`);
+    error.code = 'PENDING_MAPPING';
+    throw error;
+  }
+
+  const sourceId = String(job.record_id);
+  const sourceKey = `${job.entity}:${sourceId}`;
+  const pick = (...values) => values.find((value) => value !== undefined && value !== null && String(value).trim() !== '');
+  const dateValue = pick(data.date, data.issueDate, data.dueDate, data.createdAt, data.created_at);
+  const eventDate = /^\d{4}-\d{2}-\d{2}/.test(String(dateValue || '')) ? String(dateValue).slice(0, 10) : false;
+  const name = String(pick(data.name, data.title, data.code, data.alertCode, data.original_name, data.originalName, data.description, data.email, data.action, data.role, `${job.entity} ${sourceId}`));
+  const reference = pick(data.code, data.reference, data.alertCode, data.externalReference, data.file_id, data.id);
+  const counterparty = pick(data.counterparty, data.customerName, data.supplierName, data.partnerName, data.employeeName, data.accountName, data.materialName, data.productName, data.actorName);
+  const amount = finiteAmount(pick(data.total, data.amount, data.balance, data.allocatedAmount, data.costEstimate, data.openingBalance, data.materialCost, data.unitCost, 0));
+  const mirrorValues = {
+    name,
+    entity: job.entity,
+    source_id: sourceId,
+    source_key: sourceKey,
+    reference: reference ? String(reference) : false,
+    status: pick(data.status, data.paymentStatus, data.role, data.active === undefined ? '' : (data.active ? 'ACTIVE' : 'INACTIVE')) || false,
+    event_date: eventDate,
+    amount,
+    counterparty: counterparty ? String(counterparty) : false,
+    payload_json: JSON.stringify(data, null, 2),
+    source_created_at: String(pick(data.createdAt, data.created_at, '') || ''),
+    synced_at: new Date().toISOString().replace('T', ' ').slice(0, 19),
+  };
+
+  let nativeModel = '';
+  let nativeId = 0;
   if (job.entity === 'customers' || job.entity === 'suppliers') {
-    model = 'res.partner';
-    values = { name: data.name, vat: data.taxCode || false, phone: data.phone || false, email: data.email || false, street: data.address || false };
+    nativeModel = 'res.partner';
+    const values = {
+      name: String(pick(data.name, data.email, `FinTax ${sourceId}`)),
+      fintax_source_key: sourceKey,
+      ref: `FTX:${sourceKey}`,
+      vat: data.taxCode || false,
+      phone: data.phone || false,
+      email: data.email || false,
+      street: data.address || false,
+    };
+    const found = await executeOdoo(nativeModel, 'search_read', [[['fintax_source_key', '=', sourceKey]]], { fields: ['id'], limit: 1 });
+    nativeId = found?.length ? Number(found[0].id) : Number(await executeOdoo(nativeModel, 'create', [values]));
+    if (found?.length) await executeOdoo(nativeModel, 'write', [[nativeId], values]);
+  } else if (job.entity === 'users') {
+    nativeModel = 'res.partner';
+    const values = {
+      name: String(pick(data.name, data.email, `FinTax user ${sourceId}`)),
+      fintax_source_key: sourceKey,
+      ref: `FTX:${sourceKey}`,
+      email: data.email || false,
+      active: data.active !== false,
+      company_type: 'person',
+    };
+    const found = await executeOdoo(nativeModel, 'search_read', [[['fintax_source_key', '=', sourceKey]]], { fields: ['id'], limit: 1 });
+    nativeId = found?.length ? Number(found[0].id) : Number(await executeOdoo(nativeModel, 'create', [values]));
+    if (found?.length) await executeOdoo(nativeModel, 'write', [[nativeId], values]);
   } else if (job.entity === 'products' || job.entity === 'materials') {
-    model = 'product.template';
-    values = { name: data.name, default_code: data.code || false, list_price: finiteAmount(data.price), standard_price: finiteAmount(data.cost ?? data.unitCost), type: 'consu' };
-  } else {
-    const error = new Error(`Chưa có mapping Odoo an toàn cho entity ${job.entity}.`); error.code = 'PENDING_MAPPING'; throw error;
+    nativeModel = 'product.template';
+    const values = {
+      name: String(pick(data.name, data.code, `FinTax ${sourceId}`)),
+      fintax_source_key: sourceKey,
+      default_code: data.code || false,
+      list_price: finiteAmount(data.price ?? data.suggestedPrice),
+      standard_price: finiteAmount(data.cost ?? data.unitCost ?? data.estimatedUnitCost),
+      type: 'consu',
+    };
+    const found = await executeOdoo(nativeModel, 'search_read', [[['fintax_source_key', '=', sourceKey]]], { fields: ['id'], limit: 1 });
+    nativeId = found?.length ? Number(found[0].id) : Number(await executeOdoo(nativeModel, 'create', [values]));
+    if (found?.length) await executeOdoo(nativeModel, 'write', [[nativeId], values]);
   }
-  let odooId = Number(data.odooId || 0);
-  if (!odooId) {
-    const domain = model === 'res.partner' && data.taxCode
-      ? [[['vat', '=', data.taxCode]]]
-      : model === 'product.template' && data.code
-        ? [[['default_code', '=', data.code]]]
-        : [[['name', '=', data.name]]];
-    const found = await executeOdoo(model, 'search_read', domain, { fields: ['id'], limit: 1 });
-    if (found?.length) odooId = Number(found[0].id);
+
+  if (nativeModel) {
+    mirrorValues.native_model = nativeModel;
+    mirrorValues.native_id = nativeId;
   }
-  if (odooId) await executeOdoo(model, 'write', [[odooId], values]);
-  else odooId = Number(await executeOdoo(model, 'create', [values]));
+  const foundMirror = await executeOdoo('fintax.sync.record', 'search_read', [[['source_key', '=', sourceKey]]], { fields: ['id'], limit: 1 });
+  const mirrorId = foundMirror?.length
+    ? Number(foundMirror[0].id)
+    : Number(await executeOdoo('fintax.sync.record', 'create', [mirrorValues]));
+  if (foundMirror?.length) await executeOdoo('fintax.sync.record', 'write', [[mirrorId], mirrorValues]);
+
+  if (job.entity === 'file-assets') {
+    const storedName = path.basename(String(pick(data.stored_name, data.storedName, sourceId)));
+    const baseDir = path.resolve(uploadDir);
+    const filePath = path.resolve(baseDir, storedName);
+    if (!filePath.startsWith(`${baseDir}${path.sep}`)) throw new Error('Invalid attachment path.');
+    const content = await readFile(filePath);
+    await executeOdoo('fintax.sync.record', 'write', [[mirrorId], {
+      file_content: content.toString('base64'),
+      file_filename: String(pick(data.original_name, data.originalName, storedName)),
+      synced_at: new Date().toISOString().replace('T', ' ').slice(0, 19),
+    }]);
+  }
+
   const current = await getRecord(job.entity, job.record_id);
-  if (current) await getPool().query('UPDATE records SET data = CAST(? AS JSON), sync_status = ? WHERE entity = ? AND record_id = ?', [JSON.stringify({ ...current, odooId }), 'SYNCED', job.entity, job.record_id]);
+  if (current) {
+    const updated = { ...current, odooMirrorId: mirrorId };
+    if (nativeId) updated.odooId = nativeId;
+    else delete updated.odooId;
+    await getPool().query('UPDATE records SET data = CAST(? AS JSON), sync_status = ? WHERE entity = ? AND record_id = ?', [JSON.stringify(updated), 'SYNCED', job.entity, job.record_id]);
+  }
   await getPool().query('UPDATE odoo_sync_jobs SET status = ?, last_error = NULL, attempts = attempts + 1 WHERE id = ?', ['SYNCED', job.id]);
-  return { id: job.id, entity: job.entity, recordId: job.record_id, status: 'SYNCED', odooId };
+  return { id: job.id, entity: job.entity, recordId: job.record_id, status: 'SYNCED', odooMirrorId: mirrorId, nativeModel: nativeModel || null, nativeId: nativeId || null };
 }
 
 let odooWorkerRunning = false;
@@ -243,6 +323,51 @@ async function syncOdooJobs({ statuses, limit = 50 }) {
     }
   }
   return { attempted: results.length, results };
+}
+
+async function enqueueFullOdooBackfill() {
+  const db = getPool();
+  const standaloneEntities = ['users', 'role-permissions', 'audit-logs', 'file-assets'];
+  const recordEntities = odooSyncEntities.filter((entity) => !standaloneEntities.includes(entity));
+  const counts = {};
+  let queued = 0;
+  const count = (entity) => { counts[entity] = (counts[entity] || 0) + 1; queued += 1; };
+
+  const [records] = await db.query(
+    'SELECT entity, record_id, data, sync_status FROM records WHERE entity IN (?) AND sync_status <> ? ORDER BY entity, record_id',
+    [recordEntities, 'DEMO_SEED'],
+  );
+  for (const record of records) {
+    const payload = decodeData(record.data);
+    if (await enqueueOdooSync(record.entity, record.record_id, payload, db)) {
+      await db.query('UPDATE records SET sync_status = ? WHERE entity = ? AND record_id = ?', ['PENDING_ODOO', record.entity, record.record_id]);
+      count(record.entity);
+    }
+  }
+
+  const [users] = await db.query('SELECT id, email, full_name, role, active, created_at, updated_at FROM users ORDER BY created_at, id');
+  for (const user of users) {
+    if (await enqueueOdooSync('users', user.id, { id: user.id, email: user.email, name: user.full_name, role: user.role, active: Boolean(user.active), createdAt: user.created_at, updatedAt: user.updated_at }, db)) count('users');
+  }
+
+  const [permissions] = await db.query('SELECT role, entities, actions, updated_at FROM role_permissions ORDER BY role');
+  for (const permission of permissions) {
+    if (await enqueueOdooSync('role-permissions', permission.role, { id: permission.role, role: permission.role, entities: decodeData(permission.entities), actions: decodeData(permission.actions), updatedAt: permission.updated_at }, db)) count('role-permissions');
+  }
+
+  const [audits] = await db.query('SELECT id, actor_id, actor_name, action, entity, record_id, before_data, after_data, created_at FROM audit_logs ORDER BY id');
+  for (const row of audits) {
+    const payload = { id: String(row.id), actorId: row.actor_id, actorName: row.actor_name, action: row.action, entity: row.entity, recordId: row.record_id, beforeData: row.before_data ? decodeData(row.before_data) : null, afterData: row.after_data ? decodeData(row.after_data) : null, createdAt: row.created_at };
+    if (await enqueueOdooSync('audit-logs', payload.id, payload, db)) count('audit-logs');
+  }
+
+  const [files] = await db.query('SELECT file_id, stored_name, original_name, mime_type, size_bytes, owner_id, created_at FROM file_assets ORDER BY created_at, file_id');
+  for (const file of files) {
+    const payload = { id: file.file_id, file_id: file.file_id, stored_name: file.stored_name, original_name: file.original_name, mime_type: file.mime_type, size_bytes: Number(file.size_bytes), owner_id: file.owner_id, created_at: file.created_at };
+    if (await enqueueOdooSync('file-assets', file.file_id, payload, db)) count('file-assets');
+  }
+
+  return { queued, counts };
 }
 
 async function autoSyncOdooQueue() {
@@ -303,6 +428,7 @@ app.post('/api/users', requireAuth, requireOwner, async (req, res) => {
   try {
     await getPool().query('INSERT INTO users (id,email,full_name,role,password_hash) VALUES (?,?,?,?,?)', [id, String(email).toLowerCase(), name, role, hash]);
     const user = { id, email: String(email).toLowerCase(), name, role, roleLabel: roles[role].label };
+    await enqueueOdooSync('users', id, { id, email: user.email, name, role, active: true, createdAt: new Date().toISOString() });
     await createAudit({ actor: auditActor(req.user), action: 'USER_CREATED', entity: 'users', recordId: id, afterData: { email: user.email, name, role } });
     res.status(201).json(user);
   } catch (error) { res.status(409).json({ error: error.code === 'ER_DUP_ENTRY' ? 'Email đã được sử dụng.' : 'Không thể tạo tài khoản.' }); }
@@ -312,6 +438,9 @@ app.patch('/api/users/:id/status', requireAuth, requireOwner, async (req, res) =
   if (req.params.id === req.user.id && !active) return res.status(400).json({ error: 'Bạn không thể tự khóa tài khoản đang đăng nhập.' });
   const [result] = await getPool().query('UPDATE users SET active = ? WHERE id = ?', [active, req.params.id]);
   if (!result.affectedRows) return res.status(404).json({ error: 'Không tìm thấy tài khoản.' });
+  const [userRows] = await getPool().query('SELECT id, email, full_name, role, active, created_at, updated_at FROM users WHERE id = ? LIMIT 1', [req.params.id]);
+  const changedUser = userRows[0];
+  if (changedUser) await enqueueOdooSync('users', changedUser.id, { id: changedUser.id, email: changedUser.email, name: changedUser.full_name, role: changedUser.role, active: Boolean(changedUser.active), createdAt: changedUser.created_at, updatedAt: changedUser.updated_at });
   await createAudit({ actor: auditActor(req.user), action: active ? 'USER_ACTIVATED' : 'USER_SUSPENDED', entity: 'users', recordId: req.params.id, afterData: { active } });
   res.json({ ok: true, active });
 });
@@ -325,6 +454,7 @@ app.put('/api/role-permissions/:role', requireAuth, requireOwner, async (req, re
   if (entities.some((item) => !capability.entities.includes(item)) || actions.some((item) => !capability.actions.includes(item))) return res.status(400).json({ error: 'Không thể cấp quyền vượt quá bộ quyền tối đa của vai trò.' });
   await getPool().query('INSERT INTO role_permissions (role, entities, actions) VALUES (?, CAST(? AS JSON), CAST(? AS JSON)) ON DUPLICATE KEY UPDATE entities = VALUES(entities), actions = VALUES(actions)', [role, JSON.stringify(entities), JSON.stringify(actions)]);
   roles[role] = { ...roles[role], entities, actions };
+  await enqueueOdooSync('role-permissions', role, { id: role, role, entities, actions, updatedAt: new Date().toISOString() });
   await createAudit({ actor: auditActor(req.user), action: 'ROLE_PERMISSIONS_UPDATED', entity: 'role_permissions', recordId: role, afterData: { role, entities, actions } });
   res.json({ role, label: roles[role].label, entities, actions });
 });
@@ -392,55 +522,11 @@ app.get('/api/integrations/odoo/queue', requireAuth, requireOwner, async (_req, 
 });
 app.post('/api/integrations/odoo/enqueue-unsynced', requireAuth, requireOwner, async (req, res) => {
   const connection = await odooStatus();
-  if (!connection.connected) return res.status(409).json({ error: `Odoo chưa sẵn sàng: ${connection.label}.` });
-
-  const entities = ['customers', 'suppliers', 'products', 'materials'];
-  const db = await getPool().getConnection();
-  let queued = 0;
-  let skipped = 0;
-  try {
-    await db.beginTransaction();
-    const [records] = await db.query(
-      'SELECT entity, record_id, data, sync_status FROM records WHERE entity IN (?) AND sync_status <> ? ORDER BY entity, record_id FOR UPDATE',
-      [entities, 'SYNCED'],
-    );
-    for (const record of records) {
-      const [existing] = await db.query(
-        "SELECT id, status FROM odoo_sync_jobs WHERE entity = ? AND record_id = ? ORDER BY created_at DESC LIMIT 1 FOR UPDATE",
-        [record.entity, record.record_id],
-      );
-      if (existing[0] && ['PENDING', 'PROCESSING', 'PENDING_RETRY'].includes(existing[0].status)) {
-        skipped += 1;
-        continue;
-      }
-      if (existing[0] && existing[0].status === 'SYNCED') {
-        await db.query('UPDATE records SET sync_status = ? WHERE entity = ? AND record_id = ?', ['SYNCED', record.entity, record.record_id]);
-        skipped += 1;
-        continue;
-      }
-
-      const id = randomUUID();
-      const payload = decodeData(record.data);
-      if (existing[0]) {
-        await db.query('UPDATE odoo_sync_jobs SET payload = CAST(? AS JSON), status = ?, last_error = NULL WHERE id = ?', [JSON.stringify(payload), 'PENDING', existing[0].id]);
-      } else {
-        await db.query('INSERT INTO odoo_sync_jobs (id, entity, record_id, payload, status) VALUES (?, ?, ?, CAST(? AS JSON), ?)', [id, record.entity, record.record_id, JSON.stringify(payload), 'PENDING']);
-      }
-      await db.query('UPDATE records SET sync_status = ? WHERE entity = ? AND record_id = ?', ['PENDING_ODOO', record.entity, record.record_id]);
-      queued += 1;
-    }
-    await db.commit();
-  } catch (error) {
-    await db.rollback();
-    throw error;
-  } finally {
-    db.release();
-  }
-
-  await createAudit({ actor: auditActor(req.user), action: 'ODOO_BACKFILL_ENQUEUED', entity: 'odoo_sync_jobs', afterData: { queued, skipped } });
-  res.json({ queued, skipped });
-});
-app.post('/api/integrations/odoo/sync-pending', requireAuth, requireOwner, async (_req, res) => {
+  if (!connection.connected) return res.status(409).json({ error: `Odoo is not ready: ${connection.label}.` });
+  const result = await enqueueFullOdooBackfill();
+  await createAudit({ actor: auditActor(req.user), action: 'ODOO_BACKFILL_ENQUEUED', entity: 'odoo_sync_jobs', afterData: result });
+  res.json(result);
+});app.post('/api/integrations/odoo/sync-pending', requireAuth, requireOwner, async (_req, res) => {
   let result;
   try { result = await syncOdooJobs({ statuses: ['PENDING', 'PENDING_RETRY', 'PENDING_MAPPING'], limit: 50 }); }
   catch (error) { return res.status(409).json({ error: error.message }); }
@@ -899,6 +985,16 @@ app.post('/api/files', requireAuth, upload.single('file'), async (req, res) => {
   await mkdir(uploadDir, { recursive: true });
   await writeFile(path.join(uploadDir, safeName), req.file.buffer);
   await getPool().query('INSERT INTO file_assets (file_id, stored_name, original_name, mime_type, size_bytes, owner_id) VALUES (?,?,?,?,?,?)', [safeName, safeName, path.basename(req.file.originalname), req.file.mimetype, req.file.size, req.user.id]);
+  await enqueueOdooSync('file-assets', safeName, {
+    id: safeName,
+    file_id: safeName,
+    stored_name: safeName,
+    original_name: path.basename(req.file.originalname),
+    mime_type: req.file.mimetype,
+    size_bytes: req.file.size,
+    owner_id: req.user.id,
+    created_at: new Date().toISOString(),
+  });
   res.status(201).json({ id: safeName, name: req.file.originalname, size: req.file.size, status: 'OCR_REVIEW_REQUIRED', message: 'Tệp đã lưu. OCR chưa cấu hình; cần nhập và rà soát thông tin thủ công.' });
 });
 app.get('/api/files/:id', requireAuth, async (req, res) => {
@@ -919,5 +1015,9 @@ await initDb();
 await hydrateRolePermissions();
 await seedDemoData();
 await mkdir(uploadDir, { recursive: true });
+if (process.env.ODOO_URL && process.env.ODOO_DB && process.env.ODOO_USERNAME && process.env.ODOO_PASSWORD) {
+  const backfill = await enqueueFullOdooBackfill();
+  console.info(`Odoo backfill queued: ${backfill.queued} records (${JSON.stringify(backfill.counts)}).`);
+}
 app.listen(port, () => console.log(`FinTax Middleware API listening at http://localhost:${port}`));
 setInterval(() => { void autoSyncOdooQueue(); }, 2500);

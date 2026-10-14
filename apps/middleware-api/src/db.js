@@ -3,6 +3,16 @@ import { randomUUID } from 'node:crypto';
 
 let pool;
 
+export const odooSyncEntities = [
+  'branches', 'cash-accounts', 'customers', 'suppliers', 'materials', 'products', 'boms',
+  'quotations', 'production-orders', 'stock-movements', 'labor-logs', 'transactions',
+  'invoices', 'payments', 'payment-allocations', 'reconciliations', 'alerts',
+  'classification-rules', 'tax-rules', 'tax-periods', 'users', 'role-permissions',
+  'audit-logs', 'file-assets',
+];
+
+const hasOdooConfig = () => Boolean(process.env.ODOO_URL && process.env.ODOO_DB && process.env.ODOO_USERNAME && process.env.ODOO_PASSWORD);
+
 export async function initDb() {
   pool = mysql.createPool({
     host: process.env.DB_HOST || '127.0.0.1',
@@ -52,12 +62,13 @@ export async function initDb() {
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
   await pool.query(`CREATE TABLE IF NOT EXISTS odoo_sync_jobs (
-    id CHAR(36) PRIMARY KEY, entity VARCHAR(64) NOT NULL, record_id CHAR(36) NOT NULL,
+    id CHAR(36) PRIMARY KEY, entity VARCHAR(64) NOT NULL, record_id VARCHAR(255) NOT NULL,
     payload JSON NOT NULL, status VARCHAR(32) NOT NULL DEFAULT 'PENDING', attempts INT NOT NULL DEFAULT 0,
     last_error TEXT NULL, created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     KEY ix_sync_status (status, created_at), KEY ix_sync_record (entity, record_id)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
+  await pool.query('ALTER TABLE odoo_sync_jobs MODIFY COLUMN record_id VARCHAR(255) NOT NULL');
 }
 
 export function getPool() {
@@ -89,29 +100,42 @@ export async function getRecordForUpdate(entity, id, executor) {
 export async function saveRecord(entity, data, actorId, syncStatus = 'LOCAL_DEMO', executor = getPool()) {
   const id = data.id || randomUUID();
   const value = { ...data, id };
-  // Only enqueue models with a complete, safe Odoo mapping. Accounting entries
-  // remain in MySQL until their journal/account mapping has been configured.
-  const syncable = ['customers', 'suppliers', 'products', 'materials'].includes(entity);
-  const odooConfigured = Boolean(process.env.ODOO_URL && process.env.ODOO_DB && process.env.ODOO_USERNAME && process.env.ODOO_PASSWORD);
-  const effectiveStatus = actorId && syncable ? (odooConfigured ? 'PENDING_ODOO' : 'LOCAL_DEMO') : syncStatus;
+  const syncable = odooSyncEntities.includes(entity);
+  const shouldSync = syncable && hasOdooConfig() && syncStatus !== 'DEMO_SEED';
+  const effectiveStatus = shouldSync ? 'PENDING_ODOO' : syncStatus;
   await executor.query(`INSERT INTO records (entity, record_id, data, sync_status, created_by, updated_by)
     VALUES (?, ?, CAST(? AS JSON), ?, ?, ?)
     ON DUPLICATE KEY UPDATE data = VALUES(data), sync_status = VALUES(sync_status), updated_by = VALUES(updated_by)`,
   [entity, id, JSON.stringify(value), effectiveStatus, actorId || null, actorId || null]);
-  if (actorId && syncable && odooConfigured) {
-    const [pending] = await executor.query("SELECT id FROM odoo_sync_jobs WHERE entity = ? AND record_id = ? AND status IN ('PENDING', 'PENDING_RETRY', 'PENDING_MAPPING') ORDER BY created_at DESC LIMIT 1", [entity, id]);
-    if (pending[0]) {
-      await executor.query('UPDATE odoo_sync_jobs SET payload = CAST(? AS JSON), status = ?, last_error = NULL WHERE id = ?', [JSON.stringify(value), 'PENDING', pending[0].id]);
-    } else {
-      await executor.query('INSERT INTO odoo_sync_jobs (id, entity, record_id, payload, status) VALUES (?, ?, ?, CAST(? AS JSON), ?)', [randomUUID(), entity, id, JSON.stringify(value), 'PENDING']);
-    }
-  }
+  if (shouldSync) await enqueueOdooSync(entity, id, value, executor);
   return { ...value, syncStatus: effectiveStatus };
 }
 
+export async function enqueueOdooSync(entity, recordId, payload, executor = getPool()) {
+  if (!hasOdooConfig() || !odooSyncEntities.includes(entity)) return false;
+  const id = String(recordId ?? payload?.id ?? '');
+  if (!id) throw new Error(`A source ID is required to sync ${entity} to Odoo.`);
+  if (id.length > 255) throw new Error(`Source ID for ${entity} exceeds the Odoo sync limit.`);
+  const [pending] = await executor.query(
+    "SELECT id FROM odoo_sync_jobs WHERE entity = ? AND record_id = ? AND status IN ('PENDING', 'PENDING_RETRY', 'PENDING_MAPPING') ORDER BY created_at DESC LIMIT 1",
+    [entity, id],
+  );
+  const json = JSON.stringify({ ...payload, id });
+  if (pending[0]) {
+    await executor.query('UPDATE odoo_sync_jobs SET payload = CAST(? AS JSON), status = ?, last_error = NULL WHERE id = ?', [json, 'PENDING', pending[0].id]);
+  } else {
+    await executor.query('INSERT INTO odoo_sync_jobs (id, entity, record_id, payload, status) VALUES (?, ?, ?, CAST(? AS JSON), ?)', [randomUUID(), entity, id, json, 'PENDING']);
+  }
+  return true;
+}
+
 export async function createAudit({ actor, action, entity, recordId = null, beforeData = null, afterData = null }) {
-  await getPool().query(`INSERT INTO audit_logs (actor_id, actor_name, action, entity, record_id, before_data, after_data)
+  const [result] = await getPool().query(`INSERT INTO audit_logs (actor_id, actor_name, action, entity, record_id, before_data, after_data)
     VALUES (?, ?, ?, ?, ?, ?, ?)`, [actor.id, actor.name, action, entity, recordId, beforeData ? JSON.stringify(beforeData) : null, afterData ? JSON.stringify(afterData) : null]);
+  await enqueueOdooSync('audit-logs', String(result.insertId), {
+    id: String(result.insertId), actorId: actor.id, actorName: actor.name, action, entity, recordId,
+    beforeData, afterData, createdAt: new Date().toISOString(),
+  });
 }
 
 export async function ensureUuidRecordId(entity, data, actorId, status) {
