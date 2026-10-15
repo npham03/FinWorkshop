@@ -15,6 +15,7 @@ import { fileURLToPath } from 'node:url';
 import { initDb, getPool, listRecords, getRecord, getRecordForUpdate, saveRecord, createAudit, decodeData, enqueueOdooSync, odooSyncEntities } from './db.js';
 import { seedDemoData } from './seed.js';
 import { consumeOdooPasswordReset, createOdooAuthAccount, deleteOdooAuthAccount, executeOdoo, findOdooAuthAccount, hasOdooConfig, odooStatus, sendOdooMail, updateOdooAuthAccount } from './odoo.js';
+import { syncOdooInvoice, syncOdooPayment, syncOdooQuotation } from './odoo-documents.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const uploadDir = path.resolve(__dirname, '../uploads');
@@ -102,6 +103,36 @@ const resetUrl = (token) => `${(process.env.PASSWORD_RESET_BASE_URL || process.e
 const authSignupLimit = authRateLimit({ max: 5 });
 const authResetRequestLimit = authRateLimit({ max: 4 });
 const authResetLimit = authRateLimit({ max: 10 });
+async function findOrProvisionOdooAuthAccount(email) {
+  const account = await findOdooAuthAccount(email);
+  if (account) return account;
+
+  // Accounts created before Odoo auth was enabled still have a valid bcrypt
+  // hash in MySQL. Copy that hash to Odoo on first use so reset works for them.
+  const [rows] = await getPool().query(
+    'SELECT id, email, full_name, role, password_hash, active FROM users WHERE email = ? LIMIT 1',
+    [email],
+  );
+  const local = rows[0];
+  if (!local) return null;
+  const odooId = await createOdooAuthAccount({
+    id: local.id,
+    email: local.email,
+    name: local.full_name,
+    role: local.role,
+    passwordHash: local.password_hash,
+    approved: Boolean(local.active),
+  });
+  return {
+    id: Number(odooId),
+    source_id: local.id,
+    email: local.email,
+    name: local.full_name,
+    role: local.role,
+    password_hash: local.password_hash,
+    is_approved: Boolean(local.active),
+  };
+}
 function finiteAmount(value) { const number = Number(value); return Number.isFinite(number) ? number : 0; }
 function classificationCompatible(direction, classification) {
   if (!transactionClassifications.has(classification) || classification === 'INTERNAL_TRANSFER') return false;
@@ -286,6 +317,18 @@ async function syncOdooJob(job) {
     const found = await executeOdoo(nativeModel, 'search_read', [[['fintax_source_key', '=', sourceKey]]], { fields: ['id'], limit: 1 });
     nativeId = found?.length ? Number(found[0].id) : Number(await executeOdoo(nativeModel, 'create', [values]));
     if (found?.length) await executeOdoo(nativeModel, 'write', [[nativeId], values]);
+  } else if (job.entity === 'quotations') {
+    const native = await syncOdooQuotation(data, sourceKey);
+    nativeModel = native.model;
+    nativeId = native.id;
+  } else if (job.entity === 'invoices') {
+    const native = await syncOdooInvoice(data, sourceKey);
+    nativeModel = native.model;
+    nativeId = native.id;
+  } else if (job.entity === 'payments') {
+    const native = await syncOdooPayment(data, sourceKey);
+    nativeModel = native.model;
+    nativeId = native.id;
   }
 
   if (nativeModel) {
@@ -314,8 +357,17 @@ async function syncOdooJob(job) {
   const current = await getRecord(job.entity, job.record_id);
   if (current) {
     const updated = { ...current, odooMirrorId: mirrorId };
-    if (nativeId) updated.odooId = nativeId;
-    else delete updated.odooId;
+    if (nativeId) {
+      updated.odooId = nativeId;
+      updated.odooModel = nativeModel;
+      const baseUrl = String(process.env.ODOO_URL || '').replace(/\/$/, '');
+      if (['sale.order', 'account.move', 'account.payment'].includes(nativeModel) && baseUrl) updated.odooUrl = `${baseUrl}/web#id=${nativeId}&model=${encodeURIComponent(nativeModel)}&view_type=form`;
+      else delete updated.odooUrl;
+    } else {
+      delete updated.odooId;
+      delete updated.odooModel;
+      delete updated.odooUrl;
+    }
     await getPool().query('UPDATE records SET data = CAST(? AS JSON), sync_status = ? WHERE entity = ? AND record_id = ?', [JSON.stringify(updated), 'SYNCED', job.entity, job.record_id]);
   }
   await getPool().query('UPDATE odoo_sync_jobs SET status = ?, last_error = NULL, attempts = attempts + 1 WHERE id = ?', ['SYNCED', job.id]);
@@ -461,7 +513,7 @@ app.post('/api/auth/forgot-password', authResetRequestLimit, async (req, res) =>
   if (!hasOdooConfig()) return res.status(503).json({ error: 'Odoo chưa được cấu hình để đặt lại mật khẩu.' });
 
   try {
-    const account = await findOdooAuthAccount(email);
+    const account = await findOrProvisionOdooAuthAccount(email);
     if (account) {
       const token = randomBytes(32).toString('hex');
       const expiresAt = new Date(Date.now() + 30 * 60 * 1000);

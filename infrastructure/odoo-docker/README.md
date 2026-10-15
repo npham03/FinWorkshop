@@ -5,7 +5,7 @@
 | Thông tin | Giá trị | Ghi chú |
 | :--- | :--- | :--- |
 | **URL Web Odoo** | `http://localhost:8069` | Giao diện Odoo |
-| **Database Name** | `finworkshop_db` | Database chính của dự án |
+| **Database Name** | `fintax_clean` | Database được cấu hình trong `apps/middleware-api/.env` và Docker Compose |
 | **Email đăng nhập** | `admin@fin.com` | Tài khoản quản trị |
 | **Mật khẩu đăng nhập** | `FinTax@2026` | Tài khoản local đã khởi tạo cho đồ án |
 | **Master Password** | `admin` | Giá trị mặc định của ảnh Odoo trong môi trường local |
@@ -32,6 +32,6 @@ Chỉ dùng các giá trị này cho môi trường Docker local của đồ án
 ## 3. Lệnh vận hành Docker
 
 - Khởi chạy: `docker compose up -d`
-- Xem logs Odoo: `docker compose logs -f web`
+- Xem logs Odoo: `docker compose logs -f odoo`
 - Dừng dịch vụ: `docker compose down`
 - Dừng & xóa sạch data: `docker compose down -v`

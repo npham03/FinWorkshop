@@ -5,9 +5,12 @@ title FinWorkshop Launcher
 
 echo Starting FinWorkshop...
 
+rem Also use the Node runtime bundled with Codex when system Node.js is absent.
+for /d %%R in ("%LOCALAPPDATA%\OpenAI\Codex\runtimes\cua_node\*") do if exist "%%~fR\bin\node.exe" set "PATH=%%~fR\bin;%PATH%"
+
 where node >nul 2>nul
 if errorlevel 1 (
-  echo Node.js is not installed or is not on PATH. Install Node.js 20 or newer, then try again.
+  echo Node.js 20 or newer was not found. Install Node.js or launch FinWorkshop from the Codex environment.
   goto :failed
 )
 

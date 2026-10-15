@@ -60,7 +60,9 @@ Base URL: `http://localhost:4000`. Đây là API mô phỏng; không kết nối
 
 Các mã và lịch sử do API này trả về chỉ phục vụ trình diễn; lịch sử bị xóa khi khởi động lại dịch vụ.
 
-Odoo đồng bộ `customers` và `suppliers` vào `res.partner`, `products` và `materials` vào `product.template`. Cần cài module **Product** trong database Odoo. Khóa ghép là mã số thuế cho đối tác, mã nội bộ cho sản phẩm/vật tư; nếu thiếu khóa thì dùng tên. Hóa đơn, bút toán kế toán, thanh toán và tồn kho chưa nằm trong mapping.
+Odoo đồng bộ `customers`/`suppliers` vào `res.partner`, `products`/`materials` vào `product.template`, `quotations` vào `sale.order`, `invoices` vào `account.move` (đầu ra là `out_invoice`, đầu vào là `in_invoice`) và `payments` vào `account.payment`. Addon **FinTax Integration** cần được nâng cấp cùng các module **Sales** và **Invoicing**; khóa `fintax_source_key` giúp cập nhật chứng từ mà không tạo trùng. Khách/nhà cung cấp được liên kết theo ID nguồn, mã số thuế hoặc tên. Báo giá được gửi sang trạng thái đã gửi/xác nhận theo luồng web; hóa đơn và thanh toán luôn tạo ở trạng thái nháp, không tự ghi sổ hoặc đối soát. Nếu thuế nguồn không khớp mức thuế Odoo, chứng từ có ghi chú rà soát. Chứng từ đăng trực tiếp trong Odoo chưa được nhập ngược về web.
+
+Sau đồng bộ, báo giá, hóa đơn và thanh toán trên web có liên kết mở bản ghi Odoo. Worker tự xử lý tác vụ `PENDING`; OWNER có thể nạp lại hoặc thử lại từ **Cài đặt → Tích hợp Odoo**. Chứng từ đã ghi sổ/xác nhận trong Odoo không bị ghi đè tự động; cần xử lý trong hàng đợi khi có thay đổi nguồn.
 
 Tài khoản đăng ký FinTax được lưu trong model `fintax.user.account` của addon **FinTax Integration**. Mật khẩu được lưu dưới dạng bcrypt hash; token đặt lại được lưu dưới dạng SHA-256 hash, hết hạn sau 30 phút và chỉ dùng một lần. MySQL giữ hồ sơ/role để phục vụ phân quyền ứng dụng; tài khoản mới chờ OWNER duyệt.
 

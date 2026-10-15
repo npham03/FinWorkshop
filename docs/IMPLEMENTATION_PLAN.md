@@ -2,8 +2,8 @@
 
 ## Source of truth
 
-- MySQL cục bộ lưu tài khoản, nghiệp vụ, import, demo seed và audit log để hoạt động bền vững khi Odoo chưa chạy.
-- Odoo 16 là adapter ERP tùy chọn, được kiểm tra qua XML-RPC tại middleware. Bản hiện tại chưa tự đẩy bút toán nghiệp vụ sang Odoo; khi chưa cấu hình, hồ sơ có `LOCAL_DEMO` và UI không tuyên bố đồng bộ.
+- MySQL cục bộ lưu nghiệp vụ, import, demo seed và audit log; tài khoản FinTax được quản lý trong Odoo và đồng bộ hồ sơ tối thiểu sang MySQL để phân quyền.
+- Odoo 16 nhận dữ liệu từ middleware qua XML-RPC. Báo giá web tạo/cập nhật `sale.order`; hóa đơn đầu vào/đầu ra tạo/cập nhật `account.move`; khoản thu/chi tạo `account.payment`. Các chứng từ được giữ ở trạng thái nháp để người dùng rà soát trong Odoo.
 - Mock Tax API chạy độc lập ở cổng 4000; mọi mã trả về là giả lập.
 - React client chỉ giao tiếp REST với middleware.
 
@@ -17,7 +17,7 @@
 
 ## Còn cần phát triển để dùng vận hành thực tế
 
-- Tích hợp mapping và outbox đồng bộ Odoo cho từng model, gồm xử lý lỗi/retry và đối chiếu nguồn dữ liệu.
+- Mở rộng mapping/outbox Odoo cho các phân hệ còn lại và đồng bộ hai chiều nếu cần nhập chứng từ được tạo trực tiếp trong Odoo vào web.
 - Mở rộng tính toàn vẹn giao dịch cho phân bổ thanh toán, kho và nghiệp vụ kế toán liên quan.
 - Cấu hình và xác minh OCR, gửi file an toàn, sao lưu/khôi phục, giám sát và kiểm soát triển khai production.
 - Chuyên gia rà soát hồ sơ thuế, TaxRules, biểu mẫu, quy trình hóa đơn và mọi căn cứ pháp lý còn hiệu lực trước khi dùng dữ liệu thật.
