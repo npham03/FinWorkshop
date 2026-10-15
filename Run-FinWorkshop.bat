@@ -66,11 +66,15 @@ if errorlevel 1 (
   goto :failed
 )
 
-if not exist "node_modules\.bin\concurrently.cmd" (
-  echo Installing project packages. This is only needed on the first run...
+set "NEED_NPM_INSTALL=0"
+if not exist "node_modules\.bin\concurrently.cmd" set "NEED_NPM_INSTALL=1"
+powershell -NoProfile -Command "$lock = Get-Item 'package-lock.json' -ErrorAction SilentlyContinue; $installed = Get-Item 'node_modules/.package-lock.json' -ErrorAction SilentlyContinue; if (!$lock -or !$installed -or $lock.LastWriteTimeUtc -gt $installed.LastWriteTimeUtc) { exit 1 } else { exit 0 }" >nul 2>nul
+if errorlevel 1 set "NEED_NPM_INSTALL=1"
+if "%NEED_NPM_INSTALL%"=="1" (
+  echo Installing or updating project packages...
   call npm install
   if errorlevel 1 (
-    echo npm install failed.
+    echo npm install failed. Check your internet connection and try again.
     goto :failed
   )
 )

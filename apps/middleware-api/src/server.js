@@ -14,7 +14,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { initDb, getPool, listRecords, getRecord, getRecordForUpdate, saveRecord, createAudit, decodeData, enqueueOdooSync, odooSyncEntities } from './db.js';
 import { seedDemoData } from './seed.js';
-import { consumeOdooPasswordReset, createOdooAuthAccount, deleteOdooAuthAccount, executeOdoo, findOdooAuthAccount, hasOdooConfig, odooStatus, sendOdooMail, updateOdooAuthAccount } from './odoo.js';
+import { consumeOdooPasswordReset, createOdooAuthAccount, deleteOdooAuthAccount, executeOdoo, findOdooAuthAccount, hasOdooConfig, odooStatus, updateOdooAuthAccount } from './odoo.js';
+import { sendResetEmail } from './mailer.js';
 import { syncOdooInvoice, syncOdooPayment, syncOdooQuotation } from './odoo-documents.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -523,14 +524,16 @@ app.post('/api/auth/forgot-password', authResetRequestLimit, async (req, res) =>
         reset_token_expires_at: odooDateTime(expiresAt),
       });
       const html = `<p>Bạn vừa yêu cầu đặt lại mật khẩu FinTax.</p><p><a href="${url}">Đặt lại mật khẩu</a></p><p>Liên kết hết hạn sau 30 phút. Nếu bạn không yêu cầu thao tác này, hãy bỏ qua email.</p>`;
+      const text = `Bạn vừa yêu cầu đặt lại mật khẩu FinTax. Mở liên kết này để tạo mật khẩu mới: ${url}\n\nLiên kết hết hạn sau 30 phút. Nếu bạn không yêu cầu thao tác này, hãy bỏ qua email.`;
       try {
-        await sendOdooMail({ to: email, subject: 'Đặt lại mật khẩu FinTax', html });
+        await sendResetEmail({ to: email, subject: 'Đặt lại mật khẩu FinTax', html, text });
       } catch (error) {
         console.warn('FinTax password reset email could not be sent:', error.message);
         if (process.env.NODE_ENV === 'production') {
           await updateOdooAuthAccount(account.id, { reset_token_hash: false, reset_token_expires_at: false });
+          return res.status(503).json({ error: 'Chưa gửi được email khôi phục. Kiểm tra cấu hình Gmail SMTP của máy chủ.' });
         } else {
-          return res.json({ ok: true, resetUrl: url, message: 'Máy chủ email Odoo chưa sẵn sàng; liên kết thử nghiệm chỉ hiển thị trong môi trường phát triển.' });
+          return res.json({ ok: true, resetUrl: url, message: 'Gmail SMTP chưa gửi được thư; bạn có thể dùng liên kết thử nghiệm bên dưới trong môi trường phát triển.' });
         }
       }
     }

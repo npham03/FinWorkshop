@@ -70,17 +70,3 @@ export async function deleteOdooAuthAccount(odooId) {
 export async function consumeOdooPasswordReset(tokenHash, passwordHash) {
   return executeOdoo(authAccountModel, 'consume_password_reset', [tokenHash, passwordHash]);
 }
-
-export async function sendOdooMail({ to, subject, html }) {
-  const config = setting();
-  const from = process.env.PASSWORD_RESET_FROM || config.username;
-  const mailId = await executeOdoo('mail.mail', 'create', [{
-    email_from: from,
-    email_to: to,
-    subject,
-    body_html: html,
-    auto_delete: true,
-  }]);
-  await executeOdoo('mail.mail', 'send', [[Number(mailId)]]);
-  return true;
-}

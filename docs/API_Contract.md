@@ -16,7 +16,7 @@ Base URL mặc định: `http://localhost:3001/api`. Frontend chỉ gọi middle
 | GET | `/health` | Công khai | Kiểm tra middleware và MySQL |
 | POST | `/auth/login` | Công khai | Đăng nhập, trả JWT và user |
 | POST | `/auth/register` | Công khai | Tạo tài khoản FinTax trong Odoo; tài khoản mới chờ OWNER duyệt |
-| POST | `/auth/forgot-password` | Công khai | Gửi liên kết đặt lại mật khẩu qua thư Odoo (nếu email tồn tại) |
+| POST | `/auth/forgot-password` | Công khai | Gửi liên kết đặt lại mật khẩu qua Gmail SMTP (nếu email tồn tại) |
 | POST | `/auth/reset-password` | Công khai | Đổi mật khẩu bằng token một lần, hết hạn sau 30 phút |
 | GET | `/auth/me` | Người dùng | Lấy user trong phiên hiện tại |
 | POST | `/auth/password` | Người dùng đã đăng nhập | Đổi mật khẩu phiên hiện tại |
