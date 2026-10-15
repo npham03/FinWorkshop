@@ -8,14 +8,14 @@ import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import * as XLSX from 'xlsx';
 import axios from 'axios';
-import { createHash, randomBytes, randomUUID } from 'node:crypto';
+import { createHmac, randomBytes, randomInt, randomUUID } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { initDb, getPool, listRecords, getRecord, getRecordForUpdate, saveRecord, createAudit, decodeData, enqueueOdooSync, odooSyncEntities } from './db.js';
 import { seedDemoData } from './seed.js';
 import { consumeOdooPasswordReset, createOdooAuthAccount, deleteOdooAuthAccount, executeOdoo, findOdooAuthAccount, hasOdooConfig, odooStatus, updateOdooAuthAccount } from './odoo.js';
-import { sendResetEmail } from './mailer.js';
+import { sendResetCodeEmail, smtpStatus } from './mailer.js';
 import { syncOdooInvoice, syncOdooPayment, syncOdooQuotation } from './odoo-documents.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -100,7 +100,8 @@ const normalizeEmail = (value) => String(value || '').trim().toLowerCase();
 const validEmail = (value) => value.length <= 190 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 const unusablePasswordHash = async () => bcrypt.hash(randomBytes(32).toString('hex'), 12);
 const odooDateTime = (date) => date.toISOString().slice(0, 19).replace('T', ' ');
-const resetUrl = (token) => `${(process.env.PASSWORD_RESET_BASE_URL || process.env.WEB_ORIGIN?.split(',')[0] || 'http://localhost:5173').replace(/\/$/, '')}/reset-password?token=${encodeURIComponent(token)}`;
+const resetOtpHash = (email, code) => createHmac('sha256', jwtSecret).update(`${email}:${code}`).digest('hex');
+const resetOtpMinutes = Math.max(1, Number(process.env.PASSWORD_RESET_OTP_MINUTES || 10));
 const authSignupLimit = authRateLimit({ max: 5 });
 const authResetRequestLimit = authRateLimit({ max: 4 });
 const authResetLimit = authRateLimit({ max: 10 });
@@ -516,50 +517,56 @@ app.post('/api/auth/forgot-password', authResetRequestLimit, async (req, res) =>
   try {
     const account = await findOrProvisionOdooAuthAccount(email);
     if (account) {
-      const token = randomBytes(32).toString('hex');
-      const expiresAt = new Date(Date.now() + 30 * 60 * 1000);
-      const url = resetUrl(token);
+      const code = String(randomInt(0, 1_000_000)).padStart(6, '0');
+      const codeHash = resetOtpHash(email, code);
+      const expiresAt = new Date(Date.now() + resetOtpMinutes * 60 * 1000);
       await updateOdooAuthAccount(account.id, {
-        reset_token_hash: createHash('sha256').update(token).digest('hex'),
+        reset_token_hash: codeHash,
         reset_token_expires_at: odooDateTime(expiresAt),
       });
-      const html = `<p>Bạn vừa yêu cầu đặt lại mật khẩu FinTax.</p><p><a href="${url}">Đặt lại mật khẩu</a></p><p>Liên kết hết hạn sau 30 phút. Nếu bạn không yêu cầu thao tác này, hãy bỏ qua email.</p>`;
-      const text = `Bạn vừa yêu cầu đặt lại mật khẩu FinTax. Mở liên kết này để tạo mật khẩu mới: ${url}\n\nLiên kết hết hạn sau 30 phút. Nếu bạn không yêu cầu thao tác này, hãy bỏ qua email.`;
+
       try {
-        await sendResetEmail({ to: email, subject: 'Đặt lại mật khẩu FinTax', html, text });
+        await sendResetCodeEmail({ to: email, code, expiresInMinutes: resetOtpMinutes });
       } catch (error) {
-        console.warn('FinTax password reset email could not be sent:', error.message);
+        console.warn('FinTax password reset code email could not be sent:', error.message);
         if (process.env.NODE_ENV === 'production') {
           await updateOdooAuthAccount(account.id, { reset_token_hash: false, reset_token_expires_at: false });
-          return res.status(503).json({ error: 'Chưa gửi được email khôi phục. Kiểm tra cấu hình Gmail SMTP của máy chủ.' });
-        } else {
-          return res.json({ ok: true, resetUrl: url, message: 'Gmail SMTP chưa gửi được thư; bạn có thể dùng liên kết thử nghiệm bên dưới trong môi trường phát triển.' });
+          return res.status(503).json({ error: 'Chưa gửi được mã khôi phục. Kiểm tra cấu hình Gmail SMTP trong máy chủ.' });
         }
+        return res.json({
+          ok: true,
+          message: 'Gmail SMTP chưa gửi được thư; mã thử nghiệm bên dưới chỉ dùng trong môi trường phát triển.',
+          debugCode: code,
+        });
       }
     }
   } catch (error) {
     console.warn('FinTax password reset request failed:', error.message);
-    return res.status(503).json({ error: 'Odoo hiện chưa sẵn sàng để gửi hướng dẫn khôi phục.' });
+    return res.status(503).json({ error: 'Odoo hiện chưa sẵn sàng để tạo mã khôi phục.' });
   }
-  res.json({ ok: true, message: 'Nếu email tồn tại, hướng dẫn đặt lại mật khẩu sẽ được gửi.' });
+
+  res.json({ ok: true, message: 'Nếu email tồn tại, mã đặt lại mật khẩu sẽ được gửi.' });
 });
 
 app.post('/api/auth/reset-password', authResetLimit, async (req, res) => {
-  const token = String(req.body?.token || '');
+  const email = normalizeEmail(req.body?.email);
+  const code = String(req.body?.code || '').trim();
   const newPassword = String(req.body?.newPassword || '');
-  if (!/^[a-f0-9]{64}$/i.test(token) || newPassword.length < 10 || Buffer.byteLength(newPassword, 'utf8') > 72) {
-    return res.status(400).json({ error: 'Liên kết không hợp lệ hoặc mật khẩu mới chưa đạt 10 ký tự (tối đa 72 byte UTF-8).' });
+  if (!validEmail(email) || !/^\d{6}$/.test(code) || newPassword.length < 10 || Buffer.byteLength(newPassword, 'utf8') > 72) {
+    return res.status(400).json({ error: 'Email hoặc mã không hợp lệ, hoặc mật khẩu chưa đạt 10 ký tự (tối đa 72 byte UTF-8).' });
   }
   if (!hasOdooConfig()) return res.status(503).json({ error: 'Odoo hiện chưa sẵn sàng.' });
-  const tokenHash = createHash('sha256').update(token).digest('hex');
+
+  const codeHash = resetOtpHash(email, code);
   const passwordHash = await bcrypt.hash(newPassword, 12);
   let account;
-  try { account = await consumeOdooPasswordReset(tokenHash, passwordHash); }
+  try { account = await consumeOdooPasswordReset(codeHash, passwordHash); }
   catch (error) {
-    console.warn('FinTax password reset could not reach Odoo:', error.message);
+    console.warn('Odoo password reset could not consume the code:', error.message);
     return res.status(503).json({ error: 'Odoo hiện chưa sẵn sàng. Vui lòng thử lại sau.' });
   }
-  if (!account) return res.status(400).json({ error: 'Liên kết đặt lại mật khẩu đã hết hạn hoặc không hợp lệ.' });
+  if (!account) return res.status(400).json({ error: 'Mã đặt lại mật khẩu không hợp lệ hoặc đã hết hạn.' });
+
   const localVerifier = await unusablePasswordHash();
   await getPool().query(
     'INSERT INTO users (id, email, full_name, role, password_hash, active) VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE password_hash = VALUES(password_hash)',
@@ -568,7 +575,6 @@ app.post('/api/auth/reset-password', authResetLimit, async (req, res) => {
   await createAudit({ actor: { id: account.source_id, name: account.name }, action: 'PASSWORD_RESET', entity: 'users', recordId: account.source_id });
   res.json({ ok: true, message: 'Đã đặt lại mật khẩu. Bạn có thể đăng nhập.' });
 });
-
 app.post('/api/auth/login', async (req, res) => {
   const email = normalizeEmail(req.body?.email);
   const password = String(req.body?.password || '');
@@ -747,7 +753,7 @@ app.get('/api/integrations/odoo/status', requireAuth, async (_req, res) => res.j
 app.get('/api/integrations/status', requireAuth, async (_req, res) => {
   const status = await odooStatus();
   const [queue] = await getPool().query("SELECT status, COUNT(*) AS total FROM odoo_sync_jobs GROUP BY status");
-  res.json({ odoo: status, odooQueue: Object.fromEntries(queue.map((row) => [row.status, Number(row.total)])), tax: { type: 'MOCK', label: 'API thuế giả lập', url: taxApiUrl }, mode: 'DEMO' });
+  res.json({ odoo: status, smtp: smtpStatus(), odooQueue: Object.fromEntries(queue.map((row) => [row.status, Number(row.total)])), tax: { type: 'MOCK', label: 'API thuế giả lập', url: taxApiUrl }, mode: 'DEMO' });
 });
 app.get('/api/integrations/odoo/queue', requireAuth, requireOwner, async (_req, res) => {
   const [rows] = await getPool().query('SELECT id, entity, record_id, status, attempts, last_error, created_at, updated_at FROM odoo_sync_jobs ORDER BY created_at DESC LIMIT 100');

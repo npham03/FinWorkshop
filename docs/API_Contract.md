@@ -16,8 +16,8 @@ Base URL mặc định: `http://localhost:3001/api`. Frontend chỉ gọi middle
 | GET | `/health` | Công khai | Kiểm tra middleware và MySQL |
 | POST | `/auth/login` | Công khai | Đăng nhập, trả JWT và user |
 | POST | `/auth/register` | Công khai | Tạo tài khoản FinTax trong Odoo; tài khoản mới chờ OWNER duyệt |
-| POST | `/auth/forgot-password` | Công khai | Gửi liên kết đặt lại mật khẩu qua Gmail SMTP (nếu email tồn tại) |
-| POST | `/auth/reset-password` | Công khai | Đổi mật khẩu bằng token một lần, hết hạn sau 30 phút |
+| POST | `/auth/forgot-password` | Công khai | Gửi mã OTP 6 chữ số qua Gmail SMTP (nếu email tồn tại) |
+| POST | `/auth/reset-password` | Công khai | Đặt lại mật khẩu bằng mã OTP một lần, hết hạn sau 10 phút |
 | GET | `/auth/me` | Người dùng | Lấy user trong phiên hiện tại |
 | POST | `/auth/password` | Người dùng đã đăng nhập | Đổi mật khẩu phiên hiện tại |
 | GET/POST | `/users` | OWNER | Danh sách/tạo người dùng |
@@ -64,7 +64,7 @@ Odoo đồng bộ `customers`/`suppliers` vào `res.partner`, `products`/`materi
 
 Sau đồng bộ, báo giá, hóa đơn và thanh toán trên web có liên kết mở bản ghi Odoo. Worker tự xử lý tác vụ `PENDING`; OWNER có thể nạp lại hoặc thử lại từ **Cài đặt → Tích hợp Odoo**. Chứng từ đã ghi sổ/xác nhận trong Odoo không bị ghi đè tự động; cần xử lý trong hàng đợi khi có thay đổi nguồn.
 
-Tài khoản đăng ký FinTax được lưu trong model `fintax.user.account` của addon **FinTax Integration**. Mật khẩu được lưu dưới dạng bcrypt hash; token đặt lại được lưu dưới dạng SHA-256 hash, hết hạn sau 30 phút và chỉ dùng một lần. MySQL giữ hồ sơ/role để phục vụ phân quyền ứng dụng; tài khoản mới chờ OWNER duyệt.
+Tài khoản đăng ký FinTax được lưu trong model `fintax.user.account` của addon **FinTax Integration**. Mật khẩu được lưu dưới dạng bcrypt hash; mã khôi phục 6 chữ số được ràng buộc với email bằng HMAC-SHA-256, lưu dưới dạng hash, hết hạn sau 10 phút và chỉ dùng một lần. MySQL giữ hồ sơ/role để phục vụ phân quyền ứng dụng; tài khoản mới chờ OWNER duyệt.
 
 Worker của middleware tự xử lý các tác vụ `PENDING` theo lô nền; lỗi kết nối chuyển sang `PENDING_RETRY`, không lặp yêu cầu liên tục. OWNER có thể thử lại từ màn hình Tích hợp hoặc gọi endpoint đồng bộ thủ công.
 

@@ -1,5 +1,5 @@
 import { useState, type FormEvent, type ReactNode } from 'react';
-import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { ChevronDown, Factory, FileText, ShieldCheck, Sparkles } from 'lucide-react';
 import { useAuth } from './auth';
 import { api, messageOf } from './api';
@@ -88,40 +88,64 @@ export function RegisterPage() {
 }
 
 export function ForgotPasswordPage() {
-  const { user } = useAuth(); const [email, setEmail] = useState(''); const [error, setError] = useState(''); const [message, setMessage] = useState(''); const [debugUrl, setDebugUrl] = useState(''); const [busy, setBusy] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
   if (user) return <Navigate to="/" replace />;
+
   const submit = async (event: FormEvent) => {
-    event.preventDefault(); setError(''); setMessage(''); setDebugUrl(''); setBusy(true);
-    try { const { data } = await api.post('/auth/forgot-password', { email }); setMessage(data.message || 'Nếu email tồn tại, hướng dẫn đặt lại mật khẩu sẽ được gửi.'); setDebugUrl(data.resetUrl || ''); }
-    catch (reason) { setError(messageOf(reason)); }
+    event.preventDefault(); setError(''); setBusy(true);
+    const normalizedEmail = email.trim();
+    try {
+      const { data } = await api.post('/auth/forgot-password', { email: normalizedEmail });
+      navigate(`/reset-password?email=${encodeURIComponent(normalizedEmail)}`, { state: { debugCode: data.debugCode || '' } });
+    } catch (reason) { setError(messageOf(reason)); }
     finally { setBusy(false); }
   };
-  return <AuthLayout eyebrow="Khôi phục quyền truy cập" title="Quên mật khẩu?" description="Nhập email tài khoản. Nếu tìm thấy tài khoản, FinTax sẽ gửi hướng dẫn đặt lại mật khẩu.">
-    <form onSubmit={submit} className="space-y-5"><FormError>{error}</FormError>{message && <p role="status" className="rounded-xl border border-emerald-100 bg-emerald-50 px-3.5 py-3 text-xs leading-5 text-emerald-800">{message}</p>}
+
+  return <AuthLayout eyebrow="Khôi phục quyền truy cập" title="Quên mật khẩu?" description="Nhập email tài khoản để nhận mã xác nhận gồm 6 chữ số.">
+    <form onSubmit={submit} className="space-y-5"><FormError>{error}</FormError>
       <label className="block"><span className="mb-2 block text-xs font-medium text-gray-600">Email</span><input type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} required className={inputClass} /></label>
-      <button disabled={busy} type="submit" className={primaryButton}>{busy ? 'Đang gửi…' : 'Gửi hướng dẫn đặt lại mật khẩu'}</button>
-      {debugUrl && <a href={debugUrl} className="block break-all text-xs font-medium text-brand-700 underline">Mở liên kết thử nghiệm (môi trường phát triển)</a>}
+      <button disabled={busy} type="submit" className={primaryButton}>{busy ? 'Đang gửi mã…' : 'Gửi mã xác nhận'}</button>
       <p className="text-center text-sm text-muted"><Link to="/login" className="font-semibold text-brand-700">Quay lại đăng nhập</Link></p>
     </form>
   </AuthLayout>;
 }
 
 export function ResetPasswordPage() {
-  const { user } = useAuth(); const [searchParams] = useSearchParams(); const token = searchParams.get('token') || ''; const [password, setPassword] = useState(''); const [confirmation, setConfirmation] = useState(''); const [error, setError] = useState(''); const [done, setDone] = useState(false); const [busy, setBusy] = useState(false);
+  const { user } = useAuth();
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
+  const [email, setEmail] = useState(searchParams.get('email') || '');
+  const [code, setCode] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmation, setConfirmation] = useState('');
+  const [error, setError] = useState('');
+  const [done, setDone] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const debugCode = typeof location.state?.debugCode === 'string' ? location.state.debugCode : '';
   if (user) return <Navigate to="/" replace />;
+
   const submit = async (event: FormEvent) => {
     event.preventDefault(); setError('');
     if (password !== confirmation) { setError('Hai mật khẩu chưa trùng khớp.'); return; }
     setBusy(true);
-    try { await api.post('/auth/reset-password', { token, newPassword: password }); setDone(true); }
+    try { await api.post('/auth/reset-password', { email: email.trim(), code: code.trim(), newPassword: password }); setDone(true); }
     catch (reason) { setError(messageOf(reason)); }
     finally { setBusy(false); }
   };
-  return <AuthLayout eyebrow="Cập nhật bảo mật" title={done ? 'Đổi mật khẩu thành công' : 'Đặt mật khẩu mới'} description="Liên kết đặt lại chỉ dùng được một lần và hết hạn sau 30 phút.">
-    {done ? <Link to="/login" className={`${primaryButton} no-underline`}>Đăng nhập</Link> : !token ? <div className="space-y-4"><FormError>Liên kết đặt lại mật khẩu không hợp lệ hoặc bị thiếu.</FormError><Link to="/forgot-password" className="inline-block text-sm font-semibold text-brand-700">Yêu cầu liên kết mới</Link></div> : <form onSubmit={submit} className="space-y-4"><FormError>{error}</FormError>
-      <label className="block"><span className="mb-2 block text-xs font-medium text-gray-600">Mật khẩu mới</span><input type="password" autoComplete="new-password" value={password} onChange={(event) => setPassword(event.target.value)} required minLength={10} className={inputClass} /><span className="mt-1.5 block text-[10px] text-muted">Từ 10 ký tự; mật khẩu dài tối đa 72 byte UTF-8.</span></label>
+
+  return <AuthLayout eyebrow="Cập nhật bảo mật" title={done ? 'Đổi mật khẩu thành công' : 'Đặt mật khẩu mới'} description="Nhập mã 6 chữ số trong email và mật khẩu mới của bạn. Mã chỉ dùng một lần, có hiệu lực 10 phút.">
+    {done ? <Link to="/login" className={`${primaryButton} no-underline`}>Đăng nhập</Link> : <form onSubmit={submit} className="space-y-4"><FormError>{error}</FormError>
+      {debugCode && <p role="status" className="rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-3 text-xs leading-5 text-amber-900">SMTP chưa gửi được trong môi trường phát triển. Mã thử nghiệm: <strong className="tracking-widest">{debugCode}</strong></p>}
+      <label className="block"><span className="mb-2 block text-xs font-medium text-gray-600">Email</span><input type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} required className={inputClass} /></label>
+      <label className="block"><span className="mb-2 block text-xs font-medium text-gray-600">Mã xác nhận</span><input type="text" inputMode="numeric" autoComplete="one-time-code" value={code} onChange={(event) => setCode(event.target.value.replace(/\D/g, '').slice(0, 6))} required minLength={6} maxLength={6} pattern="[0-9]{6}" className={inputClass} /></label>
+      <label className="block"><span className="mb-2 block text-xs font-medium text-gray-600">Mật khẩu mới</span><input type="password" autoComplete="new-password" value={password} onChange={(event) => setPassword(event.target.value)} required minLength={10} className={inputClass} /><span className="mt-1.5 block text-[10px] text-muted">Từ 10 ký tự; tối đa 72 byte UTF-8.</span></label>
       <label className="block"><span className="mb-2 block text-xs font-medium text-gray-600">Nhập lại mật khẩu mới</span><input type="password" autoComplete="new-password" value={confirmation} onChange={(event) => setConfirmation(event.target.value)} required minLength={10} className={inputClass} /></label>
-      <button disabled={busy} type="submit" className={primaryButton}>{busy ? 'Đang lưu…' : 'Lưu mật khẩu mới'}</button>
+      <button disabled={busy} type="submit" className={primaryButton}>{busy ? 'Đang lưu…' : 'Đặt lại mật khẩu'}</button>
+      <p className="text-center text-sm text-muted"><Link to="/forgot-password" className="font-semibold text-brand-700">Gửi mã khác</Link></p>
     </form>}
   </AuthLayout>;
 }
