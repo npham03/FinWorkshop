@@ -8,13 +8,13 @@ import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import * as XLSX from 'xlsx';
 import axios from 'axios';
-import { randomUUID } from 'node:crypto';
+import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { initDb, getPool, listRecords, getRecord, getRecordForUpdate, saveRecord, createAudit, decodeData, enqueueOdooSync, odooSyncEntities } from './db.js';
 import { seedDemoData } from './seed.js';
-import { executeOdoo, odooStatus } from './odoo.js';
+import { consumeOdooPasswordReset, createOdooAuthAccount, deleteOdooAuthAccount, executeOdoo, findOdooAuthAccount, hasOdooConfig, odooStatus, sendOdooMail, updateOdooAuthAccount } from './odoo.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const uploadDir = path.resolve(__dirname, '../uploads');
@@ -78,6 +78,30 @@ function canAct(req, action) {
   return permission?.actions === '*' || permission?.actions.includes(action);
 }
 function auditActor(user) { return { id: user.id, name: user.name }; }
+function authRateLimit({ max = 5, windowMs = 15 * 60 * 1000 } = {}) {
+  const buckets = new Map();
+  return (req, res, next) => {
+    const now = Date.now();
+    const key = String(req.ip || req.socket.remoteAddress || 'unknown');
+    let bucket = buckets.get(key);
+    if (!bucket || now - bucket.startedAt >= windowMs) {
+      bucket = { startedAt: now, count: 0 };
+      buckets.set(key, bucket);
+    }
+    bucket.count += 1;
+    if (bucket.count > max) return res.status(429).json({ error: 'Bạn thao tác quá nhiều lần. Vui lòng thử lại sau ít phút.' });
+    if (buckets.size > 5000) for (const [entry, value] of buckets) if (now - value.startedAt >= windowMs) buckets.delete(entry);
+    next();
+  };
+}
+const normalizeEmail = (value) => String(value || '').trim().toLowerCase();
+const validEmail = (value) => value.length <= 190 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+const unusablePasswordHash = async () => bcrypt.hash(randomBytes(32).toString('hex'), 12);
+const odooDateTime = (date) => date.toISOString().slice(0, 19).replace('T', ' ');
+const resetUrl = (token) => `${(process.env.PASSWORD_RESET_BASE_URL || process.env.WEB_ORIGIN?.split(',')[0] || 'http://localhost:5173').replace(/\/$/, '')}/reset-password?token=${encodeURIComponent(token)}`;
+const authSignupLimit = authRateLimit({ max: 5 });
+const authResetRequestLimit = authRateLimit({ max: 4 });
+const authResetLimit = authRateLimit({ max: 10 });
 function finiteAmount(value) { const number = Number(value); return Number.isFinite(number) ? number : 0; }
 function classificationCompatible(direction, classification) {
   if (!transactionClassifications.has(classification) || classification === 'INTERNAL_TRANSFER') return false;
@@ -233,7 +257,7 @@ async function syncOdooJob(job) {
       email: data.email || false,
       street: data.address || false,
     };
-    const found = await executeOdoo(nativeModel, 'search_read', [[['fintax_source_key', '=', sourceKey]]], { fields: ['id'], limit: 1 });
+    const found = await executeOdoo(nativeModel, 'search_read', [[['fintax_source_key', '=', sourceKey]]], { fields: ['id'], limit: 1, context: { active_test: false } });
     nativeId = found?.length ? Number(found[0].id) : Number(await executeOdoo(nativeModel, 'create', [values]));
     if (found?.length) await executeOdoo(nativeModel, 'write', [[nativeId], values]);
   } else if (job.entity === 'users') {
@@ -246,7 +270,7 @@ async function syncOdooJob(job) {
       active: data.active !== false,
       company_type: 'person',
     };
-    const found = await executeOdoo(nativeModel, 'search_read', [[['fintax_source_key', '=', sourceKey]]], { fields: ['id'], limit: 1 });
+    const found = await executeOdoo(nativeModel, 'search_read', [[['fintax_source_key', '=', sourceKey]]], { fields: ['id'], limit: 1, context: { active_test: false } });
     nativeId = found?.length ? Number(found[0].id) : Number(await executeOdoo(nativeModel, 'create', [values]));
     if (found?.length) await executeOdoo(nativeModel, 'write', [[nativeId], values]);
   } else if (job.entity === 'products' || job.entity === 'materials') {
@@ -392,13 +416,145 @@ app.get('/api/health', async (_req, res) => {
   catch { res.status(503).json({ ok: false, service: 'middleware-api', database: 'unavailable' }); }
 });
 
+app.post('/api/auth/register', authSignupLimit, async (req, res) => {
+  const email = normalizeEmail(req.body?.email);
+  const name = String(req.body?.name || '').trim();
+  const password = String(req.body?.password || '');
+  if (!validEmail(email) || name.length < 2 || name.length > 190 || password.length < 10 || Buffer.byteLength(password, 'utf8') > 72) {
+    return res.status(400).json({ error: 'Nhập tên, email hợp lệ và mật khẩu từ 10 ký tự (tối đa 72 byte UTF-8).' });
+  }
+  if (!hasOdooConfig()) return res.status(503).json({ error: 'Odoo chưa được cấu hình. Hãy cấu hình Odoo trước khi đăng ký tài khoản.' });
+
+  const [existing] = await getPool().query('SELECT id FROM users WHERE email = ? LIMIT 1', [email]);
+  let existingOdooAccount;
+  try { existingOdooAccount = await findOdooAuthAccount(email); }
+  catch (error) {
+    console.warn('FinTax signup could not read Odoo accounts:', error.message);
+    return res.status(503).json({ error: 'Odoo chưa sẵn sàng hoặc module FinTax Integration chưa được cập nhật.' });
+  }
+  if (existing.length || existingOdooAccount) return res.status(409).json({ error: 'Email đã được đăng ký.' });
+
+  const id = randomUUID();
+  const passwordHash = await bcrypt.hash(password, 12);
+  let odooId;
+  try {
+    odooId = await createOdooAuthAccount({ id, email, name, role: 'ACCOUNTANT', passwordHash, approved: false });
+  } catch (error) {
+    console.warn('FinTax signup could not create the Odoo account:', error.message);
+    return res.status(503).json({ error: 'Chưa lưu được tài khoản vào Odoo. Kiểm tra kết nối và cài module FinTax Integration.' });
+  }
+  try {
+    await getPool().query('INSERT INTO users (id, email, full_name, role, password_hash, active) VALUES (?, ?, ?, ?, ?, FALSE)', [id, email, name, 'ACCOUNTANT', await unusablePasswordHash()]);
+  } catch (error) {
+    try { await deleteOdooAuthAccount(odooId); } catch (cleanupError) { console.warn('Could not roll back the Odoo signup record:', cleanupError.message); }
+    if (error.code === 'ER_DUP_ENTRY') return res.status(409).json({ error: 'Email đã được đăng ký.' });
+    throw error;
+  }
+  await enqueueOdooSync('users', id, { id, email, name, role: 'ACCOUNTANT', active: false, createdAt: new Date().toISOString() });
+  await createAudit({ actor: { id, name }, action: 'USER_REGISTERED', entity: 'users', recordId: id, afterData: { email, role: 'ACCOUNTANT', active: false } });
+  res.status(201).json({ ok: true, message: 'Đã tạo tài khoản. Tài khoản sẽ dùng được sau khi chủ xưởng duyệt.' });
+});
+
+app.post('/api/auth/forgot-password', authResetRequestLimit, async (req, res) => {
+  const email = normalizeEmail(req.body?.email);
+  if (!validEmail(email)) return res.status(400).json({ error: 'Nhập địa chỉ email hợp lệ.' });
+  if (!hasOdooConfig()) return res.status(503).json({ error: 'Odoo chưa được cấu hình để đặt lại mật khẩu.' });
+
+  try {
+    const account = await findOdooAuthAccount(email);
+    if (account) {
+      const token = randomBytes(32).toString('hex');
+      const expiresAt = new Date(Date.now() + 30 * 60 * 1000);
+      const url = resetUrl(token);
+      await updateOdooAuthAccount(account.id, {
+        reset_token_hash: createHash('sha256').update(token).digest('hex'),
+        reset_token_expires_at: odooDateTime(expiresAt),
+      });
+      const html = `<p>Bạn vừa yêu cầu đặt lại mật khẩu FinTax.</p><p><a href="${url}">Đặt lại mật khẩu</a></p><p>Liên kết hết hạn sau 30 phút. Nếu bạn không yêu cầu thao tác này, hãy bỏ qua email.</p>`;
+      try {
+        await sendOdooMail({ to: email, subject: 'Đặt lại mật khẩu FinTax', html });
+      } catch (error) {
+        console.warn('FinTax password reset email could not be sent:', error.message);
+        if (process.env.NODE_ENV === 'production') {
+          await updateOdooAuthAccount(account.id, { reset_token_hash: false, reset_token_expires_at: false });
+        } else {
+          return res.json({ ok: true, resetUrl: url, message: 'Máy chủ email Odoo chưa sẵn sàng; liên kết thử nghiệm chỉ hiển thị trong môi trường phát triển.' });
+        }
+      }
+    }
+  } catch (error) {
+    console.warn('FinTax password reset request failed:', error.message);
+    return res.status(503).json({ error: 'Odoo hiện chưa sẵn sàng để gửi hướng dẫn khôi phục.' });
+  }
+  res.json({ ok: true, message: 'Nếu email tồn tại, hướng dẫn đặt lại mật khẩu sẽ được gửi.' });
+});
+
+app.post('/api/auth/reset-password', authResetLimit, async (req, res) => {
+  const token = String(req.body?.token || '');
+  const newPassword = String(req.body?.newPassword || '');
+  if (!/^[a-f0-9]{64}$/i.test(token) || newPassword.length < 10 || Buffer.byteLength(newPassword, 'utf8') > 72) {
+    return res.status(400).json({ error: 'Liên kết không hợp lệ hoặc mật khẩu mới chưa đạt 10 ký tự (tối đa 72 byte UTF-8).' });
+  }
+  if (!hasOdooConfig()) return res.status(503).json({ error: 'Odoo hiện chưa sẵn sàng.' });
+  const tokenHash = createHash('sha256').update(token).digest('hex');
+  const passwordHash = await bcrypt.hash(newPassword, 12);
+  let account;
+  try { account = await consumeOdooPasswordReset(tokenHash, passwordHash); }
+  catch (error) {
+    console.warn('FinTax password reset could not reach Odoo:', error.message);
+    return res.status(503).json({ error: 'Odoo hiện chưa sẵn sàng. Vui lòng thử lại sau.' });
+  }
+  if (!account) return res.status(400).json({ error: 'Liên kết đặt lại mật khẩu đã hết hạn hoặc không hợp lệ.' });
+  const localVerifier = await unusablePasswordHash();
+  await getPool().query(
+    'INSERT INTO users (id, email, full_name, role, password_hash, active) VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE password_hash = VALUES(password_hash)',
+    [account.source_id, account.email, account.name, account.role, localVerifier, Boolean(account.is_approved)],
+  );
+  await createAudit({ actor: { id: account.source_id, name: account.name }, action: 'PASSWORD_RESET', entity: 'users', recordId: account.source_id });
+  res.json({ ok: true, message: 'Đã đặt lại mật khẩu. Bạn có thể đăng nhập.' });
+});
+
 app.post('/api/auth/login', async (req, res) => {
-  const email = String(req.body.email || '').trim().toLowerCase();
-  const password = String(req.body.password || '');
+  const email = normalizeEmail(req.body?.email);
+  const password = String(req.body?.password || '');
   if (!email || !password) return res.status(400).json({ error: 'Nhập email và mật khẩu.' });
-  const [rows] = await getPool().query('SELECT * FROM users WHERE email = ? AND active = TRUE LIMIT 1', [email]);
-  const user = rows[0];
-  if (!user || !(await bcrypt.compare(password, user.password_hash))) return res.status(401).json({ error: 'Email hoặc mật khẩu chưa chính xác.' });
+
+  let odooAccount = null;
+  let odooLookupFailed = false;
+  if (hasOdooConfig()) {
+    try { odooAccount = await findOdooAuthAccount(email); }
+    catch (error) { odooLookupFailed = true; console.warn('Odoo account lookup failed; checking the local account cache:', error.message); }
+  }
+
+  let user;
+  if (odooAccount) {
+    if (!(await bcrypt.compare(password, odooAccount.password_hash || ''))) return res.status(401).json({ error: 'Email hoặc mật khẩu chưa chính xác.' });
+    if (!odooAccount.is_approved) return res.status(403).json({ error: 'Tài khoản đang chờ chủ xưởng duyệt hoặc đã bị khóa.' });
+    const [rows] = await getPool().query('SELECT * FROM users WHERE id = ? LIMIT 1', [odooAccount.source_id]);
+    user = rows[0];
+    if (!user) {
+      await getPool().query('INSERT INTO users (id, email, full_name, role, password_hash, active) VALUES (?, ?, ?, ?, ?, TRUE)', [odooAccount.source_id, email, odooAccount.name, odooAccount.role, odooAccount.password_hash]);
+      const [created] = await getPool().query('SELECT * FROM users WHERE id = ? LIMIT 1', [odooAccount.source_id]);
+      user = created[0];
+    }
+  } else {
+    const [rows] = await getPool().query('SELECT * FROM users WHERE email = ? LIMIT 1', [email]);
+    user = rows[0];
+    if (!user || !(await bcrypt.compare(password, user.password_hash))) {
+      if (odooLookupFailed) return res.status(503).json({ error: 'Odoo chưa sẵn sàng để xác thực tài khoản này. Vui lòng thử lại.' });
+      return res.status(401).json({ error: 'Email hoặc mật khẩu chưa chính xác.' });
+    }
+    if (hasOdooConfig()) {
+      try {
+        await createOdooAuthAccount({ id: user.id, email: user.email, name: user.full_name, role: user.role, passwordHash: user.password_hash, approved: Boolean(user.active) });
+        await getPool().query('UPDATE users SET password_hash = ? WHERE id = ?', [await unusablePasswordHash(), user.id]);
+      } catch (error) {
+        console.warn('Could not mirror the existing FinTax account to Odoo:', error.message);
+      }
+    }
+  }
+
+  if (!user?.active) return res.status(403).json({ error: 'Tài khoản đang chờ chủ xưởng duyệt hoặc đã bị khóa.' });
   const view = userView(user);
   const token = jwt.sign(view, jwtSecret, { expiresIn: '12h', issuer: 'fintax-middleware' });
   res.json({ token, user: view });
@@ -410,8 +566,20 @@ app.post('/api/auth/password', requireAuth, async (req, res) => {
   if (newPassword.length < 8) return res.status(400).json({ error: 'Mật khẩu mới cần ít nhất 8 ký tự.' });
   if (currentPassword === newPassword) return res.status(400).json({ error: 'Mật khẩu mới cần khác mật khẩu hiện tại.' });
   const [rows] = await getPool().query('SELECT password_hash FROM users WHERE id = ? AND active = TRUE LIMIT 1', [req.user.id]);
-  if (!rows[0] || !(await bcrypt.compare(currentPassword, rows[0].password_hash))) return res.status(400).json({ error: 'Mật khẩu hiện tại chưa chính xác.' });
-  await getPool().query('UPDATE users SET password_hash = ? WHERE id = ?', [await bcrypt.hash(newPassword, 12), req.user.id]);
+  if (!rows[0]) return res.status(400).json({ error: 'Mật khẩu hiện tại chưa chính xác.' });
+  let odooAccount = null;
+  if (hasOdooConfig()) {
+    try { odooAccount = await findOdooAuthAccount(req.user.email); }
+    catch (error) { console.warn('Could not look up the FinTax account in Odoo:', error.message); return res.status(503).json({ error: 'Odoo hiện chưa sẵn sàng để đổi mật khẩu.' }); }
+  }
+  if (!(await bcrypt.compare(currentPassword, odooAccount?.password_hash || rows[0].password_hash))) return res.status(400).json({ error: 'Mật khẩu hiện tại chưa chính xác.' });
+  const passwordHash = await bcrypt.hash(newPassword, 12);
+  if (odooAccount) {
+    try { await updateOdooAuthAccount(odooAccount.id, { password_hash: passwordHash, reset_token_hash: false, reset_token_expires_at: false }); }
+    catch (error) { return res.status(503).json({ error: 'Chưa cập nhật được mật khẩu trong Odoo. Vui lòng thử lại.' }); }
+  } else {
+    await getPool().query('UPDATE users SET password_hash = ? WHERE id = ?', [passwordHash, req.user.id]);
+  }
   await createAudit({ actor: auditActor(req.user), action: 'PASSWORD_CHANGED', entity: 'users', recordId: req.user.id });
   res.json({ ok: true });
 });
@@ -428,6 +596,10 @@ app.post('/api/users', requireAuth, requireOwner, async (req, res) => {
   try {
     await getPool().query('INSERT INTO users (id,email,full_name,role,password_hash) VALUES (?,?,?,?,?)', [id, String(email).toLowerCase(), name, role, hash]);
     const user = { id, email: String(email).toLowerCase(), name, role, roleLabel: roles[role].label };
+    if (hasOdooConfig()) {
+      try { await createOdooAuthAccount({ id, email: user.email, name, role, passwordHash: hash, approved: true }); }
+      catch (odooError) { console.warn('Could not save the administrator-created account to Odoo:', odooError.message); }
+    }
     await enqueueOdooSync('users', id, { id, email: user.email, name, role, active: true, createdAt: new Date().toISOString() });
     await createAudit({ actor: auditActor(req.user), action: 'USER_CREATED', entity: 'users', recordId: id, afterData: { email: user.email, name, role } });
     res.status(201).json(user);
@@ -436,11 +608,17 @@ app.post('/api/users', requireAuth, requireOwner, async (req, res) => {
 app.patch('/api/users/:id/status', requireAuth, requireOwner, async (req, res) => {
   const active = Boolean(req.body.active);
   if (req.params.id === req.user.id && !active) return res.status(400).json({ error: 'Bạn không thể tự khóa tài khoản đang đăng nhập.' });
+  const [userRows] = await getPool().query('SELECT id, email, full_name, role, password_hash, active, created_at, updated_at FROM users WHERE id = ? LIMIT 1', [req.params.id]);
+  const changedUser = userRows[0];
+  if (changedUser && hasOdooConfig()) {
+    try {
+      const account = await findOdooAuthAccount(changedUser.email);
+      if (account) await updateOdooAuthAccount(account.id, { is_approved: active, role: changedUser.role, name: changedUser.full_name });
+    } catch (error) { return res.status(503).json({ error: 'Chưa cập nhật được quyền tài khoản trong Odoo. Vui lòng thử lại.' }); }
+  }
   const [result] = await getPool().query('UPDATE users SET active = ? WHERE id = ?', [active, req.params.id]);
   if (!result.affectedRows) return res.status(404).json({ error: 'Không tìm thấy tài khoản.' });
-  const [userRows] = await getPool().query('SELECT id, email, full_name, role, active, created_at, updated_at FROM users WHERE id = ? LIMIT 1', [req.params.id]);
-  const changedUser = userRows[0];
-  if (changedUser) await enqueueOdooSync('users', changedUser.id, { id: changedUser.id, email: changedUser.email, name: changedUser.full_name, role: changedUser.role, active: Boolean(changedUser.active), createdAt: changedUser.created_at, updatedAt: changedUser.updated_at });
+  if (changedUser) await enqueueOdooSync('users', changedUser.id, { id: changedUser.id, email: changedUser.email, name: changedUser.full_name, role: changedUser.role, active, createdAt: changedUser.created_at, updatedAt: new Date().toISOString() });
   await createAudit({ actor: auditActor(req.user), action: active ? 'USER_ACTIVATED' : 'USER_SUSPENDED', entity: 'users', recordId: req.params.id, afterData: { active } });
   res.json({ ok: true, active });
 });

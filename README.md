@@ -1,6 +1,6 @@
 # FinTax Automation
 
-Ứng dụng web quản trị dòng tiền, báo giá và vận hành xưởng. Bản hiện tại có chế độ demo lưu dữ liệu bền vững qua MySQL; Odoo và API thuế được thể hiện riêng, không giả lập đồng bộ thật.
+Ứng dụng web quản trị dòng tiền, báo giá và vận hành xưởng. Dữ liệu nghiệp vụ được lưu trong MySQL; khi cấu hình Odoo, tài khoản FinTax và một số danh mục được quản lý/đồng bộ qua XML-RPC.
 
 ## Yêu cầu môi trường
 
@@ -53,11 +53,13 @@ docker compose -f infrastructure/odoo-docker/docker-compose.yml up -d odoo-db od
 
 Tạo database Odoo qua giao diện `http://localhost:8069` (tên gợi ý `finworkshop_db`), tạo tài khoản quản trị rồi điền `ODOO_DB`, `ODOO_USERNAME`, `ODOO_PASSWORD` trong `apps/middleware-api/.env`. Cài module **Product** trong Odoo để bật đồng bộ sản phẩm/vật tư. Khởi động lại middleware sau khi sửa `.env`.
 
+Đăng ký và quên mật khẩu yêu cầu Odoo đã được cấu hình trong `.env` và module **FinTax Integration** đã cài/cập nhật để tạo model tài khoản FinTax. Tài khoản đăng ký mới được lưu vào Odoo với mật khẩu đã băm và ở trạng thái chờ OWNER mở quyền trong **Cài đặt → Người dùng**. Đặt `PASSWORD_RESET_BASE_URL` theo địa chỉ web của ứng dụng, cấu hình máy chủ gửi thư đi trong Odoo, rồi đặt `PASSWORD_RESET_FROM` là địa chỉ gửi hợp lệ. Liên kết khôi phục hết hạn sau 30 phút và chỉ dùng một lần; trong môi trường phát triển, API trả liên kết thử nghiệm nếu Odoo chưa gửi được email.
+
 Trong FinTax, đăng nhập bằng vai trò OWNER, mở **Cài đặt → Tích hợp** rồi chọn **Nạp & đồng bộ danh mục** để đẩy dữ liệu cũ hoặc thử lại. Middleware giao tiếp với Odoo 16 qua XML-RPC và đồng bộ khách hàng/nhà cung cấp vào `res.partner`, sản phẩm/vật tư vào `product.template`; mã số thuế hoặc mã nội bộ được dùng để tìm bản ghi trước khi tạo mới. Danh mục mới được tự đồng bộ ở nền; nếu Odoo tạm lỗi, bản ghi vào trạng thái chờ thử lại và hiển thị trong màn hình tích hợp. Hóa đơn, bút toán kế toán, thanh toán và tồn kho chưa được đẩy sang Odoo.
 
 ## Các luồng hiện có
 
-- Đăng nhập JWT với ba vai trò; quyền API được kiểm tra tại middleware.
+- Đăng nhập JWT với ba vai trò; đăng ký và đặt lại mật khẩu qua Odoo; tài khoản mới chờ OWNER duyệt.
 - Dashboard, giao dịch thu chi, phân loại dòng tiền và import CSV/XLSX có preview/phát hiện dòng trùng.
 - Danh mục khách hàng, nhà cung cấp, sản phẩm, vật tư và BOM.
 - Báo giá có ước tính giá, trạng thái gửi duyệt/duyệt/từ chối và xuất Excel/PDF.

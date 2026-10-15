@@ -1,6 +1,6 @@
 # FinTax Middleware API Contract
 
-Base URL mặc định: `http://localhost:3001/api`. Frontend chỉ gọi middleware. Trừ health check và login, endpoint yêu cầu `Authorization: Bearer <JWT>`.
+Base URL mặc định: `http://localhost:3001/api`. Frontend chỉ gọi middleware. Trừ health check và các endpoint xác thực công khai, endpoint yêu cầu `Authorization: Bearer <JWT>`.
 
 ## Envelope và lỗi
 
@@ -15,6 +15,9 @@ Base URL mặc định: `http://localhost:3001/api`. Frontend chỉ gọi middle
 | --- | --- | --- | --- |
 | GET | `/health` | Công khai | Kiểm tra middleware và MySQL |
 | POST | `/auth/login` | Công khai | Đăng nhập, trả JWT và user |
+| POST | `/auth/register` | Công khai | Tạo tài khoản FinTax trong Odoo; tài khoản mới chờ OWNER duyệt |
+| POST | `/auth/forgot-password` | Công khai | Gửi liên kết đặt lại mật khẩu qua thư Odoo (nếu email tồn tại) |
+| POST | `/auth/reset-password` | Công khai | Đổi mật khẩu bằng token một lần, hết hạn sau 30 phút |
 | GET | `/auth/me` | Người dùng | Lấy user trong phiên hiện tại |
 | POST | `/auth/password` | Người dùng đã đăng nhập | Đổi mật khẩu phiên hiện tại |
 | GET/POST | `/users` | OWNER | Danh sách/tạo người dùng |
@@ -58,6 +61,8 @@ Base URL: `http://localhost:4000`. Đây là API mô phỏng; không kết nối
 Các mã và lịch sử do API này trả về chỉ phục vụ trình diễn; lịch sử bị xóa khi khởi động lại dịch vụ.
 
 Odoo đồng bộ `customers` và `suppliers` vào `res.partner`, `products` và `materials` vào `product.template`. Cần cài module **Product** trong database Odoo. Khóa ghép là mã số thuế cho đối tác, mã nội bộ cho sản phẩm/vật tư; nếu thiếu khóa thì dùng tên. Hóa đơn, bút toán kế toán, thanh toán và tồn kho chưa nằm trong mapping.
+
+Tài khoản đăng ký FinTax được lưu trong model `fintax.user.account` của addon **FinTax Integration**. Mật khẩu được lưu dưới dạng bcrypt hash; token đặt lại được lưu dưới dạng SHA-256 hash, hết hạn sau 30 phút và chỉ dùng một lần. MySQL giữ hồ sơ/role để phục vụ phân quyền ứng dụng; tài khoản mới chờ OWNER duyệt.
 
 Worker của middleware tự xử lý các tác vụ `PENDING` theo lô nền; lỗi kết nối chuyển sang `PENDING_RETRY`, không lặp yêu cầu liên tục. OWNER có thể thử lại từ màn hình Tích hợp hoặc gọi endpoint đồng bộ thủ công.
 

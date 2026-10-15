@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_fintax_sync_record_system,fintax.sync.record system,model_fintax_sync_record,base.group_system,1,1,1,0
+access_fintax_user_account_system,fintax.user.account system,model_fintax_user_account,base.group_system,1,1,1,1
