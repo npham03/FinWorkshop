@@ -70,5 +70,51 @@
 
 ---
 
-## 2. Middleware API (`http://localhost:5000`) *(Đang hoàn thiện)*
-*(Sẽ bổ sung các endpoints cho Auth, CashFlow, Quotation, E-Invoice, Reconciliation và Dashboard)*
+## 2. Middleware API (`http://localhost:5000/api/v1`) *(Database: PostgreSQL 16)*
+
+### 2.1 Xác thực người dùng (Auth)
+- `POST /api/v1/auth/login`: Đăng nhập lấy Bearer JWT Token (`admin@fin.com` / `admin123` hoặc `accountant@fin.com` / `acc123`).
+- `POST /api/v1/auth/register`: Đăng ký tài khoản người dùng mới.
+- `GET /api/v1/auth/me`: Lấy thông tin user đăng nhập hiện tại (yêu cầu Header `Authorization: Bearer <token>`).
+
+### 2.2 Sổ Quỹ Tiền Mặt & Invisible Accounting (CashFlow)
+- `POST /api/v1/cashflow`: Ghi nhận giao dịch đời thường.
+  - Body:
+    ```json
+    {
+      "type": "expense",
+      "category": "production",
+      "description": "Mua sắt thép phi 10 xây xưởng",
+      "amount": 12500000,
+      "sellerTaxCode": "0101234567",
+      "attachmentNote": "HĐ 004812"
+    }
+    ```
+  - Logic: Tự động mapping sang cặp tài khoản Nợ/Có (VD: Nợ 152 / Có 111 hoặc Nợ 627 / Có 111), kiểm tra MST người bán qua Tax Engine, lưu vào PostgreSQL (`transaction_logs`) với status `pending_sync`, sau đó non-blocking push sang Odoo XML-RPC.
+- `GET /api/v1/cashflow`: Lấy danh sách giao dịch có phân trang, lọc theo `type` (income/expense) và `category` (production/personal).
+
+### 2.3 Hóa Đơn Điện Tử (E-Invoice & Cấp Mã CQT)
+- `POST /api/v1/invoices`:
+  - Body:
+    ```json
+    {
+      "invoiceNumber": "HD-2026-001",
+      "invoiceDate": "2026-10-15",
+      "sellerTaxCode": "0101234567",
+      "buyerTaxCode": "0317894561",
+      "buyerName": "Công ty TNHH Khang Điền",
+      "buyerAddress": "123 Nam Kỳ Khởi Nghĩa, Q3, TP.HCM",
+      "items": [
+        { "name": "Thép cuộn xây dựng", "unit": "Tấn", "quantity": 2, "unitPrice": 14500000 }
+      ],
+      "vatRate": 0.1
+    }
+    ```
+  - Logic: Kiểm tra rủi ro bên bán -> Gọi Mock Tax API cấp mã CQT -> Lưu vào PostgreSQL (`invoice_logs`) -> Đồng bộ Odoo `account.move`.
+- `GET /api/v1/invoices`: Lấy danh sách hóa đơn đã phát hành và mã CQT.
+
+### 2.4 Bảng Điều Khiển & Chỉ Số (Dashboard)
+- `GET /api/v1/dashboard/summary`: Lấy toàn bộ KPI tài chính (Tổng thu, Tổng chi, Dòng tiền thuần, Chi sản xuất vs cá nhân, tỷ lệ Odoo sync, cảnh báo thuế) và tình trạng kết nối 4 thành phần hệ thống.
+
+### 2.5 Tra Cứu Thuế (Tax Proxy)
+- `GET /api/v1/tax/check-mst/:mst`: Proxy tra cứu MST doanh nghiệp qua Mock Tax API.

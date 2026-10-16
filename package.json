@@ -1,0 +1,20 @@
+{
+  "name": "finworkshop",
+  "version": "1.0.0",
+  "description": "FinWorkshop Monorepo - Tax & Financial Management System",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n \"TAX-API,MID-API,WEB-CLIENT\" -c \"yellow,blue,green\" \"npm --prefix apps/mock-tax-api run dev\" \"npm --prefix apps/middleware-api run dev\" \"npm --prefix apps/web-client run dev\"",
+    "dev:all": "concurrently -n \"TAX-API,MID-API,WEB-CLIENT\" -c \"yellow,blue,green\" \"npm --prefix apps/mock-tax-api run dev\" \"npm --prefix apps/middleware-api run dev\" \"npm --prefix apps/web-client run dev\"",
+    "dev:web": "npm --prefix apps/web-client run dev",
+    "dev:api": "npm --prefix apps/middleware-api run dev",
+    "dev:tax": "npm --prefix apps/mock-tax-api run dev",
+    "start": "npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.5"
+  }
+}
