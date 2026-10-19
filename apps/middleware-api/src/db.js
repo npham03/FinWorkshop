@@ -4,6 +4,9 @@ import { randomUUID } from 'node:crypto';
 const { Pool } = pg;
 let pool;
 
+export const DEFAULT_WORKSHOP_ID = '00000000-0000-0000-0000-000000000001';
+export const DEFAULT_WORKSHOP_NAME = 'Xưởng Mẫu FinTax Demo';
+
 export const odooSyncEntities = [
   'branches', 'cash-accounts', 'customers', 'suppliers', 'materials', 'products', 'boms',
   'quotations', 'production-orders', 'stock-movements', 'labor-logs', 'transactions',
@@ -19,7 +22,7 @@ export function adaptSqlAndParams(sql, params = []) {
     .replace(/JSON_UNQUOTE\s*\(\s*JSON_EXTRACT\s*\(\s*([a-zA-Z0-9_]+)\s*,\s*'\$\.([^']+)'\s*\)\s*\)/gi, '($1->>\'$2\')')
     .replace(/CAST\s*\(\s*\?\s*AS\s*JSON\s*\)/gi, '?::jsonb')
     .replace(/ON DUPLICATE KEY UPDATE\s+data\s*=\s*VALUES\(data\),\s*sync_status\s*=\s*VALUES\(sync_status\),\s*updated_by\s*=\s*VALUES\(updated_by\)/gi,
-      'ON CONFLICT (entity, record_id) DO UPDATE SET data = EXCLUDED.data, sync_status = EXCLUDED.sync_status, updated_by = EXCLUDED.updated_by, updated_at = CURRENT_TIMESTAMP')
+      'ON CONFLICT (workshop_id, entity, record_id) DO UPDATE SET data = EXCLUDED.data, sync_status = EXCLUDED.sync_status, updated_by = EXCLUDED.updated_by, updated_at = CURRENT_TIMESTAMP')
     .replace(/ON DUPLICATE KEY UPDATE\s+password_hash\s*=\s*VALUES\(password_hash\)/gi,
       'ON CONFLICT (id) DO UPDATE SET password_hash = EXCLUDED.password_hash, updated_at = CURRENT_TIMESTAMP')
     .replace(/ON DUPLICATE KEY UPDATE\s+entities\s*=\s*VALUES\(entities\),\s*actions\s*=\s*VALUES\(actions\)/gi,
@@ -123,9 +126,27 @@ export async function initDb() {
   const origPoolQuery = pool.query.bind(pool);
   pool.query = (sql, params) => executeQuery({ query: origPoolQuery }, sql, params);
 
-  // Create schemas for FinTax tables
+  // 1. Create workshops (tenants) table
+  await pool.query(`CREATE TABLE IF NOT EXISTS workshops (
+    id VARCHAR(36) PRIMARY KEY,
+    name VARCHAR(190) NOT NULL,
+    code VARCHAR(50),
+    tax_id VARCHAR(50),
+    owner_id VARCHAR(36),
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  )`);
+
+  // Ensure default demo workshop
+  await pool.query(`INSERT INTO workshops (id, name, code, active)
+    VALUES ('${DEFAULT_WORKSHOP_ID}', '${DEFAULT_WORKSHOP_NAME}', 'DEMO', TRUE)
+    ON CONFLICT (id) DO NOTHING`);
+
+  // 2. Users table (with workshop_id)
   await pool.query(`CREATE TABLE IF NOT EXISTS users (
     id VARCHAR(36) PRIMARY KEY,
+    workshop_id VARCHAR(36) NOT NULL DEFAULT '${DEFAULT_WORKSHOP_ID}',
     email VARCHAR(190) NOT NULL UNIQUE,
     full_name VARCHAR(190) NOT NULL,
     role VARCHAR(40) NOT NULL,
@@ -134,9 +155,14 @@ export async function initDb() {
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`);
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS workshop_id VARCHAR(36) DEFAULT '${DEFAULT_WORKSHOP_ID}'`);
+  await pool.query(`UPDATE users SET workshop_id = '${DEFAULT_WORKSHOP_ID}' WHERE workshop_id IS NULL`);
+  await pool.query('CREATE INDEX IF NOT EXISTS ix_users_workshop ON users (workshop_id)');
 
+  // 3. Records table (with workshop_id)
   await pool.query(`CREATE TABLE IF NOT EXISTS records (
     id BIGSERIAL PRIMARY KEY,
+    workshop_id VARCHAR(36) NOT NULL DEFAULT '${DEFAULT_WORKSHOP_ID}',
     entity VARCHAR(64) NOT NULL,
     record_id VARCHAR(36) NOT NULL,
     data JSONB NOT NULL,
@@ -144,13 +170,27 @@ export async function initDb() {
     created_by VARCHAR(36) NULL,
     updated_by VARCHAR(36) NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT uq_entity_record UNIQUE (entity, record_id)
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`);
-  await pool.query('CREATE INDEX IF NOT EXISTS ix_records_entity_updated ON records (entity, updated_at)');
+  await pool.query(`ALTER TABLE records ADD COLUMN IF NOT EXISTS workshop_id VARCHAR(36) DEFAULT '${DEFAULT_WORKSHOP_ID}'`);
+  await pool.query(`UPDATE records SET workshop_id = '${DEFAULT_WORKSHOP_ID}' WHERE workshop_id IS NULL`);
 
+  // Migrate unique constraint to include workshop_id
+  await pool.query(`DO $$
+  BEGIN
+    IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'uq_entity_record') THEN
+      ALTER TABLE records DROP CONSTRAINT uq_entity_record;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'uq_workshop_entity_record') THEN
+      ALTER TABLE records ADD CONSTRAINT uq_workshop_entity_record UNIQUE (workshop_id, entity, record_id);
+    END IF;
+  END $$;`);
+  await pool.query('CREATE INDEX IF NOT EXISTS ix_records_workshop_entity ON records (workshop_id, entity, updated_at)');
+
+  // 4. Audit logs table (with workshop_id)
   await pool.query(`CREATE TABLE IF NOT EXISTS audit_logs (
     id BIGSERIAL PRIMARY KEY,
+    workshop_id VARCHAR(36) NOT NULL DEFAULT '${DEFAULT_WORKSHOP_ID}',
     actor_id VARCHAR(36) NOT NULL,
     actor_name VARCHAR(190) NOT NULL,
     action VARCHAR(80) NOT NULL,
@@ -160,19 +200,27 @@ export async function initDb() {
     after_data JSONB NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`);
+  await pool.query(`ALTER TABLE audit_logs ADD COLUMN IF NOT EXISTS workshop_id VARCHAR(36) DEFAULT '${DEFAULT_WORKSHOP_ID}'`);
+  await pool.query(`UPDATE audit_logs SET workshop_id = '${DEFAULT_WORKSHOP_ID}' WHERE workshop_id IS NULL`);
   await pool.query('CREATE INDEX IF NOT EXISTS ix_audit_created ON audit_logs (created_at)');
-  await pool.query('CREATE INDEX IF NOT EXISTS ix_audit_entity ON audit_logs (entity, record_id)');
+  await pool.query('CREATE INDEX IF NOT EXISTS ix_audit_workshop ON audit_logs (workshop_id, created_at)');
 
+  // 5. Imports table (with workshop_id)
   await pool.query(`CREATE TABLE IF NOT EXISTS imports (
     id VARCHAR(36) PRIMARY KEY,
+    workshop_id VARCHAR(36) NOT NULL DEFAULT '${DEFAULT_WORKSHOP_ID}',
     actor_id VARCHAR(36) NOT NULL,
     original_name VARCHAR(255) NOT NULL,
     preview_data JSONB NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`);
+  await pool.query(`ALTER TABLE imports ADD COLUMN IF NOT EXISTS workshop_id VARCHAR(36) DEFAULT '${DEFAULT_WORKSHOP_ID}'`);
+  await pool.query(`UPDATE imports SET workshop_id = '${DEFAULT_WORKSHOP_ID}' WHERE workshop_id IS NULL`);
 
+  // 6. File assets table (with workshop_id)
   await pool.query(`CREATE TABLE IF NOT EXISTS file_assets (
     file_id VARCHAR(255) PRIMARY KEY,
+    workshop_id VARCHAR(36) NOT NULL DEFAULT '${DEFAULT_WORKSHOP_ID}',
     stored_name VARCHAR(255) NOT NULL,
     original_name VARCHAR(255) NOT NULL,
     mime_type VARCHAR(120) NOT NULL,
@@ -180,8 +228,11 @@ export async function initDb() {
     owner_id VARCHAR(36) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`);
+  await pool.query(`ALTER TABLE file_assets ADD COLUMN IF NOT EXISTS workshop_id VARCHAR(36) DEFAULT '${DEFAULT_WORKSHOP_ID}'`);
+  await pool.query(`UPDATE file_assets SET workshop_id = '${DEFAULT_WORKSHOP_ID}' WHERE workshop_id IS NULL`);
   await pool.query('CREATE INDEX IF NOT EXISTS ix_file_owner ON file_assets (owner_id, created_at)');
 
+  // 7. Role permissions table
   await pool.query(`CREATE TABLE IF NOT EXISTS role_permissions (
     role VARCHAR(40) PRIMARY KEY,
     entities JSONB NOT NULL,
@@ -189,8 +240,10 @@ export async function initDb() {
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`);
 
+  // 8. Odoo sync jobs table
   await pool.query(`CREATE TABLE IF NOT EXISTS odoo_sync_jobs (
     id VARCHAR(36) PRIMARY KEY,
+    workshop_id VARCHAR(36) NOT NULL DEFAULT '${DEFAULT_WORKSHOP_ID}',
     entity VARCHAR(64) NOT NULL,
     record_id VARCHAR(255) NOT NULL,
     payload JSONB NOT NULL,
@@ -200,6 +253,8 @@ export async function initDb() {
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`);
+  await pool.query(`ALTER TABLE odoo_sync_jobs ADD COLUMN IF NOT EXISTS workshop_id VARCHAR(36) DEFAULT '${DEFAULT_WORKSHOP_ID}'`);
+  await pool.query(`UPDATE odoo_sync_jobs SET workshop_id = '${DEFAULT_WORKSHOP_ID}' WHERE workshop_id IS NULL`);
   await pool.query('CREATE INDEX IF NOT EXISTS ix_sync_status ON odoo_sync_jobs (status, created_at)');
   await pool.query('CREATE INDEX IF NOT EXISTS ix_sync_record ON odoo_sync_jobs (entity, record_id)');
 }
@@ -214,65 +269,133 @@ export function decodeData(value) {
   return JSON.parse(Buffer.isBuffer(value) ? value.toString('utf8') : value);
 }
 
-export async function listRecords(entity, executor = getPool()) {
-  const [rows] = await executor.query('SELECT record_id, data, sync_status, updated_at FROM records WHERE entity = ? ORDER BY updated_at DESC', [entity]);
+export async function createWorkshop({ id = randomUUID(), name, code, taxId = null, ownerId = null }) {
+  const generatedCode = code || name.trim().slice(0, 10).toUpperCase().replace(/[^A-Z0-9]/g, '') || 'WS';
+  await getPool().query(
+    'INSERT INTO workshops (id, name, code, tax_id, owner_id) VALUES (?, ?, ?, ?, ?)',
+    [id, name.trim(), generatedCode, taxId, ownerId]
+  );
+  return { id, name: name.trim(), code: generatedCode, taxId, ownerId };
+}
+
+export async function getWorkshop(id) {
+  const wid = id || DEFAULT_WORKSHOP_ID;
+  const [rows] = await getPool().query('SELECT id, name, code, tax_id, owner_id, active, created_at FROM workshops WHERE id = ? LIMIT 1', [wid]);
+  return rows[0] || null;
+}
+
+export async function listRecords(entity, workshopIdOrExecutor = DEFAULT_WORKSHOP_ID, maybeExecutor = null) {
+  let wid = DEFAULT_WORKSHOP_ID;
+  let executor = getPool();
+  if (workshopIdOrExecutor && typeof workshopIdOrExecutor === 'object' && workshopIdOrExecutor.query) {
+    executor = workshopIdOrExecutor;
+  } else {
+    wid = workshopIdOrExecutor || DEFAULT_WORKSHOP_ID;
+    if (maybeExecutor && maybeExecutor.query) executor = maybeExecutor;
+  }
+  const [rows] = await executor.query(
+    'SELECT record_id, data, sync_status, updated_at FROM records WHERE entity = ? AND workshop_id = ? ORDER BY updated_at DESC',
+    [entity, wid]
+  );
   return rows.map((row) => ({ ...decodeData(row.data), id: row.record_id, syncStatus: row.sync_status }));
 }
 
-export async function getRecord(entity, id, executor = getPool()) {
-  const [rows] = await executor.query('SELECT record_id, data, sync_status FROM records WHERE entity = ? AND record_id = ? LIMIT 1', [entity, id]);
+export async function getRecord(entity, id, workshopIdOrExecutor = DEFAULT_WORKSHOP_ID, maybeExecutor = null) {
+  let wid = DEFAULT_WORKSHOP_ID;
+  let executor = getPool();
+  if (workshopIdOrExecutor && typeof workshopIdOrExecutor === 'object' && workshopIdOrExecutor.query) {
+    executor = workshopIdOrExecutor;
+  } else {
+    wid = workshopIdOrExecutor || DEFAULT_WORKSHOP_ID;
+    if (maybeExecutor && maybeExecutor.query) executor = maybeExecutor;
+  }
+  const [rows] = await executor.query(
+    'SELECT record_id, data, sync_status FROM records WHERE entity = ? AND record_id = ? AND workshop_id = ? LIMIT 1',
+    [entity, id, wid]
+  );
   return rows[0] ? { ...decodeData(rows[0].data), id: rows[0].record_id, syncStatus: rows[0].sync_status } : null;
 }
 
-export async function getRecordForUpdate(entity, id, executor) {
+export async function getRecordForUpdate(entity, id, workshopIdOrExecutor, maybeExecutor = null) {
+  let wid = DEFAULT_WORKSHOP_ID;
+  let executor = null;
+  if (workshopIdOrExecutor && typeof workshopIdOrExecutor === 'object' && workshopIdOrExecutor.query) {
+    executor = workshopIdOrExecutor;
+  } else {
+    wid = workshopIdOrExecutor || DEFAULT_WORKSHOP_ID;
+    executor = maybeExecutor;
+  }
   if (!executor) throw new Error('getRecordForUpdate requires a transaction connection.');
-  const [rows] = await executor.query('SELECT record_id, data, sync_status FROM records WHERE entity = ? AND record_id = ? LIMIT 1 FOR UPDATE', [entity, id]);
+  const [rows] = await executor.query(
+    'SELECT record_id, data, sync_status FROM records WHERE entity = ? AND record_id = ? AND workshop_id = ? LIMIT 1 FOR UPDATE',
+    [entity, id, wid]
+  );
   return rows[0] ? { ...decodeData(rows[0].data), id: rows[0].record_id, syncStatus: rows[0].sync_status } : null;
 }
 
-export async function saveRecord(entity, data, actorId, syncStatus = 'LOCAL_DEMO', executor = getPool()) {
+export async function saveRecord(entity, data, actorId, ...rest) {
+  let wid = data.workshopId || null;
+  let syncStatus = 'LOCAL_DEMO';
+  let executor = getPool();
+
+  for (const arg of rest) {
+    if (!arg) continue;
+    if (typeof arg === 'object' && typeof arg.query === 'function') {
+      executor = arg;
+    } else if (typeof arg === 'string') {
+      if (arg === 'LOCAL_DEMO' || arg === 'DEMO_SEED' || arg === 'PENDING_ODOO') {
+        syncStatus = arg;
+      } else {
+        wid = arg;
+      }
+    }
+  }
+
+  wid = wid || data.workshopId || DEFAULT_WORKSHOP_ID;
   const id = data.id || randomUUID();
-  const value = { ...data, id };
+  const value = { ...data, id, workshopId: wid };
   const syncable = odooSyncEntities.includes(entity);
   const shouldSync = syncable && hasOdooConfig() && syncStatus !== 'DEMO_SEED';
   const effectiveStatus = shouldSync ? 'PENDING_ODOO' : syncStatus;
-  await executor.query(`INSERT INTO records (entity, record_id, data, sync_status, created_by, updated_by)
-    VALUES (?, ?, CAST(? AS JSON), ?, ?, ?)
-    ON DUPLICATE KEY UPDATE data = VALUES(data), sync_status = VALUES(sync_status), updated_by = VALUES(updated_by)`,
-  [entity, id, JSON.stringify(value), effectiveStatus, actorId || null, actorId || null]);
-  if (shouldSync) await enqueueOdooSync(entity, id, value, executor);
+  await executor.query(`INSERT INTO records (workshop_id, entity, record_id, data, sync_status, created_by, updated_by)
+    VALUES (?, ?, ?, CAST(? AS JSON), ?, ?, ?)
+    ON CONFLICT (workshop_id, entity, record_id) DO UPDATE SET data = EXCLUDED.data, sync_status = EXCLUDED.sync_status, updated_by = EXCLUDED.updated_by, updated_at = CURRENT_TIMESTAMP`,
+  [wid, entity, id, JSON.stringify(value), effectiveStatus, actorId || null, actorId || null]);
+  if (shouldSync) await enqueueOdooSync(entity, id, value, wid, executor);
   return { ...value, syncStatus: effectiveStatus };
 }
 
-export async function enqueueOdooSync(entity, recordId, payload, executor = getPool()) {
+export async function enqueueOdooSync(entity, recordId, payload, workshopId = DEFAULT_WORKSHOP_ID, executor = getPool()) {
   if (!hasOdooConfig() || !odooSyncEntities.includes(entity)) return false;
   const id = String(recordId ?? payload?.id ?? '');
+  const wid = workshopId || DEFAULT_WORKSHOP_ID;
   if (!id) throw new Error(`A source ID is required to sync ${entity} to Odoo.`);
   if (id.length > 255) throw new Error(`Source ID for ${entity} exceeds the Odoo sync limit.`);
   const [pending] = await executor.query(
-    "SELECT id FROM odoo_sync_jobs WHERE entity = ? AND record_id = ? AND status IN ('PENDING', 'PENDING_RETRY', 'PENDING_MAPPING') ORDER BY created_at DESC LIMIT 1",
-    [entity, id],
+    "SELECT id FROM odoo_sync_jobs WHERE entity = ? AND record_id = ? AND workshop_id = ? AND status IN ('PENDING', 'PENDING_RETRY', 'PENDING_MAPPING') ORDER BY created_at DESC LIMIT 1",
+    [entity, id, wid],
   );
   const json = JSON.stringify({ ...payload, id });
   if (pending[0]) {
     await executor.query('UPDATE odoo_sync_jobs SET payload = CAST(? AS JSON), status = ?, last_error = NULL WHERE id = ?', [json, 'PENDING', pending[0].id]);
   } else {
-    await executor.query('INSERT INTO odoo_sync_jobs (id, entity, record_id, payload, status) VALUES (?, ?, ?, CAST(? AS JSON), ?)', [randomUUID(), entity, id, json, 'PENDING']);
+    await executor.query('INSERT INTO odoo_sync_jobs (id, workshop_id, entity, record_id, payload, status) VALUES (?, ?, ?, ?, CAST(? AS JSON), ?)', [randomUUID(), wid, entity, id, json, 'PENDING']);
   }
   return true;
 }
 
-export async function createAudit({ actor, action, entity, recordId = null, beforeData = null, afterData = null }) {
-  const [result] = await getPool().query(`INSERT INTO audit_logs (actor_id, actor_name, action, entity, record_id, before_data, after_data)
-    VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id`, [actor.id, actor.name, action, entity, recordId, beforeData ? JSON.stringify(beforeData) : null, afterData ? JSON.stringify(afterData) : null]);
+export async function createAudit({ actor, action, entity, recordId = null, workshopId = null, beforeData = null, afterData = null }) {
+  const wid = workshopId || actor?.workshopId || DEFAULT_WORKSHOP_ID;
+  const [result] = await getPool().query(`INSERT INTO audit_logs (workshop_id, actor_id, actor_name, action, entity, record_id, before_data, after_data)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id`, [wid, actor.id, actor.name, action, entity, recordId, beforeData ? JSON.stringify(beforeData) : null, afterData ? JSON.stringify(afterData) : null]);
   const insertId = result.insertId || result[0]?.id;
   await enqueueOdooSync('audit-logs', String(insertId), {
     id: String(insertId), actorId: actor.id, actorName: actor.name, action, entity, recordId,
     beforeData, afterData, createdAt: new Date().toISOString(),
-  });
+  }, wid);
 }
 
-export async function ensureUuidRecordId(entity, data, actorId, status) {
+export async function ensureUuidRecordId(entity, data, actorId, workshopId, status) {
   const record = { ...data, id: data.id || randomUUID() };
-  return saveRecord(entity, record, actorId, status);
+  return saveRecord(entity, record, actorId, workshopId, status);
 }

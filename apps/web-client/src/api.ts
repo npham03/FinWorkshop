@@ -17,7 +17,16 @@ api.interceptors.response.use((response) => response, (error) => {
 });
 
 export type Role = 'OWNER' | 'ACCOUNTANT' | 'WORKSHOP';
-export type User = { id: string; email: string; name: string; role: Role; roleLabel: string; permissions?: { entities: string[] | '*'; actions: string[] | '*' } };
+export type User = {
+  id: string;
+  email: string;
+  name: string;
+  role: Role;
+  roleLabel: string;
+  workshopId?: string;
+  workshopName?: string;
+  permissions?: { entities: string[] | '*'; actions: string[] | '*' };
+};
 export type RecordRow = Record<string, unknown> & { id: string; status?: string; syncStatus?: string };
 export const messageOf = (error: unknown) => {
   if (axios.isAxiosError(error)) return String(error.response?.data?.error || error.message || 'Không thể kết nối máy chủ.');

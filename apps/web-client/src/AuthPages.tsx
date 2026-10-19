@@ -64,24 +64,54 @@ export function LoginPage() {
 }
 
 export function RegisterPage() {
-  const { user } = useAuth(); const [name, setName] = useState(''); const [email, setEmail] = useState(''); const [password, setPassword] = useState(''); const [confirmation, setConfirmation] = useState(''); const [error, setError] = useState(''); const [done, setDone] = useState(false); const [busy, setBusy] = useState(false);
+  const { user } = useAuth();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [workshopName, setWorkshopName] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmation, setConfirmation] = useState('');
+  const [error, setError] = useState('');
+  const [done, setDone] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [successMsg, setSuccessMsg] = useState('');
+
   if (user) return <Navigate to="/" replace />;
+
   const submit = async (event: FormEvent) => {
     event.preventDefault(); setError('');
     if (password !== confirmation) { setError('Hai mật khẩu chưa trùng khớp.'); return; }
     setBusy(true);
-    try { await api.post('/auth/register', { name, email, password }); setDone(true); }
+    try {
+      const response = await api.post('/auth/register', { name, email, password, workshopName: workshopName.trim() });
+      setSuccessMsg(response.data?.message || 'Tài khoản đã được tạo thành công! Bạn có thể đăng nhập ngay để bắt đầu làm việc.');
+      setDone(true);
+    }
     catch (reason) { setError(messageOf(reason)); }
     finally { setBusy(false); }
   };
-  return <AuthLayout eyebrow="Tạo tài khoản mới" title={done ? 'Đăng ký thành công' : 'Đăng ký FinTax'} description={done ? 'Tài khoản của bạn đã sẵn sàng.' : 'Tạo tài khoản để truy cập không gian làm việc FinTax.'}>
-    {done ? <div className="space-y-5"><div className="rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-4 text-sm leading-6 text-emerald-900">Tài khoản đã được tạo thành công! Bạn có thể đăng nhập ngay để bắt đầu làm việc.</div><Link to="/login" className={`${primaryButton} no-underline`}>Đăng nhập ngay</Link></div> : <form onSubmit={submit} className="space-y-4">
+
+  return <AuthLayout eyebrow="Tạo tài khoản mới" title={done ? 'Đăng ký thành công' : 'Đăng ký FinTax Đa Xưởng'} description={done ? 'Tài khoản của bạn đã sẵn sàng.' : 'Tạo xưởng độc lập mới hoặc tham gia không gian FinTax.'}>
+    {done ? <div className="space-y-5"><div className="rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-4 text-sm leading-6 text-emerald-900">{successMsg}</div><Link to="/login" className={`${primaryButton} no-underline`}>Đăng nhập ngay</Link></div> : <form onSubmit={submit} className="space-y-4">
       <FormError>{error}</FormError>
-      <label className="block"><span className="mb-2 block text-xs font-medium text-gray-600">Họ và tên</span><input autoComplete="name" value={name} onChange={(event) => setName(event.target.value)} required minLength={2} maxLength={190} className={inputClass} /></label>
+      <label className="block">
+        <div className="mb-2 flex items-center justify-between">
+          <span className="text-xs font-medium text-gray-600">Tên xưởng / Doanh nghiệp</span>
+          <span className="text-[10px] font-semibold text-brand-600">Tạo xưởng & Vai trò Chủ xưởng</span>
+        </div>
+        <input
+          type="text"
+          value={workshopName}
+          onChange={(event) => setWorkshopName(event.target.value)}
+          placeholder="Ví dụ: Xưởng Mộc Bình An, Xưởng Cơ Khí Tiến Phát…"
+          className={inputClass}
+        />
+        <span className="mt-1.5 block text-[10px] text-muted">Nhập tên xưởng để sở hữu không gian riêng độc lập; để trống nếu tham gia xưởng FinTax mẫu.</span>
+      </label>
+      <label className="block"><span className="mb-2 block text-xs font-medium text-gray-600">Họ và tên chủ xưởng / người dùng</span><input autoComplete="name" value={name} onChange={(event) => setName(event.target.value)} required minLength={2} maxLength={190} className={inputClass} /></label>
       <label className="block"><span className="mb-2 block text-xs font-medium text-gray-600">Email</span><input type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} required className={inputClass} /></label>
       <label className="block"><span className="mb-2 block text-xs font-medium text-gray-600">Mật khẩu</span><input type="password" autoComplete="new-password" value={password} onChange={(event) => setPassword(event.target.value)} required minLength={10} className={inputClass} /><span className="mt-1.5 block text-[10px] text-muted">Từ 10 ký tự; mật khẩu dài tối đa 72 byte UTF-8.</span></label>
       <label className="block"><span className="mb-2 block text-xs font-medium text-gray-600">Nhập lại mật khẩu</span><input type="password" autoComplete="new-password" value={confirmation} onChange={(event) => setConfirmation(event.target.value)} required minLength={10} className={inputClass} /></label>
-      <button disabled={busy} type="submit" className={primaryButton}>{busy ? 'Đang tạo tài khoản…' : 'Tạo tài khoản'}<ChevronDown className="-rotate-90" size={16} /></button>
+      <button disabled={busy} type="submit" className={primaryButton}>{busy ? 'Đang tạo xưởng & tài khoản…' : 'Đăng ký xưởng mới'}<ChevronDown className="-rotate-90" size={16} /></button>
       <p className="pt-2 text-center text-sm text-muted">Đã có tài khoản? <Link to="/login" className="font-semibold text-brand-700">Đăng nhập</Link></p>
     </form>}
   </AuthLayout>;
