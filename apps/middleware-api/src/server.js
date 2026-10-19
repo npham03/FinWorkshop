@@ -477,36 +477,44 @@ app.post('/api/auth/register', authSignupLimit, async (req, res) => {
   if (!validEmail(email) || name.length < 2 || name.length > 190 || password.length < 10 || Buffer.byteLength(password, 'utf8') > 72) {
     return res.status(400).json({ error: 'Nhập tên, email hợp lệ và mật khẩu từ 10 ký tự (tối đa 72 byte UTF-8).' });
   }
-  if (!hasOdooConfig()) return res.status(503).json({ error: 'Odoo chưa được cấu hình. Hãy cấu hình Odoo trước khi đăng ký tài khoản.' });
 
   const [existing] = await getPool().query('SELECT id FROM users WHERE email = ? LIMIT 1', [email]);
   let existingOdooAccount;
-  try { existingOdooAccount = await findOdooAuthAccount(email); }
-  catch (error) {
-    console.warn('FinTax signup could not read Odoo accounts:', error.message);
-    return res.status(503).json({ error: 'Odoo chưa sẵn sàng hoặc module FinTax Integration chưa được cập nhật.' });
+  if (hasOdooConfig()) {
+    try { existingOdooAccount = await findOdooAuthAccount(email); }
+    catch (error) {
+      console.warn('FinTax signup could not read Odoo accounts:', error.message);
+    }
   }
   if (existing.length || existingOdooAccount) return res.status(409).json({ error: 'Email đã được đăng ký.' });
 
   const id = randomUUID();
   const passwordHash = await bcrypt.hash(password, 12);
   let odooId;
-  try {
-    odooId = await createOdooAuthAccount({ id, email, name, role: 'ACCOUNTANT', passwordHash, approved: false });
-  } catch (error) {
-    console.warn('FinTax signup could not create the Odoo account:', error.message);
-    return res.status(503).json({ error: 'Chưa lưu được tài khoản vào Odoo. Kiểm tra kết nối và cài module FinTax Integration.' });
+  const odooAvailable = hasOdooConfig();
+  if (odooAvailable) {
+    try {
+      odooId = await createOdooAuthAccount({ id, email, name, role: 'ACCOUNTANT', passwordHash, approved: true });
+    } catch (error) {
+      console.warn('FinTax signup could not create the Odoo account:', error.message);
+    }
   }
+
   try {
-    await getPool().query('INSERT INTO users (id, email, full_name, role, password_hash, active) VALUES (?, ?, ?, ?, ?, FALSE)', [id, email, name, 'ACCOUNTANT', await unusablePasswordHash()]);
+    await getPool().query('INSERT INTO users (id, email, full_name, role, password_hash, active) VALUES (?, ?, ?, ?, ?, TRUE)', [id, email, name, 'ACCOUNTANT', passwordHash]);
   } catch (error) {
-    try { await deleteOdooAuthAccount(odooId); } catch (cleanupError) { console.warn('Could not roll back the Odoo signup record:', cleanupError.message); }
-    if (error.code === 'ER_DUP_ENTRY') return res.status(409).json({ error: 'Email đã được đăng ký.' });
+    if (odooId) {
+      try { await deleteOdooAuthAccount(odooId); } catch (cleanupError) { console.warn('Could not roll back the Odoo signup record:', cleanupError.message); }
+    }
+    if (error.code === 'ER_DUP_ENTRY' || error.code === '23505') return res.status(409).json({ error: 'Email đã được đăng ký.' });
     throw error;
   }
-  await enqueueOdooSync('users', id, { id, email, name, role: 'ACCOUNTANT', active: false, createdAt: new Date().toISOString() });
-  await createAudit({ actor: { id, name }, action: 'USER_REGISTERED', entity: 'users', recordId: id, afterData: { email, role: 'ACCOUNTANT', active: false } });
-  res.status(201).json({ ok: true, message: 'Đã tạo tài khoản. Tài khoản sẽ dùng được sau khi chủ xưởng duyệt.' });
+
+  if (odooAvailable) {
+    await enqueueOdooSync('users', id, { id, email, name, role: 'ACCOUNTANT', active: true, createdAt: new Date().toISOString() });
+  }
+  await createAudit({ actor: { id, name }, action: 'USER_REGISTERED', entity: 'users', recordId: id, afterData: { email, role: 'ACCOUNTANT', active: true } });
+  res.status(201).json({ ok: true, message: 'Đăng ký tài khoản thành công! Bạn có thể đăng nhập ngay.' });
 });
 
 app.post('/api/auth/forgot-password', authResetRequestLimit, async (req, res) => {

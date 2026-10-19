@@ -74,8 +74,8 @@ export function RegisterPage() {
     catch (reason) { setError(messageOf(reason)); }
     finally { setBusy(false); }
   };
-  return <AuthLayout eyebrow="Tạo tài khoản mới" title={done ? 'Đã nhận đăng ký' : 'Đăng ký FinTax'} description={done ? 'Thông tin tài khoản đã được lưu trong Odoo.' : 'Tạo tài khoản để truy cập không gian làm việc FinTax.'}>
-    {done ? <div className="space-y-5"><div className="rounded-xl border border-amber-100 bg-amber-50 px-4 py-4 text-sm leading-6 text-amber-900">Tài khoản đã được tạo và lưu trong Odoo. Chủ xưởng cần mở quyền trước khi bạn đăng nhập được.</div><Link to="/login" className={`${primaryButton} no-underline`}>Quay lại đăng nhập</Link></div> : <form onSubmit={submit} className="space-y-4">
+  return <AuthLayout eyebrow="Tạo tài khoản mới" title={done ? 'Đăng ký thành công' : 'Đăng ký FinTax'} description={done ? 'Tài khoản của bạn đã sẵn sàng.' : 'Tạo tài khoản để truy cập không gian làm việc FinTax.'}>
+    {done ? <div className="space-y-5"><div className="rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-4 text-sm leading-6 text-emerald-900">Tài khoản đã được tạo thành công! Bạn có thể đăng nhập ngay để bắt đầu làm việc.</div><Link to="/login" className={`${primaryButton} no-underline`}>Đăng nhập ngay</Link></div> : <form onSubmit={submit} className="space-y-4">
       <FormError>{error}</FormError>
       <label className="block"><span className="mb-2 block text-xs font-medium text-gray-600">Họ và tên</span><input autoComplete="name" value={name} onChange={(event) => setName(event.target.value)} required minLength={2} maxLength={190} className={inputClass} /></label>
       <label className="block"><span className="mb-2 block text-xs font-medium text-gray-600">Email</span><input type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} required className={inputClass} /></label>
