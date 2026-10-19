@@ -59,10 +59,10 @@ if not exist "apps\web-client\.env.local" (
   )
 )
 
-echo Starting MySQL and Odoo with Docker Compose...
-docker compose -f "infrastructure\odoo-docker\docker-compose.yml" up -d --wait app-db odoo-db odoo
+echo Starting PostgreSQL and Odoo with Docker Compose...
+docker compose -f "infrastructure\odoo-docker\docker-compose.yml" up -d --wait odoo-db odoo
 if errorlevel 1 (
-  echo Docker Compose could not start the databases and Odoo. Check Docker Desktop and try again.
+  echo Docker Compose could not start the database and Odoo. Check Docker Desktop and try again.
   goto :failed
 )
 

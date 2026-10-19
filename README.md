@@ -1,18 +1,18 @@
 # FinTax Automation
 
-Ứng dụng web quản trị dòng tiền, báo giá và vận hành xưởng. Dữ liệu nghiệp vụ được lưu trong MySQL; khi cấu hình Odoo, tài khoản FinTax và một số danh mục được quản lý/đồng bộ qua XML-RPC.
+Ứng dụng web quản trị dòng tiền, báo giá và vận hành xưởng. Dữ liệu nghiệp vụ được lưu trong PostgreSQL 15; khi cấu hình Odoo, tài khoản FinTax và một số danh mục được quản lý/đồng bộ qua XML-RPC.
 
 ## Yêu cầu môi trường
 
 - Node.js 20 trở lên và npm 10 trở lên.
-- Docker Desktop để chạy MySQL cho middleware. Odoo 16/PostgreSQL là tùy chọn khi chỉ muốn dùng chế độ demo.
+- Docker Desktop để chạy PostgreSQL 15 và Odoo 16.
 
 ## Khởi chạy nhanh
 
 Tại thư mục gốc repository:
 
 ```powershell
-docker compose -f infrastructure/odoo-docker/docker-compose.yml up -d app-db
+docker compose -f infrastructure/odoo-docker/docker-compose.yml up -d odoo-db
 Copy-Item apps/middleware-api/.env.example apps/middleware-api/.env
 Copy-Item apps/mock-tax-api/.env.example apps/mock-tax-api/.env
 Copy-Item apps/web-client/.env.example apps/web-client/.env.local
@@ -20,9 +20,9 @@ npm install
 npm run dev
 ```
 
-Mở `http://localhost:5173`. API middleware chạy tại `http://localhost:3001`, Mock Tax API tại `http://localhost:4000`. MySQL được ánh xạ ra cổng `3307` để tránh đụng dịch vụ MySQL mặc định.
+Mở `http://localhost:5173`. API middleware chạy tại `http://localhost:3001`, Mock Tax API tại `http://localhost:4000`. PostgreSQL được ánh xạ ra cổng `5433` (container `fintax-odoo-db`) để tránh đụng độ cổng PostgreSQL mặc định (5432).
 
-Nếu không dùng Docker Compose, hãy tự cung cấp MySQL 8 và cập nhật biến `DB_*` trong `apps/middleware-api/.env`.
+Nếu không dùng Docker Compose, hãy tự cung cấp PostgreSQL 15+ và cập nhật biến `DB_*` trong `apps/middleware-api/.env`.
 
 ## Tài khoản demo
 
@@ -39,9 +39,9 @@ Database mới chỉ tự tạo ba tài khoản đăng nhập ở trên; dữ li
 ## Service và cấu hình
 
 - `apps/web-client`: React, Vite, Tailwind CSS, Axios; biến `VITE_API_URL`.
-- `apps/middleware-api`: Express REST API, MySQL, JWT, XML-RPC adapter cho Odoo; cấu hình trong `.env.example`.
+- `apps/middleware-api`: Express REST API, PostgreSQL, JWT, XML-RPC adapter cho Odoo; cấu hình trong `.env.example`.
 - `apps/mock-tax-api`: Express API mô phỏng tại cổng `4000`.
-- `infrastructure/odoo-docker`: Odoo 16 Community, PostgreSQL và MySQL cục bộ.
+- `infrastructure/odoo-docker`: Odoo 16 Community, PostgreSQL cục bộ (port 5433).
 
 Các lệnh riêng: `npm run dev:web`, `npm run dev:api`, `npm run dev:tax`, `npm run build`.
 
@@ -74,4 +74,4 @@ Trong FinTax, đăng nhập bằng vai trò OWNER, mở **Cài đặt → Tích 
 - Chưa có tích hợp ngân hàng, ký số, nộp thuế hoặc phát hành hóa đơn với nhà cung cấp thật.
 - OCR chưa cấu hình; file tải lên cần được kiểm tra và nhập thông tin thủ công.
 - TaxRules và mẫu sổ hiển thị là dữ liệu tham khảo; cần chuyên gia rà soát hiệu lực và phương pháp áp dụng trước khi dùng thực tế.
-- Dữ liệu nghiệp vụ người dùng nhập được lưu cục bộ trong MySQL; database mới không nạp bản ghi nghiệp vụ mẫu.
+- Dữ liệu nghiệp vụ người dùng nhập được lưu cục bộ trong PostgreSQL; database mới không nạp bản ghi nghiệp vụ mẫu.

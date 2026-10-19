@@ -1,6 +1,7 @@
-import mysql from 'mysql2/promise';
+import pg from 'pg';
 import { randomUUID } from 'node:crypto';
 
+const { Pool } = pg;
 let pool;
 
 export const odooSyncEntities = [
@@ -13,62 +14,194 @@ export const odooSyncEntities = [
 
 const hasOdooConfig = () => Boolean(process.env.ODOO_URL && process.env.ODOO_DB && process.env.ODOO_USERNAME && process.env.ODOO_PASSWORD);
 
-export async function initDb() {
-  pool = mysql.createPool({
-    host: process.env.DB_HOST || '127.0.0.1',
-    port: Number(process.env.DB_PORT || 3306),
-    user: process.env.DB_USER || 'fintax',
-    password: process.env.DB_PASSWORD || 'fintax_local',
-    database: process.env.DB_NAME || 'finworkshop',
-    waitForConnections: true,
-    connectionLimit: 10,
-    decimalNumbers: true,
-    charset: 'utf8mb4',
+export function adaptSqlAndParams(sql, params = []) {
+  let convertedSql = sql
+    .replace(/JSON_UNQUOTE\s*\(\s*JSON_EXTRACT\s*\(\s*([a-zA-Z0-9_]+)\s*,\s*'\$\.([^']+)'\s*\)\s*\)/gi, '($1->>\'$2\')')
+    .replace(/CAST\s*\(\s*\?\s*AS\s*JSON\s*\)/gi, '?::jsonb')
+    .replace(/ON DUPLICATE KEY UPDATE\s+data\s*=\s*VALUES\(data\),\s*sync_status\s*=\s*VALUES\(sync_status\),\s*updated_by\s*=\s*VALUES\(updated_by\)/gi,
+      'ON CONFLICT (entity, record_id) DO UPDATE SET data = EXCLUDED.data, sync_status = EXCLUDED.sync_status, updated_by = EXCLUDED.updated_by, updated_at = CURRENT_TIMESTAMP')
+    .replace(/ON DUPLICATE KEY UPDATE\s+password_hash\s*=\s*VALUES\(password_hash\)/gi,
+      'ON CONFLICT (id) DO UPDATE SET password_hash = EXCLUDED.password_hash, updated_at = CURRENT_TIMESTAMP')
+    .replace(/ON DUPLICATE KEY UPDATE\s+entities\s*=\s*VALUES\(entities\),\s*actions\s*=\s*VALUES\(actions\)/gi,
+      'ON CONFLICT (role) DO UPDATE SET entities = EXCLUDED.entities, actions = EXCLUDED.actions, updated_at = CURRENT_TIMESTAMP')
+    .replace(/INSERT IGNORE INTO role_permissions/gi, 'INSERT INTO role_permissions');
+
+  if (/INSERT INTO role_permissions/i.test(convertedSql) && !/ON CONFLICT/i.test(convertedSql)) {
+    convertedSql += ' ON CONFLICT (role) DO NOTHING';
+  }
+
+  if (/INSERT INTO audit_logs/i.test(convertedSql) && !/RETURNING/i.test(convertedSql)) {
+    convertedSql += ' RETURNING id';
+  }
+
+  const flatParams = [];
+  let paramIdx = 0;
+
+  // Handle IN (?) where parameter is an array
+  convertedSql = convertedSql.replace(/IN\s*\(\s*\?\s*\)/gi, () => {
+    const val = params[paramIdx++];
+    if (Array.isArray(val)) {
+      if (val.length === 0) {
+        flatParams.push(null);
+        return `IN ($${flatParams.length})`;
+      }
+      const placeholders = val.map((item) => {
+        flatParams.push(item);
+        return `$${flatParams.length}`;
+      });
+      return `IN (${placeholders.join(', ')})`;
+    } else {
+      flatParams.push(val);
+      return `IN ($${flatParams.length})`;
+    }
   });
+
+  // Replace remaining '?' placeholders
+  convertedSql = convertedSql.replace(/\?/g, () => {
+    if (paramIdx >= params.length) return '?';
+    const val = params[paramIdx++];
+    flatParams.push(val);
+    return `$${flatParams.length}`;
+  });
+
+  return { sql: convertedSql, params: flatParams };
+}
+
+async function executeQuery(executor, sql, params = []) {
+  const { sql: adaptedSql, params: adaptedParams } = adaptSqlAndParams(sql, params);
+  const result = await executor.query(adaptedSql, adaptedParams);
+
+  const rows = result.rows || [];
+  rows.rowCount = result.rowCount ?? rows.length;
+  rows.affectedRows = result.rowCount ?? rows.length;
+  rows.insertId = rows[0]?.id;
+
+  return [rows, result.fields || []];
+}
+
+export async function initDb() {
+  const host = process.env.DB_HOST || process.env.PGHOST || '127.0.0.1';
+  const port = Number(process.env.DB_PORT || process.env.PGPORT || 5433);
+  const user = process.env.DB_USER || process.env.PGUSER || 'odoo';
+  const password = process.env.DB_PASSWORD || process.env.PGPASSWORD || 'odoo_local';
+  const targetDb = process.env.DB_NAME || process.env.PGDATABASE || 'finworkshop';
+
+  // Ensure target database exists
+  try {
+    const adminPool = new Pool({ host, port, user, password, database: 'postgres', connectionTimeoutMillis: 5000 });
+    const checkDb = await adminPool.query('SELECT 1 FROM pg_database WHERE datname = $1', [targetDb]);
+    if (checkDb.rows.length === 0) {
+      console.info(`Creating database "${targetDb}" in PostgreSQL...`);
+      await adminPool.query(`CREATE DATABASE "${targetDb}"`);
+    }
+    await adminPool.end();
+  } catch (err) {
+    console.warn(`Database verification note: ${err.message}`);
+  }
+
+  pool = new Pool({
+    host,
+    port,
+    user,
+    password,
+    database: targetDb,
+    max: 10,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 10000,
+  });
+
+  pool.getConnection = async () => {
+    const client = await pool.connect();
+    client.beginTransaction = async () => client.query('BEGIN');
+    client.commit = async () => client.query('COMMIT');
+    client.rollback = async () => client.query('ROLLBACK');
+    const origQuery = client.query.bind(client);
+    client.query = (sql, params) => executeQuery({ query: origQuery }, sql, params);
+    return client;
+  };
+
+  const origPoolQuery = pool.query.bind(pool);
+  pool.query = (sql, params) => executeQuery({ query: origPoolQuery }, sql, params);
+
+  // Create schemas for FinTax tables
   await pool.query(`CREATE TABLE IF NOT EXISTS users (
-    id CHAR(36) PRIMARY KEY, email VARCHAR(190) NOT NULL UNIQUE,
-    full_name VARCHAR(190) NOT NULL, role VARCHAR(40) NOT NULL,
-    password_hash VARCHAR(255) NOT NULL, active BOOLEAN NOT NULL DEFAULT TRUE,
+    id VARCHAR(36) PRIMARY KEY,
+    email VARCHAR(190) NOT NULL UNIQUE,
+    full_name VARCHAR(190) NOT NULL,
+    role VARCHAR(40) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  )`);
+
   await pool.query(`CREATE TABLE IF NOT EXISTS records (
-    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    entity VARCHAR(64) NOT NULL, record_id CHAR(36) NOT NULL,
-    data JSON NOT NULL, sync_status VARCHAR(32) NOT NULL DEFAULT 'LOCAL_DEMO',
-    created_by CHAR(36) NULL, updated_by CHAR(36) NULL,
+    id BIGSERIAL PRIMARY KEY,
+    entity VARCHAR(64) NOT NULL,
+    record_id VARCHAR(36) NOT NULL,
+    data JSONB NOT NULL,
+    sync_status VARCHAR(32) NOT NULL DEFAULT 'LOCAL_DEMO',
+    created_by VARCHAR(36) NULL,
+    updated_by VARCHAR(36) NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    UNIQUE KEY uq_entity_record (entity, record_id), KEY ix_entity_updated (entity, updated_at)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_entity_record UNIQUE (entity, record_id)
+  )`);
+  await pool.query('CREATE INDEX IF NOT EXISTS ix_records_entity_updated ON records (entity, updated_at)');
+
   await pool.query(`CREATE TABLE IF NOT EXISTS audit_logs (
-    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, actor_id CHAR(36) NOT NULL,
-    actor_name VARCHAR(190) NOT NULL, action VARCHAR(80) NOT NULL, entity VARCHAR(64) NOT NULL,
-    record_id CHAR(36) NULL, before_data JSON NULL, after_data JSON NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    KEY ix_audit_created (created_at), KEY ix_audit_entity (entity, record_id)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
+    id BIGSERIAL PRIMARY KEY,
+    actor_id VARCHAR(36) NOT NULL,
+    actor_name VARCHAR(190) NOT NULL,
+    action VARCHAR(80) NOT NULL,
+    entity VARCHAR(64) NOT NULL,
+    record_id VARCHAR(36) NULL,
+    before_data JSONB NULL,
+    after_data JSONB NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  )`);
+  await pool.query('CREATE INDEX IF NOT EXISTS ix_audit_created ON audit_logs (created_at)');
+  await pool.query('CREATE INDEX IF NOT EXISTS ix_audit_entity ON audit_logs (entity, record_id)');
+
   await pool.query(`CREATE TABLE IF NOT EXISTS imports (
-    id CHAR(36) PRIMARY KEY, actor_id CHAR(36) NOT NULL, original_name VARCHAR(255) NOT NULL,
-    preview_data JSON NOT NULL, created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
+    id VARCHAR(36) PRIMARY KEY,
+    actor_id VARCHAR(36) NOT NULL,
+    original_name VARCHAR(255) NOT NULL,
+    preview_data JSONB NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  )`);
+
   await pool.query(`CREATE TABLE IF NOT EXISTS file_assets (
-    file_id VARCHAR(255) PRIMARY KEY, stored_name VARCHAR(255) NOT NULL, original_name VARCHAR(255) NOT NULL,
-    mime_type VARCHAR(120) NOT NULL, size_bytes BIGINT UNSIGNED NOT NULL, owner_id CHAR(36) NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, KEY ix_file_owner (owner_id, created_at)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
+    file_id VARCHAR(255) PRIMARY KEY,
+    stored_name VARCHAR(255) NOT NULL,
+    original_name VARCHAR(255) NOT NULL,
+    mime_type VARCHAR(120) NOT NULL,
+    size_bytes BIGINT NOT NULL,
+    owner_id VARCHAR(36) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  )`);
+  await pool.query('CREATE INDEX IF NOT EXISTS ix_file_owner ON file_assets (owner_id, created_at)');
+
   await pool.query(`CREATE TABLE IF NOT EXISTS role_permissions (
-    role VARCHAR(40) PRIMARY KEY, entities JSON NOT NULL, actions JSON NOT NULL,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
+    role VARCHAR(40) PRIMARY KEY,
+    entities JSONB NOT NULL,
+    actions JSONB NOT NULL,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  )`);
+
   await pool.query(`CREATE TABLE IF NOT EXISTS odoo_sync_jobs (
-    id CHAR(36) PRIMARY KEY, entity VARCHAR(64) NOT NULL, record_id VARCHAR(255) NOT NULL,
-    payload JSON NOT NULL, status VARCHAR(32) NOT NULL DEFAULT 'PENDING', attempts INT NOT NULL DEFAULT 0,
-    last_error TEXT NULL, created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    KEY ix_sync_status (status, created_at), KEY ix_sync_record (entity, record_id)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
-  await pool.query('ALTER TABLE odoo_sync_jobs MODIFY COLUMN record_id VARCHAR(255) NOT NULL');
+    id VARCHAR(36) PRIMARY KEY,
+    entity VARCHAR(64) NOT NULL,
+    record_id VARCHAR(255) NOT NULL,
+    payload JSONB NOT NULL,
+    status VARCHAR(32) NOT NULL DEFAULT 'PENDING',
+    attempts INT NOT NULL DEFAULT 0,
+    last_error TEXT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  )`);
+  await pool.query('CREATE INDEX IF NOT EXISTS ix_sync_status ON odoo_sync_jobs (status, created_at)');
+  await pool.query('CREATE INDEX IF NOT EXISTS ix_sync_record ON odoo_sync_jobs (entity, record_id)');
 }
 
 export function getPool() {
@@ -131,9 +264,10 @@ export async function enqueueOdooSync(entity, recordId, payload, executor = getP
 
 export async function createAudit({ actor, action, entity, recordId = null, beforeData = null, afterData = null }) {
   const [result] = await getPool().query(`INSERT INTO audit_logs (actor_id, actor_name, action, entity, record_id, before_data, after_data)
-    VALUES (?, ?, ?, ?, ?, ?, ?)`, [actor.id, actor.name, action, entity, recordId, beforeData ? JSON.stringify(beforeData) : null, afterData ? JSON.stringify(afterData) : null]);
-  await enqueueOdooSync('audit-logs', String(result.insertId), {
-    id: String(result.insertId), actorId: actor.id, actorName: actor.name, action, entity, recordId,
+    VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id`, [actor.id, actor.name, action, entity, recordId, beforeData ? JSON.stringify(beforeData) : null, afterData ? JSON.stringify(afterData) : null]);
+  const insertId = result.insertId || result[0]?.id;
+  await enqueueOdooSync('audit-logs', String(insertId), {
+    id: String(insertId), actorId: actor.id, actorName: actor.name, action, entity, recordId,
     beforeData, afterData, createdAt: new Date().toISOString(),
   });
 }
