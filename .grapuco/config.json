@@ -1,0 +1,24 @@
+{
+  "repoId": "555a1b81-f58b-4a0c-a02a-0ae67bb578ca",
+  "repoName": "FinWorkshop",
+  "server": "https://api.grapuco.com",
+  "language": "javascript",
+  "features": {
+    "embeddings": true,
+    "dataFlowAnalysis": true
+  },
+  "ignore": [
+    "node_modules",
+    "dist",
+    ".next",
+    ".git",
+    ".grapuco",
+    "__pycache__",
+    "vendor",
+    "target",
+    "build"
+  ],
+  "lastPush": "2026-10-22T13:34:24.865Z",
+  "workspaceId": "c2733530-64cd-463d-a7c9-1b40299d4b5b",
+  "workspaceName": "FinWorkshop"
+}
