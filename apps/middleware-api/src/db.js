@@ -1,5 +1,10 @@
 import pg from 'pg';
 import { randomUUID } from 'node:crypto';
+import { businessError } from './accounting.js';
+
+const revisions = new Map();
+export const recordRevision = (wid) => revisions.get(wid) || 0;
+const datedEntities = new Set(['transactions', 'invoices', 'payments', 'payment-allocations', 'stock-movements', 'labor-logs', 'reconciliations', 'accounting-adjustments', 'opening-balances']);
 
 const { Pool } = pg;
 let pool;
@@ -12,12 +17,13 @@ export const odooSyncEntities = [
   'quotations', 'production-orders', 'stock-movements', 'labor-logs', 'transactions',
   'invoices', 'payments', 'payment-allocations', 'reconciliations', 'alerts',
   'classification-rules', 'tax-rules', 'tax-periods', 'users', 'role-permissions',
-  'audit-logs', 'file-assets',
+  'audit-logs', 'file-assets', 'accounting-adjustments',
 ];
 
 const hasOdooConfig = () => Boolean(process.env.ODOO_URL && process.env.ODOO_DB && process.env.ODOO_USERNAME && process.env.ODOO_PASSWORD);
 
 export function adaptSqlAndParams(sql, params = []) {
+  if (!sql.includes('?')) return { sql, params };
   let convertedSql = sql
     .replace(/JSON_UNQUOTE\s*\(\s*JSON_EXTRACT\s*\(\s*([a-zA-Z0-9_]+)\s*,\s*'\$\.([^']+)'\s*\)\s*\)/gi, '($1->>\'$2\')')
     .replace(/CAST\s*\(\s*\?\s*AS\s*JSON\s*\)/gi, '?::jsonb')
@@ -40,29 +46,12 @@ export function adaptSqlAndParams(sql, params = []) {
   const flatParams = [];
   let paramIdx = 0;
 
-  // Handle IN (?) where parameter is an array
-  convertedSql = convertedSql.replace(/IN\s*\(\s*\?\s*\)/gi, () => {
+  convertedSql = convertedSql.replace(/IN\s*\(\s*\?\s*\)|\?/gi, (placeholder) => {
     const val = params[paramIdx++];
-    if (Array.isArray(val)) {
-      if (val.length === 0) {
-        flatParams.push(null);
-        return `IN ($${flatParams.length})`;
-      }
-      const placeholders = val.map((item) => {
-        flatParams.push(item);
-        return `$${flatParams.length}`;
-      });
-      return `IN (${placeholders.join(', ')})`;
-    } else {
-      flatParams.push(val);
-      return `IN ($${flatParams.length})`;
+    if (/^IN/i.test(placeholder)) {
+      const values = Array.isArray(val) && val.length ? val : [Array.isArray(val) ? null : val];
+      return `IN (${values.map((item) => { flatParams.push(item); return `$${flatParams.length}`; }).join(', ')})`;
     }
-  });
-
-  // Replace remaining '?' placeholders
-  convertedSql = convertedSql.replace(/\?/g, () => {
-    if (paramIdx >= params.length) return '?';
-    const val = params[paramIdx++];
     flatParams.push(val);
     return `$${flatParams.length}`;
   });
@@ -115,10 +104,12 @@ export async function initDb() {
 
   pool.getConnection = async () => {
     const client = await pool.connect();
-    client.beginTransaction = async () => client.query('BEGIN');
-    client.commit = async () => client.query('COMMIT');
+    client.beginTransaction = async () => { client.changedWorkshops = new Set(); return client.query('BEGIN'); };
+    client.commit = async () => { const result = await client.query('COMMIT'); for (const wid of client.changedWorkshops || []) revisions.set(wid, recordRevision(wid) + 1); client.changedWorkshops = new Set(); return result; };
     client.rollback = async () => client.query('ROLLBACK');
     const origQuery = client.query.bind(client);
+    const origRelease = client.release.bind(client);
+    client.release = (...args) => { client.query = origQuery; return origRelease(...args); };
     client.query = (sql, params) => executeQuery({ query: origQuery }, sql, params);
     return client;
   };
@@ -158,6 +149,9 @@ export async function initDb() {
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS workshop_id VARCHAR(36) DEFAULT '${DEFAULT_WORKSHOP_ID}'`);
   await pool.query(`UPDATE users SET workshop_id = '${DEFAULT_WORKSHOP_ID}' WHERE workshop_id IS NULL`);
   await pool.query('CREATE INDEX IF NOT EXISTS ix_users_workshop ON users (workshop_id)');
+
+  await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS approval_status VARCHAR(32) NOT NULL DEFAULT 'APPROVED'");
+  await pool.query("ALTER TABLE users ADD COLUMN IF NOT EXISTS odoo_sync_status VARCHAR(32) NOT NULL DEFAULT 'PENDING_SYNC'");
 
   // 3. Records table (with workshop_id)
   await pool.query(`CREATE TABLE IF NOT EXISTS records (
@@ -205,6 +199,9 @@ export async function initDb() {
   await pool.query('CREATE INDEX IF NOT EXISTS ix_audit_created ON audit_logs (created_at)');
   await pool.query('CREATE INDEX IF NOT EXISTS ix_audit_workshop ON audit_logs (workshop_id, created_at)');
 
+  await pool.query('ALTER TABLE audit_logs ADD COLUMN IF NOT EXISTS actor_role VARCHAR(40)');
+  await pool.query('ALTER TABLE audit_logs ADD COLUMN IF NOT EXISTS reason TEXT');
+
   // 5. Imports table (with workshop_id)
   await pool.query(`CREATE TABLE IF NOT EXISTS imports (
     id VARCHAR(36) PRIMARY KEY,
@@ -240,6 +237,20 @@ export async function initDb() {
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`);
 
+  await pool.query('ALTER TABLE role_permissions ADD COLUMN IF NOT EXISTS permissions_version INT NOT NULL DEFAULT 1');
+  await pool.query(`CREATE TABLE IF NOT EXISTS workshop_role_permissions (
+    workshop_id VARCHAR(36) NOT NULL, role VARCHAR(40) NOT NULL, entities JSONB NOT NULL, actions JSONB NOT NULL,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (workshop_id, role))`);
+  await pool.query(`INSERT INTO workshop_role_permissions (workshop_id, role, entities, actions)
+    SELECT '${DEFAULT_WORKSHOP_ID}', role, entities, actions FROM role_permissions ON CONFLICT DO NOTHING`);
+  await pool.query(`ALTER TABLE workshops ADD COLUMN IF NOT EXISTS settings JSONB NOT NULL DEFAULT '{}'::jsonb`);
+  await pool.query(`CREATE TABLE IF NOT EXISTS user_invitations (
+    id VARCHAR(36) PRIMARY KEY, workshop_id VARCHAR(36) NOT NULL, email VARCHAR(190) NOT NULL, role VARCHAR(40) NOT NULL,
+    token_hash VARCHAR(64) NOT NULL UNIQUE, expires_at TIMESTAMP NOT NULL, used_at TIMESTAMP, created_by VARCHAR(36) NOT NULL)`);
+  await pool.query(`CREATE TABLE IF NOT EXISTS record_business_keys (
+    workshop_id VARCHAR(36) NOT NULL, entity VARCHAR(64) NOT NULL, business_key TEXT NOT NULL, record_id VARCHAR(255) NOT NULL,
+    PRIMARY KEY (workshop_id, entity, business_key))`);
+
   // 8. Odoo sync jobs table
   await pool.query(`CREATE TABLE IF NOT EXISTS odoo_sync_jobs (
     id VARCHAR(36) PRIMARY KEY,
@@ -257,6 +268,9 @@ export async function initDb() {
   await pool.query(`UPDATE odoo_sync_jobs SET workshop_id = '${DEFAULT_WORKSHOP_ID}' WHERE workshop_id IS NULL`);
   await pool.query('CREATE INDEX IF NOT EXISTS ix_sync_status ON odoo_sync_jobs (status, created_at)');
   await pool.query('CREATE INDEX IF NOT EXISTS ix_sync_record ON odoo_sync_jobs (entity, record_id)');
+  await pool.query("ALTER TABLE odoo_sync_jobs ADD COLUMN IF NOT EXISTS operation VARCHAR(40) DEFAULT 'UPSERT'");
+  await pool.query('CREATE INDEX IF NOT EXISTS ix_records_invoice_alloc ON records (workshop_id, entity, (data->>\'invoiceId\'))');
+  await pool.query('CREATE INDEX IF NOT EXISTS ix_records_payment_alloc ON records (workshop_id, entity, (data->>\'paymentId\'))');
 }
 
 export function getPool() {
@@ -280,7 +294,7 @@ export async function createWorkshop({ id = randomUUID(), name, code, taxId = nu
 
 export async function getWorkshop(id) {
   const wid = id || DEFAULT_WORKSHOP_ID;
-  const [rows] = await getPool().query('SELECT id, name, code, tax_id, owner_id, active, created_at FROM workshops WHERE id = ? LIMIT 1', [wid]);
+  const [rows] = await getPool().query('SELECT id, name, code, tax_id, owner_id, active, settings, created_at FROM workshops WHERE id = ? LIMIT 1', [wid]);
   return rows[0] || null;
 }
 
@@ -352,8 +366,39 @@ export async function saveRecord(entity, data, actorId, ...rest) {
   }
 
   wid = wid || data.workshopId || DEFAULT_WORKSHOP_ID;
+  if (executor === getPool()) {
+    const connection = await getPool().getConnection();
+    try {
+      await connection.beginTransaction();
+      const saved = await saveRecord(entity, data, actorId, wid, syncStatus, connection);
+      await connection.commit();
+      return saved;
+    } catch (error) { await connection.rollback(); throw error; }
+    finally { connection.release(); }
+  }
+  await executor.query('SELECT pg_advisory_xact_lock(hashtext(?))', [`period:${wid}`]);
+  if (datedEntities.has(entity)) {
+    const before = data.id ? await getRecord(entity, data.id, wid, executor) : null;
+    await assertOpenPeriod(data, wid, executor);
+    if (before) await assertOpenPeriod(before, wid, executor);
+  }
+  (executor.changedWorkshops ||= new Set()).add(wid);
   const id = data.id || randomUUID();
   const value = { ...data, id, workshopId: wid };
+  const keyed = new Set(['invoices','quotations','customers','suppliers','materials','products','boms','production-orders','cash-accounts']);
+  if (keyed.has(entity) && String(value.code || '').trim()) {
+    const code = String(value.code).trim().toUpperCase();
+    const party = value.counterpartyId || value.taxCode || String(value.counterparty || '').trim().toUpperCase();
+    const key = entity === 'invoices' ? `${value.direction || value.type}:${party}:${value.series || ''}:${code}` : code;
+    // Reserve inside the document transaction. The unique database key also protects concurrent requests.
+    const [prior] = await executor.query('SELECT record_id FROM record_business_keys WHERE workshop_id = ? AND entity = ? AND business_key = ?', [wid, entity, key]);
+    if (prior[0] && prior[0].record_id !== id) throw businessError('Mã đã tồn tại trong doanh nghiệp.', 409);
+    const [legacy] = await executor.query('SELECT record_id, data FROM records WHERE workshop_id = ? AND entity = ? AND record_id <> ? AND UPPER(TRIM(data->>\'code\')) = ?', [wid, entity, id, code]);
+    if (legacy.some(row => entity !== 'invoices' || (() => { const other = decodeData(row.data); return (other.direction || other.type) === (value.direction || value.type) && (other.counterpartyId || other.taxCode || String(other.counterparty || '').trim().toUpperCase()) === party && (other.series || '') === (value.series || ''); })())) throw businessError('Mã đã tồn tại trong doanh nghiệp.', 409);
+    await executor.query('INSERT INTO record_business_keys (workshop_id, entity, business_key, record_id) VALUES (?, ?, ?, ?) ON CONFLICT DO NOTHING', [wid, entity, key, id]);
+    const [reserved] = await executor.query('SELECT record_id FROM record_business_keys WHERE workshop_id = ? AND entity = ? AND business_key = ?', [wid, entity, key]);
+    if (reserved[0]?.record_id !== id) throw businessError('Yêu cầu trùng chứng từ; tải lại danh sách.', 409);
+  }
   const syncable = odooSyncEntities.includes(entity);
   const shouldSync = syncable && hasOdooConfig() && syncStatus !== 'DEMO_SEED';
   const effectiveStatus = shouldSync ? 'PENDING_ODOO' : syncStatus;
@@ -366,7 +411,7 @@ export async function saveRecord(entity, data, actorId, ...rest) {
 }
 
 export async function enqueueOdooSync(entity, recordId, payload, workshopId = DEFAULT_WORKSHOP_ID, executor = getPool()) {
-  if (!hasOdooConfig() || !odooSyncEntities.includes(entity)) return false;
+  if ((!hasOdooConfig() && entity !== 'users') || !odooSyncEntities.includes(entity)) return false;
   const id = String(recordId ?? payload?.id ?? '');
   const wid = workshopId || DEFAULT_WORKSHOP_ID;
   if (!id) throw new Error(`A source ID is required to sync ${entity} to Odoo.`);
@@ -377,25 +422,33 @@ export async function enqueueOdooSync(entity, recordId, payload, workshopId = DE
   );
   const json = JSON.stringify({ ...payload, id });
   if (pending[0]) {
-    await executor.query('UPDATE odoo_sync_jobs SET payload = CAST(? AS JSON), status = ?, last_error = NULL WHERE id = ?', [json, 'PENDING', pending[0].id]);
+    await executor.query('UPDATE odoo_sync_jobs SET payload = CAST(? AS JSON), status = ?, operation = ?, last_error = NULL, updated_at = CURRENT_TIMESTAMP WHERE id = ?', [json, 'PENDING', entity === 'users' ? 'REGISTER_USER' : 'UPSERT', pending[0].id]);
   } else {
-    await executor.query('INSERT INTO odoo_sync_jobs (id, workshop_id, entity, record_id, payload, status) VALUES (?, ?, ?, ?, CAST(? AS JSON), ?)', [randomUUID(), wid, entity, id, json, 'PENDING']);
+    await executor.query('INSERT INTO odoo_sync_jobs (id, workshop_id, entity, record_id, payload, status, operation) VALUES (?, ?, ?, ?, CAST(? AS JSON), ?, ?)', [randomUUID(), wid, entity, id, json, 'PENDING', entity === 'users' ? 'REGISTER_USER' : 'UPSERT']);
   }
   return true;
 }
 
-export async function createAudit({ actor, action, entity, recordId = null, workshopId = null, beforeData = null, afterData = null }) {
+export async function createAudit({ actor, action, entity, recordId = null, workshopId = null, beforeData = null, afterData = null, reason = null, executor = getPool() }) {
   const wid = workshopId || actor?.workshopId || DEFAULT_WORKSHOP_ID;
-  const [result] = await getPool().query(`INSERT INTO audit_logs (workshop_id, actor_id, actor_name, action, entity, record_id, before_data, after_data)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id`, [wid, actor.id, actor.name, action, entity, recordId, beforeData ? JSON.stringify(beforeData) : null, afterData ? JSON.stringify(afterData) : null]);
+  const [result] = await executor.query(`INSERT INTO audit_logs (workshop_id, actor_id, actor_name, actor_role, action, entity, record_id, before_data, after_data, reason)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id`, [wid, actor.id, actor.name || 'System', actor.role || null, action, entity, recordId, beforeData ? JSON.stringify(beforeData) : null, afterData ? JSON.stringify(afterData) : null, reason || afterData?.cancellationReason || afterData?.writeOffReason || afterData?.rejectionNote || afterData?.unlockNote || null]);
   const insertId = result.insertId || result[0]?.id;
   await enqueueOdooSync('audit-logs', String(insertId), {
     id: String(insertId), actorId: actor.id, actorName: actor.name, action, entity, recordId,
-    beforeData, afterData, createdAt: new Date().toISOString(),
-  }, wid);
+    role: actor.role, reason, beforeData, afterData, createdAt: new Date().toISOString(),
+  }, wid, executor);
 }
 
 export async function ensureUuidRecordId(entity, data, actorId, workshopId, status) {
   const record = { ...data, id: data.id || randomUUID() };
   return saveRecord(entity, record, actorId, workshopId, status);
+}
+
+export async function assertOpenPeriod(record, wid, executor = getPool()) {
+  const date = String(record.date || record.issueDate || record.startDate || record.createdAt || new Date().toISOString()).slice(0, 10);
+  const [periods] = await executor.query("SELECT data FROM records WHERE workshop_id = ? AND entity = 'tax-periods' AND data->>'status' = 'LOCKED'", [wid]);
+  if (record.periodStatus === 'LOCKED' || periods.some(({ data }) => { const p = decodeData(data); return p.startDate <= date && p.endDate >= date; })) {
+    throw businessError('Chứng từ thuộc kỳ đã khóa. Chủ xưởng phải mở khóa kỳ và nhập lý do trước khi thay đổi.', 409);
+  }
 }

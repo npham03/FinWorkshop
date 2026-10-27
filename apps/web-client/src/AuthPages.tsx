@@ -1,8 +1,8 @@
-import { useState, type FormEvent, type ReactNode } from 'react';
-import { Link, Navigate, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import { ChevronDown, Factory, FileText, ShieldCheck, Sparkles } from 'lucide-react';
+import { useEffect,useState,type FormEvent,type ReactNode } from 'react';
+import { Link,Navigate,useLocation,useNavigate,useSearchParams } from 'react-router-dom';
+import { ChevronDown,Factory,FileText,ShieldCheck,Sparkles } from 'lucide-react';
 import { useAuth } from './auth';
-import { api, messageOf } from './api';
+import { api,messageOf } from './api';
 
 function AuthLayout({ eyebrow, title, description, children }: { eyebrow: string; title: string; description: string; children: ReactNode }) {
   return <div className="grid min-h-screen bg-white lg:grid-cols-[1.05fr_.95fr]">
@@ -11,16 +11,16 @@ function AuthLayout({ eyebrow, title, description, children }: { eyebrow: string
       <div className="absolute -right-12 -top-4 h-[320px] w-[320px] rounded-full border border-white/10" />
       <div className="relative z-10">
         <div className="h-20 w-[310px] overflow-hidden rounded-2xl bg-white"><img src="/logo-horizontal.png" alt="DichVuThue FinTax" className="h-full w-full object-contain" /></div>
-        <div className="mt-20 max-w-xl"><p className="text-xs font-semibold uppercase tracking-[.22em] text-red-300">FinTax Automation</p><h1 className="mt-5 text-4xl font-semibold leading-[1.15] tracking-tight">Quản trị xưởng.<br />An tâm dòng tiền.</h1><p className="mt-5 max-w-md text-sm leading-7 text-white/60">Từ định mức sản xuất đến dòng tiền và dữ liệu đối soát — rõ ràng, liền mạch, trong tầm kiểm soát.</p></div>
+        <div className="mt-20 max-w-xl"><p className="text-xs font-semibold uppercase tracking-[.22em] text-red-300">FinTax Automation</p><h1 className="mt-5 text-4xl font-semibold leading-[1.15] tracking-tight">Quản trị xưởng.<br />An tâm dòng tiền.</h1><p className="mt-5 max-w-md text-sm leading-7 text-white/60">Báo giá, sản xuất, thu chi và công nợ trong một hồ sơ.</p></div>
       </div>
       <div className="relative z-10 grid max-w-xl grid-cols-3 gap-3">{[['01', 'Dòng tiền rõ ràng'], ['02', 'Vận hành liền mạch'], ['03', 'Rà soát chủ động']].map(([number, label]) => <div key={number} className="rounded-2xl border border-white/10 bg-white/[.04] p-4"><p className="text-xs text-red-300">{number}</p><p className="mt-3 text-xs font-medium text-white/80">{label}</p></div>)}</div>
       <p className="relative z-10 text-[10px] text-white/35">Dữ liệu trình diễn · Không kết nối cơ quan thuế hoặc ngân hàng thật</p>
     </section>
     <section className="flex min-h-screen items-center justify-center px-5 py-12"><div className="w-full max-w-[410px]">
       <div className="mb-9 flex h-14 w-[220px] overflow-hidden lg:hidden"><img src="/logo-horizontal.png" alt="DichVuThue FinTax" className="h-full w-full object-contain" /></div>
-      <div className="mb-8"><p className="text-xs font-semibold uppercase tracking-[.18em] text-brand-600">{eyebrow}</p><h2 className="mt-3 text-3xl font-semibold tracking-tight">{title}</h2><p className="mt-2 text-sm leading-6 text-muted">{description}</p></div>
+      <div className="mb-8"><Link to="/" className="mb-6 inline-flex text-xs font-medium text-muted hover:text-brand-700">← Trang giới thiệu</Link><p className="text-xs font-semibold uppercase tracking-[.18em] text-brand-600">{eyebrow}</p><h2 className="mt-3 text-3xl font-semibold tracking-tight">{title}</h2><p className="mt-2 text-sm leading-6 text-muted">{description}</p></div>
       {children}
-      <div className="mt-8 flex items-center justify-center gap-1.5 text-[10px] text-gray-400"><Sparkles size={12} />FinTax Automation · Tài khoản được quản lý qua Odoo</div>
+      <div className="mt-8 flex items-center justify-center gap-1.5 text-[10px] text-gray-400"><Sparkles size={12} />FinTax Automation · Quản trị tài chính xưởng</div>
     </div></section>
   </div>;
 }
@@ -32,23 +32,24 @@ function FormError({ children }: { children: string }) { return children ? <p ro
 export function LoginPage() {
   const { user, login } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('owner@fintax.demo');
-  const [password, setPassword] = useState('FinTax@2026');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
-  if (user) return <Navigate to="/" replace />;
+  if (user) return <Navigate to="/app" replace />;
   const submit = async (event: FormEvent) => {
     event.preventDefault(); setError(''); setBusy(true);
-    try { await login(email, password); navigate('/'); }
+    try { await login(email, password); navigate('/app'); }
     catch (reason) { setError(messageOf(reason)); }
     finally { setBusy(false); }
   };
   const demos = [
-    { email: 'owner@fintax.demo', label: 'Chủ xưởng', icon: <ShieldCheck size={15} /> },
-    { email: 'accountant@fintax.demo', label: 'Kế toán', icon: <FileText size={15} /> },
-    { email: 'warehouse@fintax.demo', label: 'Thợ xưởng', icon: <Factory size={15} /> },
+    { email: 'owner.workflow@fintax.demo', label: 'Chủ xưởng', icon: <ShieldCheck size={15} /> },
+    { email: 'accountant.workflow@fintax.demo', label: 'Kế toán', icon: <FileText size={15} /> },
+    { email:'warehouse.workflow@fintax.demo',label:'Thủ kho',icon:<Factory size={15}/> },
+    { email: 'workshop.workflow@fintax.demo', label: 'Thợ xưởng', icon: <Factory size={15} /> },
   ];
-  return <AuthLayout eyebrow="Chào mừng trở lại" title="Đăng nhập FinTax" description="Sử dụng tài khoản của bạn để tiếp tục làm việc.">
+  return <AuthLayout eyebrow="Chào mừng trở lại" title="Đăng nhập FinTax" description="Đăng nhập để mở kỳ làm việc.">
     <form onSubmit={submit} className="space-y-5">
       <FormError>{error}</FormError>
       <label className="block"><span className="mb-2 block text-xs font-medium text-gray-600">Email</span><input type="email" autoComplete="username" value={email} onChange={(event) => setEmail(event.target.value)} required className={inputClass} /></label>
@@ -64,55 +65,20 @@ export function LoginPage() {
 }
 
 export function RegisterPage() {
-  const { user } = useAuth();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [workshopName, setWorkshopName] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmation, setConfirmation] = useState('');
-  const [error, setError] = useState('');
-  const [done, setDone] = useState(false);
-  const [busy, setBusy] = useState(false);
-  const [successMsg, setSuccessMsg] = useState('');
-
-  if (user) return <Navigate to="/" replace />;
-
-  const submit = async (event: FormEvent) => {
-    event.preventDefault(); setError('');
-    if (password !== confirmation) { setError('Hai mật khẩu chưa trùng khớp.'); return; }
-    setBusy(true);
-    try {
-      const response = await api.post('/auth/register', { name, email, password, workshopName: workshopName.trim() });
-      setSuccessMsg(response.data?.message || 'Tài khoản đã được tạo thành công! Bạn có thể đăng nhập ngay để bắt đầu làm việc.');
-      setDone(true);
-    }
-    catch (reason) { setError(messageOf(reason)); }
-    finally { setBusy(false); }
-  };
-
-  return <AuthLayout eyebrow="Tạo tài khoản mới" title={done ? 'Đăng ký thành công' : 'Đăng ký FinTax Đa Xưởng'} description={done ? 'Tài khoản của bạn đã sẵn sàng.' : 'Tạo xưởng độc lập mới hoặc tham gia không gian FinTax.'}>
-    {done ? <div className="space-y-5"><div className="rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-4 text-sm leading-6 text-emerald-900">{successMsg}</div><Link to="/login" className={`${primaryButton} no-underline`}>Đăng nhập ngay</Link></div> : <form onSubmit={submit} className="space-y-4">
-      <FormError>{error}</FormError>
-      <label className="block">
-        <div className="mb-2 flex items-center justify-between">
-          <span className="text-xs font-medium text-gray-600">Tên xưởng / Doanh nghiệp</span>
-          <span className="text-[10px] font-semibold text-brand-600">Tạo xưởng & Vai trò Chủ xưởng</span>
-        </div>
-        <input
-          type="text"
-          value={workshopName}
-          onChange={(event) => setWorkshopName(event.target.value)}
-          placeholder="Ví dụ: Xưởng Mộc Bình An, Xưởng Cơ Khí Tiến Phát…"
-          className={inputClass}
-        />
-        <span className="mt-1.5 block text-[10px] text-muted">Nhập tên xưởng để sở hữu không gian riêng độc lập; để trống nếu tham gia xưởng FinTax mẫu.</span>
-      </label>
-      <label className="block"><span className="mb-2 block text-xs font-medium text-gray-600">Họ và tên chủ xưởng / người dùng</span><input autoComplete="name" value={name} onChange={(event) => setName(event.target.value)} required minLength={2} maxLength={190} className={inputClass} /></label>
-      <label className="block"><span className="mb-2 block text-xs font-medium text-gray-600">Email</span><input type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} required className={inputClass} /></label>
-      <label className="block"><span className="mb-2 block text-xs font-medium text-gray-600">Mật khẩu</span><input type="password" autoComplete="new-password" value={password} onChange={(event) => setPassword(event.target.value)} required minLength={10} className={inputClass} /><span className="mt-1.5 block text-[10px] text-muted">Từ 10 ký tự; mật khẩu dài tối đa 72 byte UTF-8.</span></label>
-      <label className="block"><span className="mb-2 block text-xs font-medium text-gray-600">Nhập lại mật khẩu</span><input type="password" autoComplete="new-password" value={confirmation} onChange={(event) => setConfirmation(event.target.value)} required minLength={10} className={inputClass} /></label>
-      <button disabled={busy} type="submit" className={primaryButton}>{busy ? 'Đang tạo xưởng & tài khoản…' : 'Đăng ký xưởng mới'}<ChevronDown className="-rotate-90" size={16} /></button>
-      <p className="pt-2 text-center text-sm text-muted">Đã có tài khoản? <Link to="/login" className="font-semibold text-brand-700">Đăng nhập</Link></p>
+  const {user}=useAuth();const [params]=useSearchParams();const inviteToken=params.get('invite')||'';
+  const [name,setName]=useState(''),[email,setEmail]=useState(''),[company,setCompany]=useState(''),[password,setPassword]=useState(''),[confirmation,setConfirmation]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState(''),[done,setDone]=useState(false),[message,setMessage]=useState(''),[inviteReady,setInviteReady]=useState(!inviteToken);
+  useEffect(()=>{if(inviteToken)void api.get(`/invitations/${inviteToken}`).then(({data})=>{setCompany(data.workshopName);setEmail(data.email);setInviteReady(true);}).catch(reason=>setError(messageOf(reason)));},[inviteToken]);
+  if(user)return <Navigate to="/app" replace/>;
+  const submit=async(event:FormEvent)=>{event.preventDefault();setError('');if(password!==confirmation){setError('Hai mật khẩu chưa trùng khớp.');return;}setBusy(true);try{const {data}=await api.post('/auth/register',{name,email,password,workshopName:company,inviteToken:inviteToken||undefined,mode:inviteToken?'JOIN':'CREATE_WORKSHOP'});setMessage(data.message);setDone(true);}catch(reason){setError(messageOf(reason));}finally{setBusy(false);}};
+  return <AuthLayout eyebrow={inviteToken?'Lời mời từ doanh nghiệp':'Bắt đầu với FinWorkshop'} title={done?'Không gian làm việc đã sẵn sàng':inviteToken?'Tham gia doanh nghiệp':'Tạo doanh nghiệp của bạn'} description={done?'Đăng nhập để khai báo danh mục và số dư đầu kỳ.':inviteToken?'Vai trò và doanh nghiệp được xác định trong lời mời.':'Một không gian riêng cho chủ doanh nghiệp, kế toán, thủ kho và thợ.'}>
+    {done?<div className="space-y-5"><p className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm leading-6 text-emerald-900">{message}</p><Link className={`${primaryButton} no-underline`} to="/login">Đăng nhập doanh nghiệp</Link></div>:<form onSubmit={submit} className="space-y-4"><FormError>{error}</FormError>
+      <label className="block text-xs font-medium text-slate-600">Tên doanh nghiệp / Hộ kinh doanh<input required minLength={2} readOnly={Boolean(inviteToken)} className={`${inputClass} mt-2`} value={company} onChange={e=>setCompany(e.target.value)} placeholder="Ví dụ: Cơ khí An Phát"/></label>
+      <label className="block text-xs font-medium text-slate-600">{inviteToken?'Họ và tên nhân viên':'Họ và tên chủ doanh nghiệp'}<input required autoComplete="name" minLength={2} maxLength={190} className={`${inputClass} mt-2`} value={name} onChange={e=>setName(e.target.value)}/></label>
+      <label className="block text-xs font-medium text-slate-600">Email đăng nhập<input required type="email" autoComplete="email" readOnly={Boolean(inviteToken)} className={`${inputClass} mt-2`} value={email} onChange={e=>setEmail(e.target.value)}/></label>
+      <label className="block text-xs font-medium text-slate-600">Mật khẩu<input required type="password" autoComplete="new-password" minLength={10} className={`${inputClass} mt-2`} value={password} onChange={e=>setPassword(e.target.value)}/><span className="mt-2 block text-[11px] text-muted">Tối thiểu 10 ký tự, tối đa 72 byte UTF-8.</span></label>
+      <label className="block text-xs font-medium text-slate-600">Nhập lại mật khẩu<input required type="password" autoComplete="new-password" minLength={10} className={`${inputClass} mt-2`} value={confirmation} onChange={e=>setConfirmation(e.target.value)}/></label>
+      {!inviteToken&&<p className="rounded-lg bg-slate-50 p-3 text-xs leading-6 text-muted">Doanh nghiệp bắt đầu với dữ liệu trống, VNĐ và phương pháp GTGT khấu trừ. Chủ doanh nghiệp cấu hình lại trước khi ghi nhận chứng từ.</p>}
+      <button className={primaryButton} disabled={busy||!inviteReady}>{busy?'Đang tạo…':inviteToken?'Tham gia theo lời mời':'Tạo không gian doanh nghiệp'}</button><p className="text-center text-xs text-muted">Đã có tài khoản? <Link className="font-semibold text-brand-700" to="/login">Đăng nhập</Link></p>
     </form>}
   </AuthLayout>;
 }
@@ -123,7 +89,7 @@ export function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
-  if (user) return <Navigate to="/" replace />;
+  if (user) return <Navigate to="/app" replace />;
 
   const submit = async (event: FormEvent) => {
     event.preventDefault(); setError(''); setBusy(true);
@@ -156,7 +122,7 @@ export function ResetPasswordPage() {
   const [done, setDone] = useState(false);
   const [busy, setBusy] = useState(false);
   const debugCode = typeof location.state?.debugCode === 'string' ? location.state.debugCode : '';
-  if (user) return <Navigate to="/" replace />;
+  if (user) return <Navigate to="/app" replace />;
 
   const submit = async (event: FormEvent) => {
     event.preventDefault(); setError('');

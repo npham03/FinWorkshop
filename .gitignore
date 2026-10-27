@@ -1,4 +1,4 @@
-﻿node_modules/
+node_modules/
 dist/
 .env
 .env.*.local
@@ -8,3 +8,11 @@ apps/web-client/.env.local
 apps/middleware-api/uploads/*
 !apps/middleware-api/uploads/.gitkeep
 *.tsbuildinfo
+
+apps/middleware-api/test-results.json
+apps/middleware-api/test-registration.json
+apps/middleware-api/test-artifacts/
+
+# Generated Python bytecode from the Odoo container
+__pycache__/
+*.py[cod]

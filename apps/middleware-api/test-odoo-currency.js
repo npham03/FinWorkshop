@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {parseVcbQuote,validateFxPolicy,VCB_SOURCE} from './src/odoo-currency.js';
+const xml='<ExrateList><DateTime>10/27/2026 6:57:59 AM</DateTime><Exrate CurrencyCode="USD" Buy="25,640.00" Transfer="25,670.00" Sell="26,050.00" /></ExrateList>';
+const quote=parseVcbQuote(xml,'USD','2026-10-27');
+assert.equal(quote.vndPerBaseUnit,26050);assert.equal(quote.date,'2026-10-27');assert.equal(quote.side,'SELL');assert.equal(quote.source,VCB_SOURCE);
+assert.throws(()=>parseVcbQuote(xml,'USD','2026-10-26'));assert.throws(()=>parseVcbQuote(xml,'USD','2026-11-04'));assert.throws(()=>parseVcbQuote(xml.replace('26,050.00','0'),'USD','2026-10-27'));
+assert.equal(validateFxPolicy(quote,26050,1,'2026-10-27'),26050);
+assert.throws(()=>validateFxPolicy(quote,1,1,'2026-10-27'));assert.throws(()=>validateFxPolicy(quote,26050,1,'2026-10-26'));assert.throws(()=>validateFxPolicy(quote,26050,1,'2026-11-04'));assert.throws(()=>validateFxPolicy({...quote,source:'http://invalid'},26050,1,'2026-10-27'));
+assert.equal(26050/validateFxPolicy(quote,26050,1,'2026-10-27'),1);
+console.log('PASS VCB source/date/side, decimal parsing, future/stale/invalid quotes, VND/USD direction, missing or changed rate guard');

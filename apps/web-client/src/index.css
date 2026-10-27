@@ -4,6 +4,22 @@
 
 @layer base {
   body { @apply m-0 bg-canvas font-sans text-ink antialiased; }
+  body { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum'; }
+  svg.lucide { stroke-width: 1.75; }
   button, input, select, textarea { font: inherit; }
   ::selection { @apply bg-brand-100 text-brand-900; }
+}
+
+@layer components {
+  .field-highlight { @apply rounded-xl border border-line border-l-4 border-l-brand-600 bg-brand-50 px-4 py-3; }
+  .financial-label { @apply text-[11px] font-semibold uppercase tracking-wider text-muted; }
+  .financial-value { @apply mt-2 text-xl font-bold tracking-tight tabular-nums text-ink; }
+  .document-table th { @apply whitespace-nowrap bg-slate-50 px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-600; }
+  .document-table td { @apply border-t border-line px-4 py-3 text-sm; }
+  .document-print-only { @apply hidden; }
+}
+@media print {
+  body:has([data-document-detail]) > #root { visibility: hidden; }
+  [data-document-detail] { visibility: visible; position: absolute; inset: 0; overflow: visible !important; max-height: none !important; box-shadow: none !important; padding: 12mm !important; }
+  [data-document-detail] [data-no-print] { display: none !important; }
 }
