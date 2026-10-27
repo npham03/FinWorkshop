@@ -14,7 +14,14 @@
     "dev:tax": "npm --workspace apps/mock-tax-api run dev",
     "build": "npm --workspace apps/web-client run build",
     "start:api": "npm --workspace apps/middleware-api start",
-    "start:tax": "npm --workspace apps/mock-tax-api start"
+    "start:tax": "npm --workspace apps/mock-tax-api start",
+    "test:workflows": "npm --workspace apps/middleware-api run test:workflows",
+    "seed:workflows": "npm --workspace apps/middleware-api run seed:workflows",
+    "test:big-update": "node apps/middleware-api/test-big-update.js",
+    "test:export": "node test-export.mjs",
+    "test:currency": "node apps/middleware-api/test-odoo-currency.js",
+    "configure:odoo-vnd": "node apps/middleware-api/configure-odoo-vnd.js",
+    "test:review-fixes": "node apps/middleware-api/test-review-fixes.js"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"

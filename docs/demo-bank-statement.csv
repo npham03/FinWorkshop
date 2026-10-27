@@ -1,0 +1,5 @@
+﻿date,description,credit,debit,reference
+2026-10-27,DEMO khach thanh toan,2200000,,DEMO-ST-001
+2026-10-27,DEMO mua vat tu,,1100000,DEMO-ST-002
+2026-10-27,DEMO khach thanh toan,2200000,,DEMO-ST-001
+invalid,DEMO dong loi,abc,,DEMO-ST-ERROR

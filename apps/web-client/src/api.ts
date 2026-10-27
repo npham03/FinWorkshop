@@ -16,7 +16,7 @@ api.interceptors.response.use((response) => response, (error) => {
   return Promise.reject(error);
 });
 
-export type Role = 'OWNER' | 'ACCOUNTANT' | 'WORKSHOP';
+export type Role = 'OWNER' | 'ACCOUNTANT' | 'WAREHOUSE' | 'WORKSHOP';
 export type User = {
   id: string;
   email: string;
@@ -36,8 +36,6 @@ export const getRecords = async <T = RecordRow>(entity: string) => (await api.ge
 export const createRecord = async <T = RecordRow>(entity: string, data: object) => (await api.post<T>(`/${entity}`, data)).data;
 export const updateRecord = async <T = RecordRow>(entity: string, id: string, data: object) => (await api.put<T>(`/${entity}/${id}`, data)).data;
 export const actionRecord = async <T = RecordRow>(entity: string, id: string, action: string, data: object = {}) => (await api.post<T>(`/${entity}/${id}/actions/${action}`, data)).data;
-export const formatVnd = (value: unknown) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(Number(value || 0));
-export const formatDate = (value: unknown) => value ? new Intl.DateTimeFormat('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(new Date(String(value))) : '—';
-export const statusLabel = (status: unknown) => ({
-  ACTIVE: 'Đang hoạt động', DRAFT: 'Bản nháp', PENDING_APPROVAL: 'Chờ duyệt', APPROVED: 'Đã duyệt', REJECTED: 'Từ chối', SENT: 'Đã gửi', ACCEPTED: 'Đã chấp nhận', IN_PROGRESS: 'Đang thực hiện', COMPLETED: 'Hoàn thành', SAVED: 'Đã lưu', DEMO_CODE_ISSUED: 'Đã mô phỏng cấp mã', REVIEW_REQUIRED: 'Chờ rà soát', NEEDS_REVIEW: 'Cần rà soát', CONFIRMED: 'Đã xác nhận', OPEN: 'Đang mở', RESOLVED: 'Đã xử lý', MATCHED: 'Khớp', PARTIAL: 'Khớp một phần', MISMATCH: 'Lệch', UNRESOLVED: 'Chưa đối soát', LOCKED: 'Đã khóa', REVIEWED: 'Đã rà soát', CANCELLED: 'Đã hủy', REVIEW_REQUIRED_TAX: 'Chờ rà soát quy tắc', ALLOCATED: 'Đã phân bổ', PAID: 'Đã thanh toán', UNPAID: 'Chưa thanh toán',
-} as Record<string, string>)[String(status || '')] || String(status || 'Chưa phân loại');
+export { formatMoney as formatVnd, vietnamDate as formatDate, displayLabel as statusLabel } from './presentation';
+
+export const today = () => new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });

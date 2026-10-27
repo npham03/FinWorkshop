@@ -14,7 +14,8 @@ class FinTaxUserAccount(models.Model):
         [
             ("OWNER", "Chủ xưởng"),
             ("ACCOUNTANT", "Kế toán / Bán hàng"),
-            ("WORKSHOP", "Thủ kho / Thợ xưởng"),
+            ("WAREHOUSE", "Thủ kho"),
+            ("WORKSHOP", "Thợ xưởng"),
         ],
         required=True,
         default="ACCOUNTANT",

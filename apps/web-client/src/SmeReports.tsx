@@ -1,0 +1,23 @@
+import { useCallback,useEffect,useState,type ReactNode } from 'react';
+import { api,formatVnd,messageOf,today } from './api';
+import { Button,Card,PageHeader } from './components';
+import { DataTable } from './DataTable';
+import { exportBooks } from './exports';
+
+export function SmeReports({periodTools}:{periodTools:ReactNode}){
+  const [report,setReport]=useState<any>(null),[legacy,setLegacy]=useState<any[]>([]),[from,setFrom]=useState(`${today().slice(0,7)}-01`),[to,setTo]=useState(today()),[selected,setSelected]=useState(new URLSearchParams(window.location.search).get('book')||'SME-NKC'),[mode,setMode]=useState('SME'),[error,setError]=useState(''),[busy,setBusy]=useState(false);
+  const load=useCallback(async()=>{setBusy(true);setError('');try{const [sme,books]=await Promise.all([api.get('/reports/sme',{params:{from,to}}),api.get('/reports/books',{params:{from,to}})]);setReport(sme.data);setLegacy(books.data.books);}catch(reason){setError(messageOf(reason));}finally{setBusy(false);}},[from,to]);
+  useEffect(()=>{void load();},[load]);
+  const vat=legacy.find(book=>book.code==='S4-HKD');
+  const smeBooks=[...(report?.books||[]),...(vat?[{...vat,code:'SME-GTGT',title:'Bảng đối chiếu GTGT theo chứng từ'}]:[])];
+  const books=mode==='SME'?smeBooks:legacy,current=books.find(book=>book.code===selected)||books[0];
+  const kpis=[['Doanh thu',report?.summary.revenue],['Giá vốn đã xuất bán',report?.summary.cogs],['Lãi gộp',report?.summary.grossProfit],['Nguyên vật liệu tồn',report?.summary.rawMaterials],['Sản xuất dở dang',report?.summary.wip],['Thành phẩm tồn',report?.summary.finishedGoods]];
+  return <><PageHeader title="Sổ sách & Báo cáo quản trị" action={<div className="flex gap-2"><Button variant="secondary" onClick={()=>void load()} disabled={busy}>Làm mới</Button><Button disabled={!books.length} onClick={()=>exportBooks(books,`FinWorkshop-${mode}-${from}-${to}`)}>Xuất toàn bộ (.xlsx)</Button></div>}/><div className="mb-5 flex flex-wrap items-end gap-3"><label className="text-xs">Từ ngày<input aria-label="Báo cáo từ ngày" type="date" className="ml-2 rounded-lg border border-line p-2" value={from} onChange={e=>setFrom(e.target.value)}/></label><label className="text-xs">Đến ngày<input aria-label="Báo cáo đến ngày" type="date" className="ml-2 rounded-lg border border-line p-2" value={to} onChange={e=>setTo(e.target.value)}/></label><select aria-label="Nhóm báo cáo" className="rounded-lg border border-line bg-white p-2 text-sm" value={mode} onChange={e=>{setMode(e.target.value);setSelected(e.target.value==='SME'?'SME-NKC':'S1-HKD');}}><option value="SME">Quản trị SME · Kho, giá thành & Công nợ</option><option value="DETAIL">7 sổ đối chiếu chi tiết</option></select><Button variant={selected==='periods'?'primary':'secondary'} onClick={()=>setSelected('periods')}>Kỳ kế toán</Button></div>
+    {error&&<p role="alert" className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-red-700">{error}</p>}
+    {mode==='SME'&&report&&<><div className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">{kpis.map(([label,value])=><Card key={label} className="border-l-4 border-l-brand-600 p-4"><p className="text-xs text-muted">{label}</p><strong className="mt-2 block text-xl tabular-nums">{formatVnd(value)}</strong></Card>)}</div><p className="mb-4 text-xs text-muted">Phát sinh Nợ: {formatVnd(report.summary.debit)} · Có: {formatVnd(report.summary.credit)} · {report.summary.debit===report.summary.credit?'Cân đối phát sinh':'Cần đối chiếu'}</p>{report.warnings.map((warning:string)=><p key={warning} className="mb-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">{warning}</p>)}</>}
+    {mode==='DETAIL'&&<p className="mb-4 rounded-lg border border-blue-200 bg-blue-50 p-3 text-xs text-blue-900">Bảy sổ đối chiếu theo cấu trúc cũ TT88. HKD năm 2026 cần chọn mẫu theo TT152; các bảng này không phải bộ hồ sơ kê khai.</p>}
+    <div className="my-4 flex flex-wrap gap-2">{books.map(book=><Button key={book.code} variant={current?.code===book.code&&selected!=='periods'?'primary':'secondary'} onClick={()=>setSelected(book.code)}>{book.code}</Button>)}</div>
+    {busy&&!report?<Card className="p-8 text-muted">Đang tổng hợp chứng từ…</Card>:selected==='periods'?periodTools:current&&<Card><h2 className="border-b border-line p-4 font-semibold">{current.title}</h2><DataTable key={`${mode}-${current.code}`} title={current.title} rows={current.rows} columns={current.columns}/></Card>}
+    <p className="mt-5 text-xs leading-6 text-muted">Báo cáo quản trị trước khấu hao, thuế TNDN và bút toán cuối kỳ. Đối chiếu chứng từ và sổ kế toán trước khi lập báo cáo tài chính.</p>
+  </>;
+}

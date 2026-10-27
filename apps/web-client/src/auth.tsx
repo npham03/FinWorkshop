@@ -1,5 +1,5 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import { api, type User } from './api';
+import { createContext,useContext,useEffect,useState,type ReactNode } from 'react';
+import { api,type User } from './api';
 
 type AuthContextValue = { user: User | null; loading: boolean; login: (email: string, password: string) => Promise<void>; logout: () => void };
 const AuthContext = createContext<AuthContextValue | null>(null);

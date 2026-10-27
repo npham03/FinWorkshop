@@ -13,7 +13,10 @@ export function hasOdooConfig() {
 }
 
 function invoke(client, method, params) {
-  return new Promise((resolve, reject) => client.methodCall(method, params, (error, value) => error ? reject(error) : resolve(value)));
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('Odoo XML-RPC timeout')), Number(process.env.ODOO_TIMEOUT_MS || 5000));
+    client.methodCall(method, params, (error, value) => { clearTimeout(timer); error ? reject(error) : resolve(value); });
+  });
 }
 
 export async function odooStatus() {

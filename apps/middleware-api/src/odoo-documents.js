@@ -1,6 +1,10 @@
 import { createHash } from 'node:crypto';
-import { listRecords } from './db.js';
+import { listRecords, getRecord } from './db.js';
 import { executeOdoo } from './odoo.js';
+import { invoiceDirection } from './accounting.js';
+
+import {companyForWorkshop} from './odoo-company.js';
+import {vndForDocument} from './odoo-currency.js';
 
 const amount = (value) => Number.isFinite(Number(value)) ? Number(value) : 0;
 const odooMappingError = (message) => Object.assign(new Error(message), { code: 'PENDING_MAPPING' });
@@ -10,12 +14,12 @@ async function findSourceRecord(model, sourceKey, fields = ['id']) {
   return rows?.[0] || null;
 }
 
-async function resolvePartner(data, partnerType) {
+async function resolvePartner(data, partnerType, companyId) {
   const counterpartEntity = partnerType === 'supplier' ? 'suppliers' : 'customers';
   const counterpartName = String(data.counterparty || data.customerName || data.supplierName || data.partnerName || '').trim();
   if (!counterpartName) throw odooMappingError(`Thiếu tên ${partnerType === 'supplier' ? 'nhà cung cấp' : 'khách hàng'} để tạo chứng từ Odoo.`);
 
-  const records = await listRecords(counterpartEntity);
+  const records = await listRecords(counterpartEntity, data.workshopId);
   const namedRecord = records.find((record) => (data.counterpartyId && record.id === data.counterpartyId)
     || (data.customerId && record.id === data.customerId)
     || (data.supplierId && record.id === data.supplierId)
@@ -28,16 +32,18 @@ async function resolvePartner(data, partnerType) {
   }
 
   const taxCode = String(data.taxCode || namedRecord?.taxCode || '').trim();
-  const stableKey = counterpartSourceKey || `web:partner:${createHash('sha256').update(`${partnerType}|${taxCode}|${counterpartName.toLocaleLowerCase('vi')}`).digest('hex').slice(0, 32)}`;
+  const stableKey = counterpartSourceKey || `web:partner:${createHash('sha256').update(`${data.workshopId}|${partnerType}|${taxCode}|${counterpartName.toLocaleLowerCase('vi')}`).digest('hex').slice(0, 32)}`;
   const alreadyLinked = await findSourceRecord('res.partner', stableKey);
   if (alreadyLinked) return Number(alreadyLinked.id);
 
+  const legacy=['00000000-0000-0000-0000-000000000001','00000000-0000-0000-0000-000000000002'].includes(data.workshopId);
+  const companyDomain=legacy?[['company_id','in',[false,companyId]]]:[['company_id','=',companyId]];
   let found = [];
   const fields = ['id', 'fintax_source_key'];
-  if (taxCode) found = await executeOdoo('res.partner', 'search_read', [[['vat', '=', taxCode]]], { fields, limit: 1, context: { active_test: false } });
-  if (!found?.length) found = await executeOdoo('res.partner', 'search_read', [[['name', '=ilike', counterpartName]]], { fields, limit: 1, context: { active_test: false } });
+  if (taxCode) found = await executeOdoo('res.partner', 'search_read', [[...companyDomain,['vat', '=', taxCode]]], { fields, limit: 1, context: { active_test: false } });
+  if (!found?.length) found = await executeOdoo('res.partner', 'search_read', [[...companyDomain,['name', '=ilike', counterpartName]]], { fields, limit: 1, context: { active_test: false } });
   const values = {
-    name: String(namedRecord?.name || counterpartName),
+    name: String(namedRecord?.name || counterpartName),company_id:companyId,
     email: data.email || namedRecord?.email || false,
     phone: data.phone || namedRecord?.phone || false,
     vat: taxCode || false,
@@ -53,12 +59,18 @@ async function resolvePartner(data, partnerType) {
   return Number(await executeOdoo('res.partner', 'create', [{ ...values, fintax_source_key: stableKey }]));
 }
 
-async function matchingTaxIds(typeUse, subtotal, taxAmount) {
+async function matchingTaxIds(typeUse, subtotal, taxAmount, treatment = '',companyId) {
+  if (taxAmount === 0 && ['ZERO_RATED', 'EXEMPT'].includes(treatment)) {
+    const taxes = await executeOdoo('account.tax', 'search_read', [[['type_tax_use', '=', typeUse],['company_id','=',companyId], ['active', '=', true], ['amount', '=', 0]]], { fields: ['id', 'name'], limit: 100 });
+    const match = taxes.find((tax) => treatment === 'EXEMPT' ? /KCT|exempt|không chịu/i.test(tax.name) : /0%|zero/i.test(tax.name) && !/KCT|exempt/i.test(tax.name));
+    if (!match) throw odooMappingError(`Cần cấu hình thuế Odoo riêng cho ${treatment === 'EXEMPT' ? 'không chịu thuế KCT' : 'thuế suất 0%'}.`);
+    return [Number(match.id)];
+  }
   if (subtotal <= 0 || taxAmount <= 0) return [];
-  const taxes = await executeOdoo('account.tax', 'search_read', [[['type_tax_use', '=', typeUse], ['active', '=', true], ['amount_type', '=', 'percent']]], { fields: ['id', 'amount'], limit: 100 });
+  const taxes = await executeOdoo('account.tax', 'search_read', [[['type_tax_use', '=', typeUse],['company_id','=',companyId], ['active', '=', true], ['amount_type', '=', 'percent']]], { fields: ['id', 'amount'], limit: 100 });
   const expected = amount(taxAmount);
   const match = taxes.map((tax) => ({ tax, delta: Math.abs(subtotal * amount(tax.amount) / 100 - expected) })).sort((a, b) => a.delta - b.delta)[0];
-  return match && match.delta <= Math.max(1, subtotal * 0.002) ? [Number(match.tax.id)] : [];
+  return match && match.delta <= 5 ? [Number(match.tax.id)] : [];
 }
 
 function saleLines(data, taxIds) {
@@ -76,16 +88,16 @@ function saleLines(data, taxIds) {
 }
 
 export async function syncOdooQuotation(data, sourceKey) {
-  const partnerId = await resolvePartner(data, 'customer');
-  const companies = await executeOdoo('res.company', 'search_read', [[]], { fields: ['id', 'currency_id'], limit: 1 });
-  const company = companies?.[0];
+  const company = await companyForWorkshop(data.workshopId);
+  const partnerId = await resolvePartner(data, 'customer',company.id);
   if (!company) throw odooMappingError('Odoo chưa có công ty để tạo báo giá.');
-  const pricelists = await executeOdoo('product.pricelist', 'search_read', [[['currency_id', '=', Number(company.currency_id?.[0] || 0)], '|', ['company_id', '=', false], ['company_id', '=', Number(company.id)]]], { fields: ['id'], limit: 1 });
+  const currencyId = await vndForDocument(company,data.date || data.issueDate, ['CANCELLED','REJECTED'].includes(data.status));
+  const pricelists = await executeOdoo('product.pricelist', 'search_read', [[['currency_id', '=', currencyId], '|', ['company_id', '=', false], ['company_id', '=', Number(company.id)]]], { fields: ['id'], limit: 1 });
   if (!pricelists?.length) throw odooMappingError('Chưa có bảng giá Odoo cùng tiền tệ với công ty.');
   const date = String(data.date || data.issueDate || new Date().toISOString().slice(0, 10)).slice(0, 10);
   const subtotal = amount(data.subtotal ?? data.total);
   const taxAmount = amount(data.taxAmount);
-  const taxes = await matchingTaxIds('sale', subtotal, taxAmount);
+  const taxes = await matchingTaxIds('sale', subtotal, taxAmount,'',company.id);
   const taxNote = taxAmount > 0 && !taxes.length ? `Thuế nguồn ${taxAmount} VND chưa khớp thuế Odoo; cần rà soát.` : '';
   const values = {
     fintax_source_key: sourceKey,
@@ -97,7 +109,7 @@ export async function syncOdooQuotation(data, sourceKey) {
     date_order: `${date} 00:00:00`,
     validity_date: data.validUntil || false,
     note: [String(data.terms || ''), taxNote].filter(Boolean).join('\n\n'),
-    order_line: saleLines(data, taxes),
+    order_line: [[5, 0, 0], ...saleLines(data, taxes)],
   };
   const existing = await findSourceRecord('sale.order', sourceKey, ['id', 'state']);
   let nativeId;
@@ -120,43 +132,51 @@ export async function syncOdooQuotation(data, sourceKey) {
 }
 
 export async function syncOdooInvoice(data, sourceKey) {
-  const isVendorBill = data.direction === 'INPUT';
-  if (!isVendorBill && data.direction !== 'OUTPUT') throw odooMappingError('Chọn hóa đơn đầu vào hoặc đầu ra để ánh xạ sang Odoo.');
+  if (['CANCELLED', 'VOID'].includes(data.status)) { const existing = await findSourceRecord('account.move', sourceKey); if (existing) { await executeOdoo('account.move', 'fintax_cancel_invoice', [[Number(existing.id)]]); return { model: 'account.move', id: Number(existing.id) }; } return { model: '', id: null }; }
+  const direction = invoiceDirection(data);
+  const isVendorBill = direction === 'INPUT';
+  if (!isVendorBill && direction !== 'OUTPUT') throw odooMappingError('Chọn hóa đơn đầu vào hoặc đầu ra để ánh xạ sang Odoo.');
   const moveType = isVendorBill ? 'in_invoice' : 'out_invoice';
-  const partnerId = await resolvePartner(data, isVendorBill ? 'supplier' : 'customer');
-  const companies = await executeOdoo('res.company', 'search_read', [[]], { fields: ['id', 'currency_id'], limit: 1 });
-  const company = companies?.[0];
+  const company = await companyForWorkshop(data.workshopId);
+  const partnerId = await resolvePartner(data, isVendorBill ? 'supplier' : 'customer',company.id);
   if (!company?.currency_id?.[0]) throw odooMappingError('Odoo chưa cấu hình tiền tệ công ty.');
   const journals = await executeOdoo('account.journal', 'search_read', [[['type', '=', isVendorBill ? 'purchase' : 'sale'], ['company_id', '=', Number(company.id)], ['active', '=', true]]], { fields: ['id', 'default_account_id'], limit: 1 });
   const journal = journals?.[0];
   if (!journal?.default_account_id?.[0]) throw odooMappingError(`Chưa cấu hình nhật ký ${isVendorBill ? 'hóa đơn nhà cung cấp' : 'hóa đơn khách hàng'} với tài khoản mặc định trong Odoo.`);
   const subtotal = amount(data.subtotal ?? data.total);
   const taxAmount = amount(data.taxAmount);
-  const taxes = await matchingTaxIds(isVendorBill ? 'purchase' : 'sale', subtotal, taxAmount);
-  const items = Array.isArray(data.items) && data.items.length ? data.items : [{ name: data.description || data.title || data.code || 'Hóa đơn FinTax', quantity: 1, unitPrice: subtotal }];
-  const taxNote = taxAmount > 0 && !taxes.length ? ` · Thuế nguồn ${taxAmount} VND chưa khớp thuế Odoo, cần rà soát` : '';
-  const invoiceLines = items.map((item) => [0, 0, {
-    name: `${String(item.name || item.description || data.description || data.code || 'Hóa đơn FinTax')}${taxNote}`,
-    quantity: Math.max(0.000001, amount(item.quantity ?? 1)),
-    price_unit: amount(item.unitPrice ?? item.unitCost ?? item.amount ?? 0),
-    account_id: Number(journal.default_account_id[0]),
-    ...(taxes.length ? { tax_ids: [[6, 0, taxes]] } : {}),
-  }]);
+  if (data.taxMode === 'HKD_REVENUE' || data.items?.some((item) => item.taxMode === 'HKD_REVENUE')) throw odooMappingError('Thuế HKD GTGT/TNCN cần tài khoản nghĩa vụ thuế riêng; không ánh xạ tổng tỷ lệ thành thuế GTGT khấu trừ.');
+  const items = data.items?.length ? data.items : [{ name: data.description || data.code, quantity: 1, unitPrice: subtotal, taxAmount, taxRate: data.taxRate }];
+  const invoiceLines = [];
+  for (const item of items) {
+    const lineSubtotal = Math.round(amount(item.quantity ?? 1) * amount(item.unitPrice ?? item.unitCost ?? item.amount));
+    const expectedTax = item.taxAmount ?? Math.round(lineSubtotal * amount(item.taxRate ?? data.taxRate) / 100);
+    const taxes = await matchingTaxIds(isVendorBill ? 'purchase' : 'sale', lineSubtotal, expectedTax, item.taxTreatment || data.taxTreatment,company.id);
+    if (expectedTax > 0 && !taxes.length) throw odooMappingError(`Chưa có thuế Odoo khớp dòng ${item.name || data.code}: ${expectedTax} VND. Cấu hình thuế trước khi thử lại.`);
+    invoiceLines.push([0, 0, { name: String(item.name || item.description || data.code), quantity: amount(item.quantity ?? 1), price_unit: amount(item.unitPrice ?? item.unitCost ?? item.amount), account_id: Number(journal.default_account_id[0]), tax_ids: [[6, 0, taxes]] }]);
+  }
+  if (amount(data.discountAmount)) invoiceLines.push([0, 0, { name: 'Chiết khấu hóa đơn sau thuế', quantity: 1, price_unit: -amount(data.discountAmount), account_id: Number(journal.default_account_id[0]), tax_ids: [[6, 0, []]] }]);
+  const rounding = amount(data.roundingAdjustment) + amount(data.taxRoundingAdjustment);
+  if (rounding) invoiceLines.push([0, 0, { name: 'Điều chỉnh làm tròn VNĐ', quantity: 1, price_unit: rounding, account_id: Number(journal.default_account_id[0]), tax_ids: [[6, 0, []]] }]);
   const values = {
     fintax_source_key: sourceKey,
     move_type: moveType,
     journal_id: Number(journal.id),
     company_id: Number(company.id),
-    currency_id: Number(company.currency_id[0]),
+    currency_id: await vndForDocument(company,data.date || data.issueDate, ['CANCELLED','REJECTED'].includes(data.status)),
     partner_id: partnerId,
     ref: String(data.code || sourceKey),
     invoice_origin: `FinTax:${sourceKey}`,
     invoice_date: data.date || data.issueDate || false,
     invoice_date_due: data.dueDate || false,
     narration: String(data.notes || data.description || ''),
-    invoice_line_ids: invoiceLines,
+    invoice_line_ids: [[5, 0, 0], ...invoiceLines],
   };
   const existing = await findSourceRecord('account.move', sourceKey, ['id', 'state']);
+  if (existing && ['CANCELLED', 'VOID'].includes(data.status)) {
+    await executeOdoo('account.move', 'fintax_cancel_invoice', [[Number(existing.id)]]);
+    return { model: 'account.move', id: Number(existing.id) };
+  }
   let nativeId;
   if (!existing) nativeId = Number(await executeOdoo('account.move', 'create', [values], { context: { allowed_company_ids: [Number(company.id)] } }));
   else {
@@ -175,12 +195,11 @@ export async function syncOdooInvoice(data, sourceKey) {
 export async function syncOdooPayment(data, sourceKey) {
   const isInbound = data.direction === 'RECEIVED';
   if (!isInbound && data.direction !== 'PAID') throw odooMappingError('Chọn chiều thu hoặc chi để ánh xạ thanh toán Odoo.');
-  const partnerId = await resolvePartner(data, isInbound ? 'customer' : 'supplier');
-  const account = data.accountId ? (await listRecords('cash-accounts')).find((row) => row.id === data.accountId) : null;
+  const company = await companyForWorkshop(data.workshopId);
+  const partnerId = await resolvePartner(data, isInbound ? 'customer' : 'supplier',company.id);
+  const account = data.accountId ? (await listRecords('cash-accounts', data.workshopId)).find((row) => row.id === data.accountId) : null;
   if (!account) throw odooMappingError('Chưa tìm thấy tài khoản tiền của khoản thanh toán trong web.');
   const journalType = account.type === 'CASH' ? 'cash' : 'bank';
-  const companies = await executeOdoo('res.company', 'search_read', [[]], { fields: ['id', 'currency_id'], limit: 1 });
-  const company = companies?.[0];
   if (!company) throw odooMappingError('Odoo chưa có công ty để tạo phiếu thanh toán.');
   const journals = await executeOdoo('account.journal', 'search_read', [[['type', '=', journalType], ['company_id', '=', Number(company.id)], ['active', '=', true]]], { fields: ['id'], limit: 1 });
   if (!journals?.length) throw odooMappingError(`Odoo chưa có nhật ký ${journalType === 'cash' ? 'tiền mặt' : 'ngân hàng'} cho tài khoản ${account.name}.`);
@@ -194,13 +213,13 @@ export async function syncOdooPayment(data, sourceKey) {
     journal_id: Number(journals[0].id),
     payment_method_line_id: Number(methodLines[0].id),
     amount: amount(data.amount),
-    currency_id: Number(company.currency_id?.[0] || 0),
+    currency_id: await vndForDocument(company,data.date || data.issueDate, ['CANCELLED','REJECTED'].includes(data.status)),
     date: data.date || new Date().toISOString().slice(0, 10),
     ref: String(data.code || sourceKey),
   };
-  const allocations = (await listRecords('payment-allocations')).filter((row) => row.paymentId === data.id);
+  const allocations = (await listRecords('payment-allocations', data.workshopId)).filter((row) => row.paymentId === data.id && !['UNALLOCATED', 'CANCELLED'].includes(row.status));
   if (allocations.length) {
-    const invoices = await listRecords('invoices');
+    const invoices = await listRecords('invoices', data.workshopId);
     const invoiceCodes = allocations.map((allocation) => invoices.find((invoice) => invoice.id === allocation.invoiceId)?.code).filter(Boolean);
     if (invoiceCodes.length) values.ref = `${values.ref} · Hóa đơn ${invoiceCodes.join(', ')}`.slice(0, 255);
   }
@@ -218,4 +237,25 @@ export async function syncOdooPayment(data, sourceKey) {
     else await executeOdoo('account.payment', 'write', [[nativeId], values]);
   }
   return { model: 'account.payment', id: nativeId };
+}
+
+export async function syncOdooAdjustment(data, sourceKey) {
+  const invoice = await getRecord('invoices', data.invoiceId, data.workshopId);
+  const move = await findSourceRecord('account.move', `invoices:${data.invoiceId}`);
+  if (!move && data.status === 'CANCELLED') return { model: '', id: null };
+  if (!move || !invoice) throw odooMappingError('Hóa đơn gốc chưa có trong Odoo; thử lại sau khi hóa đơn đồng bộ.');
+  const id = await executeOdoo('account.move', 'fintax_sync_adjustment', [[Number(move.id)], { ...data, sourceKey }]);
+  return { model: 'account.move', id: Number(id) || null };
+}
+
+export async function syncOdooAllocation(data, sourceKey) {
+  const invoice = await findSourceRecord('account.move', `invoices:${data.invoiceId}`);
+  const payment = await findSourceRecord('account.payment', `payments:${data.paymentId}`);
+  if (!invoice || !payment) {
+    if (['UNALLOCATED', 'CANCELLED'].includes(data.status)) return { model: '', id: null };
+    throw odooMappingError('Hóa đơn hoặc phiếu thanh toán chưa đồng bộ Odoo.');
+  }
+  try { await executeOdoo('account.move', 'fintax_sync_allocation', [[Number(invoice.id)], Number(payment.id), { ...data, sourceKey }]); }
+  catch (error) { throw odooMappingError(`Chưa đối soát Odoo: ${error.message}`); }
+  return { model: '', id: null };
 }
