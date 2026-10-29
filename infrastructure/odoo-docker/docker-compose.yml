@@ -28,6 +28,7 @@ services:
     command: ["odoo", "-d", "fintax_clean", "--db-filter=^fintax_clean$", "--no-database-list", "--addons-path=/mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons"]
     ports:
       - "8069:8069"
+      - "8070:8069"
     environment:
       HOST: odoo-db
       USER: odoo
