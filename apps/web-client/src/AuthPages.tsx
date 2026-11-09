@@ -11,7 +11,7 @@ function AuthLayout({ eyebrow, title, description, children }: { eyebrow: string
       <div className="absolute -right-12 -top-4 h-[320px] w-[320px] rounded-full border border-white/10" />
       <div className="relative z-10">
         <div className="h-20 w-[310px] overflow-hidden rounded-2xl bg-white"><img src="/logo-horizontal.png" alt="DichVuThue FinTax" className="h-full w-full object-contain" /></div>
-        <div className="mt-20 max-w-xl"><p className="text-xs font-semibold uppercase tracking-[.22em] text-red-300">FinTax Automation</p><h1 className="mt-5 text-4xl font-semibold leading-[1.15] tracking-tight">Quản trị xưởng.<br />An tâm dòng tiền.</h1><p className="mt-5 max-w-md text-sm leading-7 text-white/60">Báo giá, sản xuất, thu chi và công nợ trong một hồ sơ.</p></div>
+        <div className="mt-20 max-w-xl"><p className="text-xs font-semibold uppercase tracking-[.22em] text-red-300">FinTax Automation</p><h1 className="mt-5 text-4xl font-semibold leading-[1.15] tracking-tight">Quản trị xưởng.<br />An tâm dòng tiền.</h1><p className="mt-5 max-w-md text-sm leading-7 text-white/60">Báo giá, sản xuất, thu chi và tiền còn nợ trong một hồ sơ.</p></div>
       </div>
       <div className="relative z-10 grid max-w-xl grid-cols-3 gap-3">{[['01', 'Dòng tiền rõ ràng'], ['02', 'Vận hành liền mạch'], ['03', 'Rà soát chủ động']].map(([number, label]) => <div key={number} className="rounded-2xl border border-white/10 bg-white/[.04] p-4"><p className="text-xs text-red-300">{number}</p><p className="mt-3 text-xs font-medium text-white/80">{label}</p></div>)}</div>
       <p className="relative z-10 text-[10px] text-white/35">Dữ liệu trình diễn · Không kết nối cơ quan thuế hoặc ngân hàng thật</p>
@@ -44,10 +44,10 @@ export function LoginPage() {
     finally { setBusy(false); }
   };
   const demos = [
-    { email: 'owner.workflow@fintax.demo', label: 'Chủ xưởng', icon: <ShieldCheck size={15} /> },
-    { email: 'accountant.workflow@fintax.demo', label: 'Kế toán', icon: <FileText size={15} /> },
-    { email:'warehouse.workflow@fintax.demo',label:'Thủ kho',icon:<Factory size={15}/> },
-    { email: 'workshop.workflow@fintax.demo', label: 'Thợ xưởng', icon: <Factory size={15} /> },
+    { email: 'owner.workflow@fintax.demo', label: 'Chủ xưởng', desc: 'Xem tất cả, duyệt và theo dõi tiền', icon: <ShieldCheck size={15} /> },
+    { email: 'accountant.workflow@fintax.demo', label: 'Kế toán', desc: 'Hóa đơn, thu chi, thuế', icon: <FileText size={15} /> },
+    { email:'warehouse.workflow@fintax.demo',label:'Thủ kho', desc: 'Quản lý vật tư trong kho',icon:<Factory size={15}/> },
+    { email: 'workshop.workflow@fintax.demo', label: 'Thợ xưởng', desc: 'Xem việc, ghi giờ công và vật tư', icon: <Factory size={15} /> },
   ];
   return <AuthLayout eyebrow="Chào mừng trở lại" title="Đăng nhập FinTax" description="Đăng nhập để mở kỳ làm việc.">
     <form onSubmit={submit} className="space-y-5">
@@ -58,7 +58,7 @@ export function LoginPage() {
       <button disabled={busy} type="submit" className={primaryButton}>{busy ? 'Đang xác thực…' : 'Đăng nhập'}<ChevronDown className="-rotate-90" size={16} /></button>
     </form>
     <div className="my-6 flex items-center gap-3"><span className="h-px flex-1 bg-line" /><span className="text-[10px] uppercase tracking-wider text-gray-400">Tài khoản mẫu</span><span className="h-px flex-1 bg-line" /></div>
-    <div className="space-y-2">{demos.map((demo) => <button key={demo.email} type="button" onClick={() => { setEmail(demo.email); setPassword('FinTax@2026'); }} className={`flex w-full items-center gap-3 rounded-xl border px-3.5 py-3 text-left transition ${email === demo.email ? 'border-brand-200 bg-brand-50/60' : 'border-line hover:bg-gray-50'}`}><span className="rounded-lg bg-white p-2 text-brand-700 shadow-sm">{demo.icon}</span><span className="flex-1"><span className="block text-xs font-medium">{demo.label}</span><span className="mt-0.5 block text-[10px] text-muted">{demo.email}</span></span><span className="text-[10px] text-gray-400">Chọn</span></button>)}</div>
+    <div className="space-y-2">{demos.map((demo) => <button key={demo.email} type="button" onClick={() => { setEmail(demo.email); setPassword('FinTax@2026'); }} className={`flex w-full items-center gap-3 rounded-xl border px-3.5 py-3 text-left transition ${email === demo.email ? 'border-brand-200 bg-brand-50/60' : 'border-line hover:bg-gray-50'}`}><span className="rounded-lg bg-white p-2 text-brand-700 shadow-sm">{demo.icon}</span><span className="flex-1"><span className="block text-base font-bold text-ink">{demo.label}</span><span className="mt-0.5 block text-sm text-slate-600">{demo.desc}</span></span><span className="text-[10px] text-gray-400">Chọn</span></button>)}</div>
     <p className="mt-3 text-center text-[10px] text-muted">Mật khẩu tài khoản mẫu: <span className="font-medium text-gray-600">FinTax@2026</span></p>
     <p className="mt-7 text-center text-sm text-muted">Chưa có tài khoản? <Link to="/register" className="font-semibold text-brand-700 hover:text-brand-800">Đăng ký</Link></p>
   </AuthLayout>;
@@ -75,9 +75,9 @@ export function RegisterPage() {
       <label className="block text-xs font-medium text-slate-600">Tên doanh nghiệp / Hộ kinh doanh<input required minLength={2} readOnly={Boolean(inviteToken)} className={`${inputClass} mt-2`} value={company} onChange={e=>setCompany(e.target.value)} placeholder="Ví dụ: Cơ khí An Phát"/></label>
       <label className="block text-xs font-medium text-slate-600">{inviteToken?'Họ và tên nhân viên':'Họ và tên chủ doanh nghiệp'}<input required autoComplete="name" minLength={2} maxLength={190} className={`${inputClass} mt-2`} value={name} onChange={e=>setName(e.target.value)}/></label>
       <label className="block text-xs font-medium text-slate-600">Email đăng nhập<input required type="email" autoComplete="email" readOnly={Boolean(inviteToken)} className={`${inputClass} mt-2`} value={email} onChange={e=>setEmail(e.target.value)}/></label>
-      <label className="block text-xs font-medium text-slate-600">Mật khẩu<input required type="password" autoComplete="new-password" minLength={10} className={`${inputClass} mt-2`} value={password} onChange={e=>setPassword(e.target.value)}/><span className="mt-2 block text-[11px] text-muted">Tối thiểu 10 ký tự, tối đa 72 byte UTF-8.</span></label>
+      <label className="block text-xs font-medium text-slate-600">Mật khẩu<input required type="password" autoComplete="new-password" minLength={10} className={`${inputClass} mt-2`} value={password} onChange={e=>setPassword(e.target.value)}/><span className="mt-2 block text-[11px] text-muted">Dùng ít nhất 10 ký tự.</span></label>
       <label className="block text-xs font-medium text-slate-600">Nhập lại mật khẩu<input required type="password" autoComplete="new-password" minLength={10} className={`${inputClass} mt-2`} value={confirmation} onChange={e=>setConfirmation(e.target.value)}/></label>
-      {!inviteToken&&<p className="rounded-lg bg-slate-50 p-3 text-xs leading-6 text-muted">Doanh nghiệp bắt đầu với dữ liệu trống, VNĐ và phương pháp GTGT khấu trừ. Chủ doanh nghiệp cấu hình lại trước khi ghi nhận chứng từ.</p>}
+      {!inviteToken&&<p className="rounded-lg bg-slate-50 p-3 text-xs leading-6 text-muted">Doanh nghiệp bắt đầu với dữ liệu trống, VNĐ và phương pháp VAT khấu trừ. Chủ doanh nghiệp cấu hình lại trước khi ghi lại giấy tờ.</p>}
       <button className={primaryButton} disabled={busy||!inviteReady}>{busy?'Đang tạo…':inviteToken?'Tham gia theo lời mời':'Tạo không gian doanh nghiệp'}</button><p className="text-center text-xs text-muted">Đã có tài khoản? <Link className="font-semibold text-brand-700" to="/login">Đăng nhập</Link></p>
     </form>}
   </AuthLayout>;

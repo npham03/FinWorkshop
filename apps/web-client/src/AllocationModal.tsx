@@ -9,12 +9,12 @@ export function AllocationModal({ invoiceId, paymentId, onClose, onSaved }: { in
   const fields: FieldDef[] = [
     { name: 'invoiceId', label: 'Hóa đơn', type: 'select', required: true, wide: true, options: invoices.map((row) => ({ value: row.id, label: `${row.code} · ${row.counterparty} · ${row.direction === 'PAID' ? 'Phiếu chi' : displayLabel(row.direction)} · còn ${formatVnd(row.openBalance)}` })) },
     { name: 'paymentId', label: 'Phiếu thu / chi', type: 'select', required: true, wide: true, options: payments.map((row) => ({ value: row.id, label: `${row.code} · ${row.counterparty} · ${row.direction === 'PAID' ? 'Phiếu chi' : displayLabel(row.direction)} · còn ${formatVnd(Number(row.amount) - Number(row.allocatedAmount || 0))}` })) },
-    { name: 'allocatedAmount', label: 'Tiền phân bổ (₫)', type: 'number', required: true, min: 1 },
+    { name: 'allocatedAmount', label: 'Tiền gán vào hóa đơn (₫)', type: 'number', required: true, min: 1 },
     { name: 'discountAmount', label: 'Chiết khấu thanh toán (₫)', type: 'number', min: 0 },
     { name: 'bankFeeAmount', label: 'Phí ngân hàng chi riêng (₫)', type: 'number', min: 0 },
     { name: 'roundingAdjustment', label: 'Làm tròn (±5 ₫)', type: 'number', min: -5, max: 5 },
     { name: 'writeOffReason', label: 'Lý do xử lý chênh lệch / phí NH', type: 'textarea', wide: true },
   ];
   if (error) return <div role="alert" className="fixed inset-10 z-50 rounded-2xl bg-white p-6 shadow-xl">{error}<button onClick={onClose}>Đóng</button></div>;
-  return <RecordModal title="Phân bổ / Xử lý chênh lệch công nợ" fields={fields} initial={{ invoiceId, paymentId }} onClose={onClose} busy={busy} onSubmit={async (value) => { setBusy(true); try { await createRecord('payment-allocations', value); window.dispatchEvent(new Event('fintax:records-changed')); await onSaved(); onClose(); } finally { setBusy(false); } }}/>;
+  return <RecordModal title="Gán vào hóa đơn / Xử lý chênh lệch tiền còn nợ" fields={fields} initial={{ invoiceId, paymentId }} onClose={onClose} busy={busy} onSubmit={async (value) => { setBusy(true); try { await createRecord('payment-allocations', value); window.dispatchEvent(new Event('fintax:records-changed')); await onSaved(); onClose(); } finally { setBusy(false); } }}/>;
 }

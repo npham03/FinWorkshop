@@ -8,14 +8,30 @@
   svg.lucide { stroke-width: 1.75; }
   button, input, select, textarea { font: inherit; }
   ::selection { @apply bg-brand-100 text-brand-900; }
+  body { line-height: 1.55; background-image: linear-gradient(180deg, #fcf6f5 0, #f6f5f3 360px); background-repeat: no-repeat; }
+  main { animation: rise .3s ease-out both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  /* Dễ đọc: bỏ chữ in hoa + cỡ chữ quá nhỏ ở toàn bộ ứng dụng */
+  .uppercase { text-transform: none !important; letter-spacing: normal !important; }
+  [class*="tracking-["] { letter-spacing: normal !important; }
+  [class*="text-[9px]"], [class*="text-[10px]"], [class*="text-[11px]"], [class*="text-[12px]"] { font-size: .875rem !important; line-height: 1.3rem !important; }
+  [class*="text-[13px]"] { font-size: 1rem !important; }
+  /* Ô nhập liệu lớn, dễ bấm */
+  input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]), select, textarea { min-height: 46px; font-size: 1rem; }
+  input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]), select, textarea { border-color: #94a3b8 !important; }
+  :focus-visible { outline: 3px solid #1d4ed8; outline-offset: 2px; }
+  @media (pointer: coarse) { button, [role=button] { min-height: 44px; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
 }
 
 @layer components {
   .field-highlight { @apply rounded-xl border border-line border-l-4 border-l-brand-600 bg-brand-50 px-4 py-3; }
-  .financial-label { @apply text-[11px] font-semibold uppercase tracking-wider text-muted; }
-  .financial-value { @apply mt-2 text-xl font-bold tracking-tight tabular-nums text-ink; }
-  .document-table th { @apply whitespace-nowrap bg-slate-50 px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-600; }
-  .document-table td { @apply border-t border-line px-4 py-3 text-sm; }
+  .financial-label { @apply text-sm font-medium text-muted; }
+  .financial-value { @apply mt-2 text-2xl font-bold tracking-tight tabular-nums text-ink; }
+  .document-table th { @apply whitespace-nowrap bg-slate-50 px-3 py-3 text-left text-sm font-semibold text-slate-700; }
+  .document-table td { @apply border-t border-line px-3 py-3 text-sm; }
+  .document-table tbody tr { transition: background-color .15s; }
+  .document-table tbody tr:hover td { background-color: #fffaf9; }
   .document-print-only { @apply hidden; }
 }
 @media print {
