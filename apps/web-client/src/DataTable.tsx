@@ -7,7 +7,15 @@ import { formatDate,formatVnd,statusLabel,today } from './api';
 
 export function Pagination({ page, pageSize, total, onPage, onPageSize }: { page: number; pageSize: number; total: number; onPage: (value: number) => void; onPageSize: (value: number) => void }) {
   const count = Math.max(1, Math.ceil(total / pageSize));
-  return <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line p-4 text-xs text-muted"><span>Hiển thị {total ? (page - 1) * pageSize + 1 : 0}–{Math.min(page * pageSize, total)} trên tổng số {total} bản ghi</span><div className="flex flex-wrap items-center gap-2"><select aria-label="Số dòng mỗi trang" value={pageSize} onChange={(event) => { onPageSize(Number(event.target.value)); onPage(1); }} className="rounded-lg border border-line p-2">{[10, 20, 50, 100].map((size) => <option key={size} value={size}>{size} dòng</option>)}</select>{[{ label: 'Đầu', value: 1 }, { label: 'Trước', value: page - 1 }, ...Array.from({ length: Math.min(5, count) }, (_, index) => { const value = Math.min(Math.max(1, page - 2), Math.max(1, count - 4)) + index; return { label: String(value), value }; }), { label: 'Tiếp', value: page + 1 }, { label: 'Cuối', value: count }].map(({ label, value }) => <button key={label} disabled={value < 1 || value > count || value === page} onClick={() => onPage(value)} className={`rounded-lg border px-2 py-1.5 disabled:opacity-40 ${String(page) === label ? 'border-brand-600 bg-brand-50' : 'border-line'}`}>{label}</button>)}</div></div>;
+  return <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200/80 px-4 py-3 text-xs text-slate-500">
+    <span>Hiển thị <b className="text-slate-800">{total ? (page - 1) * pageSize + 1 : 0}–{Math.min(page * pageSize, total)}</b> trên <b className="text-slate-800">{total}</b> bản ghi</span>
+    <div className="flex flex-wrap items-center gap-1.5">
+      <select aria-label="Số dòng mỗi trang" value={pageSize} onChange={(event) => { onPageSize(Number(event.target.value)); onPage(1); }} className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs text-slate-700">
+        {[10, 20, 50, 100].map((size) => <option key={size} value={size}>{size} dòng</option>)}
+      </select>
+      {[{ label: 'Đầu', value: 1 }, { label: 'Trước', value: page - 1 }, ...Array.from({ length: Math.min(5, count) }, (_, index) => { const value = Math.min(Math.max(1, page - 2), Math.max(1, count - 4)) + index; return { label: String(value), value }; }), { label: 'Tiếp', value: page + 1 }, { label: 'Cuối', value: count }].map(({ label, value }) => <button key={label} disabled={value < 1 || value > count || value === page} onClick={() => onPage(value)} className={`rounded-lg border px-2.5 py-1 text-xs font-medium transition disabled:opacity-30 ${String(page) === label ? 'border-brand-600 bg-brand-50 text-brand-700 font-bold' : 'border-slate-200 text-slate-600 hover:bg-slate-50'}`}>{label}</button>)}
+    </div>
+  </div>;
 }
 
 export function DataTable({ title, rows, columns, controls, emptyTitle, emptyHint }: { emptyTitle?: string; emptyHint?: string; title: string; rows: Record<string, any>[]; columns: ExportColumn[]; controls?: (row: any) => ReactNode }) {
@@ -35,7 +43,7 @@ export function DataTable({ title, rows, columns, controls, emptyTitle, emptyHin
     if (key.endsWith('Id')) return referenceText(row,key);
     if (/Rate$/.test(key)) return formatTaxRate(['wasteRate','marginRate'].includes(key) && Number(value) < 1 ? Number(value)*100 : value, row.taxTreatment);
     if (key === 'last_error') return !value ? '—' : /ngày giấy tờ|quá 7 ngày|đúng kỳ/i.test(value) ? 'Cần tỷ giá đúng kỳ' : /tax|thuế/i.test(value) ? 'Cần khớp mức thuế' : /VND|tiền tệ|tỷ giá/i.test(value) ? 'Cần kiểm tra VND và tỷ giá' : /connect|timeout|ECONN/i.test(value) ? 'Lỗi kết nối · Chờ thử lại' : 'Kiểm tra cấu hình Odoo';
-    if (key === 'progress') return exportValue ? `${value}%` : <div className="min-w-28"><div className="mb-1 text-right text-xs font-bold">{formatNumber(value)}%</div><div className="h-1.5 rounded-full bg-slate-200"><div className="h-full rounded-full bg-brand-600" style={{ width: `${Math.min(100,Number(value))}%` }}/></div></div>;
+    if (key === 'progress') return exportValue ? `${value}%` : <div className="min-w-24"><div className="mb-1 text-right text-xs font-bold text-slate-700">{formatNumber(value)}%</div><div className="h-1.5 rounded-full bg-slate-100 overflow-hidden"><div className="h-full rounded-full bg-brand-600" style={{ width: `${Math.min(100,Number(value))}%` }}/></div></div>;
     if (column.format === 'status' || column.format === 'classification' || ['status','direction','type','approvalStatus','odooSyncStatus','syncStatus','role','source','taxMode','ownerScope'].includes(key)) {
       const isPayment = key === 'direction' && ['PAID','RECEIVED','PAYMENT','RECEIPT'].includes(value);
       const stockReceipt=key==='type'&&value==='RECEIPT'&&(row.materialId||row.productId);
@@ -46,5 +54,54 @@ export function DataTable({ title, rows, columns, controls, emptyTitle, emptyHin
     return typeof value === 'number' ? exportValue ? value : formatNumber(value) : plainValue(value);
   };
   const download = () => exportExcel(title, sorted.map((row) => Object.fromEntries(columns.map((column) => [column.key, display(row,column,true)]))), columns);
-  return <div><div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-4"><div className="flex w-full flex-wrap items-center gap-2 lg:w-auto"><div className="w-full sm:w-64"><SearchBox value={search} onChange={setSearch}/></div><Filter size={15} className="hidden text-muted sm:block"/><select aria-label="Lọc trạng thái" value={status} onChange={(event) => setStatus(event.target.value)} className="max-w-full rounded-lg border border-line bg-white p-2.5 text-xs font-medium"><option value="">Tất cả trạng thái</option>{statuses.map((value) => <option key={value} value={value}>{statusLabel(value)}</option>)}</select>{types.length > 0 && <select aria-label="Lọc loại" value={type} onChange={(event) => setType(event.target.value)} className="max-w-full rounded-lg border border-line bg-white p-2.5 text-xs font-medium"><option value="">Tất cả loại</option>{types.map((value) => <option key={value} value={value}>{value === 'PAID' ? 'Phiếu chi' : statusLabel(value)}</option>)}</select>}</div><Button variant="secondary" compact onClick={download}><ArrowDownToLine size={14}/>Xuất Excel (.xlsx)</Button></div>{sorted.length ? <div className="overflow-x-auto"><table className="w-full text-left text-sm"><thead className="border-b border-line bg-slate-50"><tr><th className="w-16 whitespace-nowrap px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-muted">STT</th>{columns.map((column) => <th key={column.key} className={`whitespace-nowrap px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-muted ${column.format === 'money' || isMoneyField(column.key) ? 'text-right' : ''}`}><button onClick={() => setSort({ key: column.key, descending: sort.key === column.key ? !sort.descending : false })} className="inline-flex items-center gap-1">{column.label}<ArrowUpDown size={11} className={sort.key === column.key ? 'text-brand-600' : 'text-slate-300'}/></button></th>)}{controls && <th className="whitespace-nowrap px-4 py-3 text-right text-[10px] font-bold uppercase tracking-wide text-muted">Thao tác</th>}</tr></thead><tbody>{sorted.slice((current - 1) * pageSize, current * pageSize).map((row,index) => <tr key={row.id || index} className={`border-b border-line last:border-0 ${warning(row) === 'red' ? 'bg-red-50/70 hover:bg-red-50' : warning(row) === 'amber' ? 'bg-amber-50/70 hover:bg-amber-50' : 'hover:bg-slate-50'}`}><td className="px-4 py-3 text-xs tabular-nums text-muted"><span className="flex items-center gap-1.5">{warning(row) && <AlertTriangle size={14} className={warning(row) === 'red' ? 'text-red-600' : 'text-amber-600'} aria-label={warning(row) === 'red' ? 'Cần xử lý ngay' : 'Cần rà soát'}/>}<span>{(current - 1) * pageSize + index + 1}</span></span></td>{columns.map((column) => <td key={column.key} className={`max-w-xs px-4 py-3 text-[13px] ${column.format === 'money' || isMoneyField(column.key) ? 'whitespace-nowrap text-right font-semibold tabular-nums' : ['code','name','counterparty'].includes(column.key) ? 'font-semibold' : 'text-slate-600'}`}>{display(row,column)}</td>)}{controls && <td className="px-4 py-3"><div className="flex min-w-max flex-wrap justify-end gap-1.5">{controls(row)}</div></td>}</tr>)}</tbody></table></div> : <EmptyState title={query || status || type ? 'Không tìm thấy kết quả' : emptyTitle || 'Chưa có gì ở đây'} description={query || status || type ? 'Thử gõ từ khác hoặc bỏ bớt bộ lọc.' : emptyHint || 'Bấm nút thêm ở góc trên để bắt đầu.'}/>}<Pagination page={current} pageSize={pageSize} total={sorted.length} onPage={setPage} onPageSize={setPageSize}/></div>;
+  return <div className="rounded-xl border border-slate-200/80 bg-white shadow-soft overflow-hidden">
+    <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/80 px-4 py-3 bg-white">
+      <div className="flex w-full flex-wrap items-center gap-2 lg:w-auto">
+        <div className="w-full sm:w-60"><SearchBox value={search} onChange={setSearch}/></div>
+        <Filter size={14} className="hidden text-slate-400 sm:block"/>
+        <select aria-label="Lọc trạng thái" value={status} onChange={(event) => setStatus(event.target.value)} className="max-w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700">
+          <option value="">Tất cả trạng thái</option>
+          {statuses.map((value) => <option key={value} value={value}>{statusLabel(value)}</option>)}
+        </select>
+        {types.length > 0 && <select aria-label="Lọc loại" value={type} onChange={(event) => setType(event.target.value)} className="max-w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700">
+          <option value="">Tất cả loại</option>
+          {types.map((value) => <option key={value} value={value}>{value === 'PAID' ? 'Phiếu chi' : statusLabel(value)}</option>)}
+        </select>}
+      </div>
+      <Button variant="secondary" compact onClick={download}><ArrowDownToLine size={13}/>Xuất Excel (.xlsx)</Button>
+    </div>
+    {sorted.length ? <div className="overflow-x-auto">
+      <table className="w-full text-left text-sm">
+        <thead className="border-b border-slate-200/90 bg-slate-50/90">
+          <tr>
+            <th className="w-14 whitespace-nowrap px-3.5 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500">STT</th>
+            {columns.map((column) => <th key={column.key} className={`whitespace-nowrap px-3.5 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 ${column.format === 'money' || isMoneyField(column.key) ? 'text-right' : ''}`}>
+              <button onClick={() => setSort({ key: column.key, descending: sort.key === column.key ? !sort.descending : false })} className="inline-flex items-center gap-1 hover:text-slate-900 transition-colors">
+                {column.label}
+                <ArrowUpDown size={11} className={sort.key === column.key ? 'text-brand-600' : 'text-slate-300'}/>
+              </button>
+            </th>)}
+            {controls && <th className="whitespace-nowrap px-3.5 py-2.5 text-right text-[11px] font-semibold uppercase tracking-wider text-slate-500">Thao tác</th>}
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-slate-100">
+          {sorted.slice((current - 1) * pageSize, current * pageSize).map((row,index) => <tr key={row.id || index} className={`transition-colors ${warning(row) === 'red' ? 'bg-red-50/60 hover:bg-red-50' : warning(row) === 'amber' ? 'bg-amber-50/60 hover:bg-amber-50' : 'hover:bg-slate-50/80'}`}>
+            <td className="px-3.5 py-2.5 text-xs tabular-nums text-slate-400">
+              <span className="flex items-center gap-1.5">
+                {warning(row) && <AlertTriangle size={13} className={warning(row) === 'red' ? 'text-red-600' : 'text-amber-600'} aria-label={warning(row) === 'red' ? 'Cần xử lý ngay' : 'Cần rà soát'}/>}
+                <span>{(current - 1) * pageSize + index + 1}</span>
+              </span>
+            </td>
+            {columns.map((column) => <td key={column.key} className={`max-w-xs px-3.5 py-2.5 text-xs sm:text-[13px] ${column.format === 'money' || isMoneyField(column.key) ? 'whitespace-nowrap text-right font-semibold tabular-nums text-slate-900' : ['code','name','counterparty'].includes(column.key) ? 'font-semibold text-slate-900' : 'text-slate-600'}`}>
+              {display(row,column)}
+            </td>)}
+            {controls && <td className="px-3.5 py-2.5 text-right">
+              <div className="flex min-w-max flex-wrap justify-end gap-1.5">{controls(row)}</div>
+            </td>}
+          </tr>)}
+        </tbody>
+      </table>
+    </div> : <EmptyState title={query || status || type ? 'Không tìm thấy kết quả' : emptyTitle || 'Chưa có dữ liệu'} description={query || status || type ? 'Thử tìm từ khóa khác hoặc xóa bộ lọc.' : emptyHint || 'Bấm nút thêm ở góc trên để bắt đầu.'}/>}
+    <Pagination page={current} pageSize={pageSize} total={sorted.length} onPage={setPage} onPageSize={setPageSize}/>
+  </div>;
 }

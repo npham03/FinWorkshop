@@ -3,39 +3,125 @@
 @tailwind utilities;
 
 @layer base {
-  body { @apply m-0 bg-canvas font-sans text-ink antialiased; }
-  body { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum'; }
-  svg.lucide { stroke-width: 1.75; }
-  button, input, select, textarea { font: inherit; }
-  ::selection { @apply bg-brand-100 text-brand-900; }
-  body { line-height: 1.55; background-image: linear-gradient(180deg, #fcf6f5 0, #f6f5f3 360px); background-repeat: no-repeat; }
-  main { animation: rise .3s ease-out both; }
-  @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-  /* Dễ đọc: bỏ chữ in hoa + cỡ chữ quá nhỏ ở toàn bộ ứng dụng */
-  .uppercase { text-transform: none !important; letter-spacing: normal !important; }
-  [class*="tracking-["] { letter-spacing: normal !important; }
-  [class*="text-[9px]"], [class*="text-[10px]"], [class*="text-[11px]"], [class*="text-[12px]"] { font-size: .875rem !important; line-height: 1.3rem !important; }
-  [class*="text-[13px]"] { font-size: 1rem !important; }
-  /* Ô nhập liệu lớn, dễ bấm */
-  input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]), select, textarea { min-height: 46px; font-size: 1rem; }
-  input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]), select, textarea { border-color: #94a3b8 !important; }
-  :focus-visible { outline: 3px solid #1d4ed8; outline-offset: 2px; }
-  @media (pointer: coarse) { button, [role=button] { min-height: 44px; } }
-  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+  body {
+    @apply m-0 bg-canvas font-sans text-ink antialiased;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum', 'cv02', 'cv03', 'cv04', 'cv11';
+    background-color: #F8FAFC;
+    color: #0F172A;
+  }
+
+  svg.lucide {
+    stroke-width: 1.75;
+  }
+
+  button, input, select, textarea {
+    font: inherit;
+  }
+
+  ::selection {
+    @apply bg-brand-100 text-brand-900;
+  }
+
+  main {
+    animation: rise .25s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* Katana Clean Form Controls */
+  input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]), select, textarea {
+    border-color: #E2E8F0;
+    transition: all 0.15s ease-in-out;
+  }
+
+  input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]):focus, select:focus, textarea:focus {
+    border-color: #DC2626 !important;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12) !important;
+    outline: none !important;
+  }
+
+  :focus-visible {
+    outline: 2px solid #DC2626;
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }
 
 @layer components {
-  .field-highlight { @apply rounded-xl border border-line border-l-4 border-l-brand-600 bg-brand-50 px-4 py-3; }
-  .financial-label { @apply text-sm font-medium text-muted; }
-  .financial-value { @apply mt-2 text-2xl font-bold tracking-tight tabular-nums text-ink; }
-  .document-table th { @apply whitespace-nowrap bg-slate-50 px-3 py-3 text-left text-sm font-semibold text-slate-700; }
-  .document-table td { @apply border-t border-line px-3 py-3 text-sm; }
-  .document-table tbody tr { transition: background-color .15s; }
-  .document-table tbody tr:hover td { background-color: #fffaf9; }
-  .document-print-only { @apply hidden; }
+  /* Katana MRP Signature Components */
+  .field-highlight {
+    @apply rounded-xl border border-line border-l-4 border-l-brand-600 bg-brand-50/60 px-4 py-3;
+  }
+
+  .financial-label {
+    @apply text-xs font-semibold uppercase tracking-wider text-muted;
+  }
+
+  .financial-value {
+    @apply mt-1 text-2xl font-bold tracking-tight tabular-nums text-ink;
+  }
+
+  .document-table th {
+    @apply whitespace-nowrap bg-slate-50/90 px-3.5 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 border-b border-line;
+  }
+
+  .document-table td {
+    @apply border-t border-line/80 px-3.5 py-3 text-xs sm:text-sm text-slate-700;
+  }
+
+  .document-table tbody tr {
+    transition: background-color 0.12s ease;
+  }
+
+  .document-table tbody tr:hover td {
+    background-color: #F8FAFC;
+  }
+
+  .document-print-only {
+    @apply hidden;
+  }
 }
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
 @media print {
-  body:has([data-document-detail]) > #root { visibility: hidden; }
-  [data-document-detail] { visibility: visible; position: absolute; inset: 0; overflow: visible !important; max-height: none !important; box-shadow: none !important; padding: 12mm !important; }
-  [data-document-detail] [data-no-print] { display: none !important; }
+  body:has([data-document-detail]) > #root {
+    visibility: hidden;
+  }
+  [data-document-detail] {
+    visibility: visible;
+    position: absolute;
+    inset: 0;
+    overflow: visible !important;
+    max-height: none !important;
+    box-shadow: none !important;
+    padding: 12mm !important;
+  }
+  [data-document-detail] [data-no-print] {
+    display: none !important;
+  }
 }
