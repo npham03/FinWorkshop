@@ -309,6 +309,17 @@ function AppShell() {
               <Bell size={16} />
             </Link>
 
+            <a
+              href="http://localhost:3001/api-docs"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Mở tài liệu API (Swagger UI)"
+              className="hidden sm:flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors shadow-2xs"
+            >
+              <FileText size={13} className="text-brand-600" />
+              <span>Swagger API</span>
+            </a>
+
             <div className="h-4 w-px bg-slate-200 mx-0.5" />
 
             {/* Profile Dropdown */}
@@ -333,6 +344,15 @@ function AppShell() {
                     <p className="truncate text-xs font-semibold text-slate-900">{user?.email}</p>
                     <p className="text-[10px] text-brand-700 font-medium">{user?.roleLabel}</p>
                   </div>
+                  <a
+                    href="http://localhost:3001/api-docs"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors border-b border-slate-100"
+                  >
+                    <FileText size={13} className="text-brand-600" />
+                    <span>Swagger API</span>
+                  </a>
                   <button
                     onClick={() => {
                       logout();

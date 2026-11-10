@@ -27,6 +27,7 @@ import { consumeOdooPasswordReset, createOdooAuthAccount, executeOdoo, findOdooA
 import { sendResetCodeEmail, smtpStatus } from './mailer.js';
 import {currencyStatus,configureOdooVnd} from './odoo-currency.js';
 import { syncOdooInvoice, syncOdooPayment, syncOdooQuotation, syncOdooAdjustment, syncOdooAllocation } from './odoo-documents.js';
+import { setupSwagger } from './swagger.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const uploadDir = path.resolve(__dirname, '../uploads');
@@ -47,10 +48,14 @@ function permissionsFor(role, wid = DEFAULT_WORKSHOP_ID) { return tenantPermissi
 const roleCaps = Object.fromEntries(['ACCOUNTANT', 'WAREHOUSE', 'WORKSHOP'].map((role) => [role, { entities: [...roles[role].entities], actions: [...roles[role].actions] }]));
 const transactionClassifications = new Set(['BUSINESS_INCOME', 'BUSINESS_EXPENSE', 'PERSONAL', 'INTERNAL_TRANSFER', 'OWNER_FUNDING', 'OWNER_DRAW', 'UNCLASSIFIED']);
 
-app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api-docs')) return next();
+  return helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } })(req, res, next);
+});
 app.use(cors({ origin: process.env.WEB_ORIGIN?.split(',') || ['http://localhost:5173'], credentials: false }));
 app.use(express.json({ limit: '8mb' }));
 app.use(express.urlencoded({ extended: true, limit: '2mb' }));
+setupSwagger(app);
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 15 * 1024 * 1024, files: 1 } });
 
 if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) throw new Error('JWT_SECRET bắt buộc phải được cấu hình ở production.');
@@ -1368,5 +1373,8 @@ if (process.env.ODOO_URL && process.env.ODOO_DB && process.env.ODOO_USERNAME && 
   const backfill = process.env.ODOO_BACKFILL_ON_START === 'true' ? await enqueueFullOdooBackfill() : { queued: 0, counts: {} };
   console.info(`Odoo backfill queued: ${backfill.queued} records (${JSON.stringify(backfill.counts)}).`);
 }
-app.listen(port, () => console.log(`FinTax Middleware API listening at http://localhost:${port}`));
+app.listen(port, () => {
+  console.log(`FinTax Middleware API listening at http://localhost:${port}`);
+  console.log(`FinTax Swagger UI documentation at http://localhost:${port}/api-docs`);
+});
 if (process.env.ODOO_SYNC_WORKER !== 'false') setInterval(() => { void autoSyncOdooQueue(); }, 5000);
