@@ -1,0 +1,150 @@
+{
+  "tag": "QAAPI-1794333987215",
+  "api": "http://127.0.0.1:3002/api",
+  "executedAt": "2026-11-10T18:06:27.215Z",
+  "probes": [
+    {
+      "name": "POST existing invoice id",
+      "status": 201,
+      "existingId": "4b344ba8-d32a-4c9c-8192-274e29f2edac",
+      "returnedId": "4b344ba8-d32a-4c9c-8192-274e29f2edac",
+      "before": {
+        "code": "QAAPI-1794333987215-PAID",
+        "total": 1000,
+        "paidAmount": 1000,
+        "openBalance": 0
+      },
+      "after": {
+        "code": "QAAPI-1794333987215-REPLACED",
+        "total": 2000,
+        "paidAmount": 0,
+        "openBalance": 2000
+      },
+      "allocationStillPresent": true,
+      "customerReceivable": 2000
+    },
+    {
+      "name": "Payment nonexistent counterparty",
+      "status": 201,
+      "persistedId": "cf008435-74e9-4ff8-81bb-9e7ea033160e",
+      "counterpartyId": "nonexistent-qa-customer",
+      "amount": 111
+    },
+    {
+      "name": "Payment inactive account",
+      "status": 201,
+      "accountStatus": "INACTIVE",
+      "balanceBefore": 1000,
+      "balanceAfter": 1222,
+      "paymentId": "ec34056b-2db5-4374-b21f-7dbfb784740a"
+    },
+    {
+      "name": "Lock QA period",
+      "status": 200
+    },
+    {
+      "name": "Invalid invoice date",
+      "inputDate": "2026-10-32",
+      "status": 201,
+      "persistedDate": "2026-10-32",
+      "id": "80184a4f-4563-4edc-a8ad-b48e56961b43"
+    },
+    {
+      "name": "Invalid invoice date",
+      "inputDate": "not-a-date",
+      "status": 201,
+      "persistedDate": "not-a-date",
+      "id": "47a22e0c-9cab-414d-a7ec-f63911a03f35"
+    },
+    {
+      "name": "Locked date negative control",
+      "status": 409,
+      "error": "Chứng từ thuộc kỳ đã khóa. Chủ xưởng phải mở khóa kỳ và nhập lý do trước khi thay đổi."
+    },
+    {
+      "name": "Impossible period calendar date",
+      "status": 201,
+      "startDate": "2027-02-30",
+      "endDate": "2027-02-31"
+    },
+    {
+      "name": "Invoice same number different suppliers edit",
+      "firstCreated": 201,
+      "secondCreated": 201,
+      "editStatus": 409,
+      "error": "Số hóa đơn đã được sử dụng."
+    },
+    {
+      "name": "Dashboard current-day cache invalidation",
+      "range": [
+        "2026-11-01",
+        "2026-11-11"
+      ],
+      "cacheEqual": true,
+      "before": 0,
+      "after": 100,
+      "delta": 100
+    },
+    {
+      "name": "Dashboard historical suite assumption",
+      "historicalRange": [
+        "2026-10-01",
+        "2026-10-31"
+      ],
+      "historicalDelta": 100,
+      "currentDelta": 0
+    },
+    {
+      "name": "Password eight-character policy",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "name": "Password over 72-byte validation",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "name": "Old JWT after password change",
+      "passwordChanged": true,
+      "oldTokenStatus": 200
+    },
+    {
+      "name": "Password bcrypt truncation collision",
+      "configuredLength": 73,
+      "prefixLength": 72,
+      "prefixLoginStatus": 200,
+      "fullLoginStatus": 200
+    },
+    {
+      "name": "Cash account direct balance mutation",
+      "status": 200,
+      "balanceBefore": 1001311,
+      "balanceAfter": 9876543,
+      "openingBalanceBefore": 1000000,
+      "openingBalanceAfter": 1000000
+    },
+    {
+      "name": "Unauthenticated financial data negative control",
+      "status": 401
+    },
+    {
+      "name": "Cleared quotation BOM stale snapshot",
+      "status": 201,
+      "bomId": "",
+      "bom": {
+        "id": "old-qa-bom",
+        "productId": "missing-old-product",
+        "items": [
+          {
+            "materialId": "missing-old-material",
+            "quantity": 2
+          }
+        ]
+      },
+      "costEstimate": 1595,
+      "suggestedUnitPrice": 1994
+    }
+  ],
+  "workshopId": "6d512609-f096-4229-9944-0ceb00aa3380"
+}

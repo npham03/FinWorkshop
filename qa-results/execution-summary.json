@@ -1,0 +1,36 @@
+{
+  "dateLocal": "2026-11-11",
+  "timezone": "Asia/Ho_Chi_Minh",
+  "repository": "https://github.com/npham03/FinWorkshop",
+  "commit": "399cbddfa0be540a80a3facc1c6ef0569e695068",
+  "sourceEdited": false,
+  "productionDataChanged": false,
+  "results": [
+    {"name": "npm ci", "result": "FAIL", "reason": "package-lock missing swagger-ui-express and transitive entries"},
+    {"name": "npm install --package-lock=false", "result": "PASS", "note": "Local QA dependency installation only, lock unmodified"},
+    {"name": "npm run build", "result": "PASS"},
+    {"name": "test-review-fixes", "result": "PASS", "passed": 18, "total": 18},
+    {"name": "test-workflows", "result": "FAIL", "passed": 14, "total": 15, "reason": "Fixed October date compared against default current-month dashboard; positive cache probes passed"},
+    {"name": "test-big-update", "result": "STOPPED_AT_ASSERTION", "location": "apps/middleware-api/test-big-update.js:46", "reason": "SME operatingCost and S3 expense have different accounting bases; discrepancy reconciled"},
+    {"name": "test-export.mjs", "result": "FAIL", "reason": "VM require is not defined", "control": "3 actual browser XLSX exports downloaded and parsed successfully"},
+    {"name": "test-odoo-currency", "result": "PASS"},
+    {"name": "test-odoo-contract", "result": "FAIL", "reason": "Missing default cash-account fixture initially; after fixture setup old mock FX date conflicts with quotation default current date"},
+    {"name": "Live Odoo addon", "result": "PASS", "scope": "Posted purchase invoice, payment, balanced adjustment, reconcile, idempotent retry, unreconcile, cancel adjustment/invoice", "cleanup": "Database transaction rolled back"},
+    {"name": "Live Odoo API and password recovery", "result": "PASS", "groups": 8, "evidence": "odoo-live.json"},
+    {"name": "Role-route browser sweep", "result": "COMPLETED", "checks": 52, "pageErrors": 0, "note": "Coverage does not imply all interaction branches passed; separate UI defects recorded"},
+    {"name": "Mobile browser pages", "result": "PASS", "pages": 4, "width": 390, "scope": "No page-level horizontal overflow"},
+    {"name": "Actual browser exports", "result": "PASS", "exports": 3},
+    {"name": "Tracked git diff", "result": "EMPTY"}
+  ],
+  "findings": {
+    "confirmedApplicationAndInstall": 20,
+    "testHarnessProblems": 4,
+    "requirementsToClarify": 3
+  },
+  "limits": [
+    "No real SMTP delivery, bank transfer, tax filing or digital signature",
+    "No full load/soak test or all-browser matrix",
+    "No guarantee of exhaustive state/input combinations",
+    "No application fixes applied"
+  ]
+}

@@ -1,0 +1,144 @@
+{
+  "commit": "399cbddfa0be540a80a3facc1c6ef0569e695068",
+  "scope": "Local isolated Odoo 16 at 8079; SMTP not configured; no real email or tax submission",
+  "results": [
+    {
+      "name": "New business registers with live Odoo",
+      "status": "PASS",
+      "evidence": {
+        "status": 201,
+        "body": {
+          "ok": true,
+          "workshopId": "3316e587-5e20-41dd-ba31-3b44efe1c9dd",
+          "approvalStatus": "APPROVED",
+          "odooSyncStatus": "SYNCED",
+          "message": "Đã tạo không gian làm việc. Bạn có thể đăng nhập; ERP sẽ đồng bộ nền."
+        }
+      }
+    },
+    {
+      "name": "New owner can log in",
+      "status": "PASS",
+      "evidence": {
+        "status": 200,
+        "role": "OWNER",
+        "workshopId": "3316e587-5e20-41dd-ba31-3b44efe1c9dd"
+      }
+    },
+    {
+      "name": "Integration reports real Odoo connection",
+      "status": "PASS",
+      "evidence": {
+        "status": 200,
+        "body": {
+          "odoo": {
+            "configured": true,
+            "connected": true,
+            "label": "Đã kết nối"
+          },
+          "company": null,
+          "currency": null,
+          "smtp": {
+            "configured": false,
+            "host": "smtp.gmail.com",
+            "sender": null,
+            "label": "Chưa cấu hình Gmail SMTP"
+          },
+          "odooQueue": {
+            "PENDING": 2
+          },
+          "tax": {
+            "type": "MOCK",
+            "label": "API thuế giả lập",
+            "url": "http://127.0.0.1:4005"
+          },
+          "mode": "DEMO"
+        }
+      }
+    },
+    {
+      "name": "Owner provisions isolated Odoo company",
+      "status": "PASS",
+      "evidence": {
+        "status": 200,
+        "body": {
+          "id": 4,
+          "name": "QA-ODOO-1794334041602",
+          "currency": "VND",
+          "message": "Đã tạo công ty riêng bằng VNĐ. Hoàn thiện hệ thống tài khoản, nhật ký và quy tắc thuế trong Odoo trước khi đồng bộ chứng từ."
+        }
+      }
+    },
+    {
+      "name": "Integration queue is scoped and executable",
+      "status": "PASS",
+      "evidence": {
+        "status": 200,
+        "body": {
+          "attempted": 3,
+          "results": [
+            {
+              "id": "68fe9035-bb19-41df-a741-ffddaacdcf0b",
+              "entity": "users",
+              "recordId": "14abc09b-085a-4950-b259-4e6a0c78815f",
+              "status": "SYNCED",
+              "odooMirrorId": 4,
+              "nativeModel": "res.partner",
+              "nativeId": 12
+            },
+            {
+              "id": "3cffcc29-d180-40d6-a412-34842c83e119",
+              "entity": "audit-logs",
+              "recordId": "6",
+              "status": "SYNCED",
+              "odooMirrorId": 5,
+              "nativeModel": null,
+              "nativeId": null
+            },
+            {
+              "id": "e5fdea94-815a-40a7-9882-b2a4e12dbda7",
+              "entity": "audit-logs",
+              "recordId": "7",
+              "status": "SYNCED",
+              "odooMirrorId": 6,
+              "nativeModel": null,
+              "nativeId": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Password recovery through Odoo can request OTP without SMTP",
+      "status": "PASS",
+      "evidence": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "message": "Gmail SMTP chưa gửi được thư; mã thử nghiệm bên dưới chỉ dùng trong môi trường phát triển.",
+          "debugCode": "[REDACTED]"
+        }
+      }
+    },
+    {
+      "name": "Invalid OTP is rejected",
+      "status": "PASS",
+      "evidence": {
+        "status": 400,
+        "body": {
+          "error": "Email hoặc mã không hợp lệ, hoặc mật khẩu chưa đạt 10 ký tự (tối đa 72 byte UTF-8)."
+        }
+      }
+    },
+    {
+      "name": "Valid development OTP resets password and cannot be reused",
+      "status": "PASS",
+      "evidence": {
+        "resetStatus": 200,
+        "oldPasswordLogin": 401,
+        "newPasswordLogin": 200,
+        "reusedOtpStatus": 400
+      }
+    }
+  ]
+}

@@ -1,0 +1,2649 @@
+{
+  "base": "http://127.0.0.1:3002/api",
+  "tag": "QA-DB-1794334037670",
+  "date": "2026-11-11",
+  "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+  "cases": [
+    {
+      "name": "Weighted-average partial exit creates negative stock value",
+      "confirmed": true,
+      "before": {
+        "id": "4f1e78e0-19da-43ca-b6d2-a181fff23b4d",
+        "code": "",
+        "name": "QA-DB-1794334037670-rounding",
+        "unit": "unit",
+        "stock": 11,
+        "status": "ACTIVE",
+        "unitCost": 2,
+        "stockValue": 17,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "trackInventory": true
+      },
+      "after": {
+        "id": "4f1e78e0-19da-43ca-b6d2-a181fff23b4d",
+        "code": "",
+        "name": "QA-DB-1794334037670-rounding",
+        "unit": "unit",
+        "stock": 1,
+        "status": "ACTIVE",
+        "unitCost": -3,
+        "stockValue": -3,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "trackInventory": true
+      },
+      "movement": {
+        "type": "ADJUST_OUT",
+        "materialId": "4f1e78e0-19da-43ca-b6d2-a181fff23b4d",
+        "quantity": 10,
+        "date": "2026-11-11",
+        "reason": "QA-DB-1794334037670",
+        "id": "2a6ac335-33c8-44f7-9ece-a65ce2de7901",
+        "sequence": 3,
+        "itemEntity": "materials",
+        "materialName": "QA-DB-1794334037670-rounding",
+        "unit": "unit",
+        "unitCost": 2,
+        "amount": 20,
+        "status": "CONFIRMED",
+        "stockBefore": 11,
+        "stockAfter": 1,
+        "stockValueBefore": 17,
+        "stockValueAfter": -3,
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "syncStatus": "LOCAL_DEMO"
+      },
+      "expected": {
+        "stock": 1,
+        "stockValue": 2,
+        "amount": 15,
+        "calculation": "17 - round(10 * 17/11) = 2"
+      },
+      "requests": [
+        6,
+        11
+      ]
+    },
+    {
+      "name": "Editing master unitCost rewrites subsequent issued valuation",
+      "confirmed": true,
+      "edited": {
+        "id": "855f5e7d-90b3-411e-9f42-158247e2f1f6",
+        "code": "",
+        "name": "QA-DB-1794334037670-cost-edit",
+        "unit": "kg",
+        "stock": 10,
+        "status": "ACTIVE",
+        "unitCost": 9000,
+        "stockValue": 10000,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "trackInventory": true
+      },
+      "movement": {
+        "type": "ADJUST_OUT",
+        "materialId": "855f5e7d-90b3-411e-9f42-158247e2f1f6",
+        "quantity": 1,
+        "date": "2026-11-11",
+        "reason": "QA-DB-1794334037670",
+        "id": "457de0f1-09d5-4ba0-93e5-7473b9acec4a",
+        "sequence": 2,
+        "itemEntity": "materials",
+        "materialName": "QA-DB-1794334037670-cost-edit",
+        "unit": "kg",
+        "unitCost": 9000,
+        "amount": 9000,
+        "status": "CONFIRMED",
+        "stockBefore": 10,
+        "stockAfter": 9,
+        "stockValueBefore": 10000,
+        "stockValueAfter": 1000,
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "syncStatus": "LOCAL_DEMO"
+      },
+      "after": {
+        "id": "855f5e7d-90b3-411e-9f42-158247e2f1f6",
+        "code": "",
+        "name": "QA-DB-1794334037670-cost-edit",
+        "unit": "kg",
+        "stock": 9,
+        "status": "ACTIVE",
+        "unitCost": 111,
+        "stockValue": 1000,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "trackInventory": true
+      },
+      "expected": {
+        "amount": 1000,
+        "stockValue": 9000,
+        "calculation": "10*1000 - 1*1000 = 9000, not 1000"
+      },
+      "requests": [
+        12,
+        16
+      ]
+    },
+    {
+      "name": "Draft production permits zero quantity on update",
+      "confirmed": true,
+      "job": {
+        "productId": "af93234a-1967-4c8b-b3dc-6b6219a01307",
+        "quantity": 1,
+        "date": "2026-11-11",
+        "id": "a5cc831d-fe92-4ecb-80c1-898177245184",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "productName": "QA-DB-1794334037670-zero",
+        "code": "SX-1794334039438",
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      },
+      "edited": {
+        "status": 200,
+        "data": {
+          "id": "a5cc831d-fe92-4ecb-80c1-898177245184",
+          "code": "SX-1794334039438",
+          "date": "2026-11-11",
+          "status": "DRAFT",
+          "progress": 0,
+          "quantity": 0,
+          "productId": "af93234a-1967-4c8b-b3dc-6b6219a01307",
+          "laborHours": 0,
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "productName": "QA-DB-1794334037670-zero",
+          "syncStatus": "LOCAL_DEMO",
+          "laborCost": 0,
+          "estimatedUnitCost": 0,
+          "suggestedPrice": 0,
+          "wasteRate": 0,
+          "marginRate": 0
+        }
+      },
+      "expectedStatus": 400,
+      "requests": [
+        17,
+        19
+      ]
+    },
+    {
+      "name": "Warehouse can set financial machine cost while receiving finished goods",
+      "confirmed": true,
+      "job": {
+        "productId": "b0fd77a7-8ae4-467a-b236-b19eba6a4d5a",
+        "quantity": 1,
+        "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537",
+        "plannedMachineCost": 1000,
+        "date": "2026-11-11",
+        "id": "46798021-9a1f-49bc-8c0d-89f882e9c895",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "productName": "QA-DB-1794334037670-warehouse-cost",
+        "code": "SX-1794334039486",
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      },
+      "start": {
+        "id": "46798021-9a1f-49bc-8c0d-89f882e9c895",
+        "code": "SX-1794334039486",
+        "productId": "b0fd77a7-8ae4-467a-b236-b19eba6a4d5a",
+        "productName": "QA-DB-1794334037670-warehouse-cost",
+        "quantity": 1,
+        "stage": "Đang sản xuất",
+        "progress": 0,
+        "laborHours": 0,
+        "status": "IN_PROGRESS",
+        "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537"
+      },
+      "completed": {
+        "id": "46798021-9a1f-49bc-8c0d-89f882e9c895",
+        "code": "SX-1794334039486",
+        "productId": "b0fd77a7-8ae4-467a-b236-b19eba6a4d5a",
+        "productName": "QA-DB-1794334037670-warehouse-cost",
+        "quantity": 1,
+        "stage": "Chờ nghiệm thu thành phẩm",
+        "progress": 100,
+        "laborHours": 0,
+        "status": "READY_FOR_RECEIPT",
+        "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537"
+      },
+      "receipt": {
+        "id": "46798021-9a1f-49bc-8c0d-89f882e9c895",
+        "code": "SX-1794334039486",
+        "productId": "b0fd77a7-8ae4-467a-b236-b19eba6a4d5a",
+        "productName": "QA-DB-1794334037670-warehouse-cost",
+        "quantity": 1,
+        "stage": "Đã nghiệm thu",
+        "progress": 100,
+        "laborHours": 0,
+        "status": "COMPLETED",
+        "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537",
+        "finishedReceiptId": "3a702214-d995-4a19-b8cd-9a52f2b87bb0"
+      },
+      "after": {
+        "id": "46798021-9a1f-49bc-8c0d-89f882e9c895",
+        "code": "SX-1794334039486",
+        "date": "2026-11-11",
+        "stage": "Đã nghiệm thu",
+        "status": "COMPLETED",
+        "progress": 100,
+        "quantity": 1,
+        "unitCost": 1000000,
+        "productId": "b0fd77a7-8ae4-467a-b236-b19eba6a4d5a",
+        "startedAt": "2026-11-10T18:07:19.504Z",
+        "totalCost": 1000000,
+        "acceptedAt": "2026-11-10T18:07:19.542Z",
+        "acceptedBy": "QA-DB-1794334037670-WAREHOUSE",
+        "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537",
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "completedAt": "2026-11-10T18:07:19.522Z",
+        "productName": "QA-DB-1794334037670-warehouse-cost",
+        "completionNote": "",
+        "actualLaborCost": 0,
+        "actualMachineCost": 1000000,
+        "finishedReceiptId": "3a702214-d995-4a19-b8cd-9a52f2b87bb0",
+        "actualMaterialCost": 0,
+        "plannedMachineCost": 1000
+      },
+      "stock": {
+        "id": "b0fd77a7-8ae4-467a-b236-b19eba6a4d5a",
+        "code": "",
+        "name": "QA-DB-1794334037670-warehouse-cost",
+        "unit": "unit",
+        "stock": 1,
+        "status": "ACTIVE",
+        "unitCost": 1000000,
+        "stockValue": 1000000,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "trackInventory": true
+      },
+      "expected": "WAREHOUSE accepts physical quantity, not silently overwrite approved cost of 1000 with 1000000.",
+      "requests": [
+        20,
+        26
+      ]
+    },
+    {
+      "name": "Existing production assignment accepts nonexistent user on update",
+      "confirmed": true,
+      "job": {
+        "productName": "QA-DB-1794334037670-assignment",
+        "quantity": 1,
+        "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537",
+        "date": "2026-11-11",
+        "id": "6150e211-0c39-4a6b-bd7b-05fa590d2842",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "code": "SX-1794334039604",
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      },
+      "edited": {
+        "status": 200,
+        "data": {
+          "id": "6150e211-0c39-4a6b-bd7b-05fa590d2842",
+          "code": "SX-1794334039604",
+          "date": "2026-11-11",
+          "status": "DRAFT",
+          "progress": 0,
+          "quantity": 1,
+          "assignedTo": "00000000-0000-0000-0000-000000000000",
+          "laborHours": 0,
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "productName": "QA-DB-1794334037670-assignment",
+          "syncStatus": "LOCAL_DEMO",
+          "laborCost": 0,
+          "estimatedUnitCost": 0,
+          "suggestedPrice": 0,
+          "wasteRate": 0,
+          "marginRate": 0
+        }
+      },
+      "expectedStatus": 400,
+      "requests": [
+        27,
+        28
+      ]
+    },
+    {
+      "name": "Creating production with BOM and omitted quantity defaults job to 1 but labor/machine plan to 0",
+      "confirmed": true,
+      "bom": {
+        "code": "QA-DB-1794334037670-BOM",
+        "productId": "c5cedfd3-50be-4811-ad6b-b783081a9b7d",
+        "productName": "QA-DB-1794334037670-bom-product",
+        "items": [
+          {
+            "materialId": "c9157783-ad53-4979-9a48-0def7c9838a9",
+            "name": "QA-DB-1794334037670-bom-material",
+            "unit": "kg",
+            "quantity": 1,
+            "unitCost": 1000,
+            "amount": 1000
+          }
+        ],
+        "laborHours": 2,
+        "laborRate": 100000,
+        "machineCost": 10000,
+        "id": "a097f203-aeed-44b1-b2d4-b67a34e54970",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "laborCost": 200000,
+        "estimatedUnitCost": 210000,
+        "suggestedPrice": 210000,
+        "wasteRate": 0,
+        "marginRate": 0,
+        "materialCost": 1000,
+        "version": 1,
+        "status": "ACTIVE",
+        "syncStatus": "LOCAL_DEMO"
+      },
+      "job": {
+        "productId": "c5cedfd3-50be-4811-ad6b-b783081a9b7d",
+        "bomId": "a097f203-aeed-44b1-b2d4-b67a34e54970",
+        "date": "2026-11-11",
+        "id": "7e4f8b8c-87dd-463e-a300-84605fad17dd",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "productName": "QA-DB-1794334037670-bom-product",
+        "bom": {
+          "id": "a097f203-aeed-44b1-b2d4-b67a34e54970",
+          "code": "QA-DB-1794334037670-BOM",
+          "items": [
+            {
+              "name": "QA-DB-1794334037670-bom-material",
+              "unit": "kg",
+              "amount": 1000,
+              "quantity": 1,
+              "unitCost": 1000,
+              "materialId": "c9157783-ad53-4979-9a48-0def7c9838a9"
+            }
+          ],
+          "status": "ACTIVE",
+          "version": 1,
+          "laborCost": 200000,
+          "laborRate": 100000,
+          "productId": "c5cedfd3-50be-4811-ad6b-b783081a9b7d",
+          "wasteRate": 0,
+          "laborHours": 2,
+          "marginRate": 0,
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "machineCost": 10000,
+          "productName": "QA-DB-1794334037670-bom-product",
+          "materialCost": 1000,
+          "suggestedPrice": 210000,
+          "estimatedUnitCost": 210000,
+          "syncStatus": "LOCAL_DEMO"
+        },
+        "laborRate": 100000,
+        "plannedLaborHours": 0,
+        "plannedMachineCost": 0,
+        "quantity": 1,
+        "code": "SX-1794334039689",
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      },
+      "expected": {
+        "quantity": 1,
+        "plannedLaborHours": 2,
+        "plannedMachineCost": 10000
+      },
+      "requests": [
+        29,
+        32
+      ]
+    },
+    {
+      "name": "Editing draft production quantity does not rescale BOM labor and machine cost",
+      "confirmed": true,
+      "job": {
+        "productId": "01ca050d-4431-49a3-894f-153ca7f1369a",
+        "bomId": "87f366c2-061b-4d68-8873-ffe9d384b65d",
+        "quantity": 1,
+        "date": "2026-11-11",
+        "id": "79f313e9-8686-45cc-af2e-4e922a463756",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "productName": "QA-DB-1794334037670-rescale-product",
+        "bom": {
+          "id": "87f366c2-061b-4d68-8873-ffe9d384b65d",
+          "code": "QA-DB-1794334037670-BOM2",
+          "items": [
+            {
+              "name": "QA-DB-1794334037670-rescale-material",
+              "unit": "kg",
+              "amount": 1000,
+              "quantity": 1,
+              "unitCost": 1000,
+              "materialId": "2b06f5eb-16da-4c42-9f3b-1c1a2e75c943"
+            }
+          ],
+          "status": "ACTIVE",
+          "version": 1,
+          "laborCost": 200000,
+          "laborRate": 100000,
+          "productId": "01ca050d-4431-49a3-894f-153ca7f1369a",
+          "wasteRate": 0,
+          "laborHours": 2,
+          "marginRate": 0,
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "machineCost": 10000,
+          "productName": "QA-DB-1794334037670-rescale-product",
+          "materialCost": 1000,
+          "suggestedPrice": 210000,
+          "estimatedUnitCost": 210000,
+          "syncStatus": "LOCAL_DEMO"
+        },
+        "laborRate": 100000,
+        "plannedLaborHours": 2,
+        "plannedMachineCost": 10000,
+        "code": "SX-1794334039749",
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      },
+      "edited": {
+        "id": "79f313e9-8686-45cc-af2e-4e922a463756",
+        "bom": {
+          "id": "87f366c2-061b-4d68-8873-ffe9d384b65d",
+          "code": "QA-DB-1794334037670-BOM2",
+          "items": [
+            {
+              "name": "QA-DB-1794334037670-rescale-material",
+              "unit": "kg",
+              "amount": 1000,
+              "quantity": 1,
+              "unitCost": 1000,
+              "materialId": "2b06f5eb-16da-4c42-9f3b-1c1a2e75c943"
+            }
+          ],
+          "status": "ACTIVE",
+          "version": 1,
+          "laborCost": 200000,
+          "laborRate": 100000,
+          "productId": "01ca050d-4431-49a3-894f-153ca7f1369a",
+          "wasteRate": 0,
+          "laborHours": 2,
+          "marginRate": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "machineCost": 10000,
+          "productName": "QA-DB-1794334037670-rescale-product",
+          "materialCost": 1000,
+          "suggestedPrice": 210000,
+          "estimatedUnitCost": 210000
+        },
+        "code": "SX-1794334039749",
+        "date": "2026-11-11",
+        "bomId": "87f366c2-061b-4d68-8873-ffe9d384b65d",
+        "status": "DRAFT",
+        "progress": 0,
+        "quantity": 10,
+        "laborRate": 100000,
+        "productId": "01ca050d-4431-49a3-894f-153ca7f1369a",
+        "laborHours": 0,
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "productName": "QA-DB-1794334037670-rescale-product",
+        "plannedLaborHours": 2,
+        "plannedMachineCost": 10000,
+        "syncStatus": "LOCAL_DEMO",
+        "laborCost": 0,
+        "estimatedUnitCost": 0,
+        "suggestedPrice": 0,
+        "wasteRate": 0,
+        "marginRate": 0
+      },
+      "expected": {
+        "plannedLaborHours": 20,
+        "plannedMachineCost": 100000
+      },
+      "requests": [
+        33,
+        37
+      ]
+    },
+    {
+      "name": "Quotation accepts a BOM belonging to a different product and converts it to production",
+      "confirmed": true,
+      "quote": {
+        "code": "QA-DB-1794334037670-Q-MISMATCH",
+        "title": "QA-DB-1794334037670-product-B",
+        "productId": "79f33113-d788-457d-8bc6-dfc6f7a414ae",
+        "bomId": "2ffb5b25-5c6b-4ebf-aba3-aab1f86cd190",
+        "quantity": 1,
+        "unitPrice": 1000000,
+        "date": "2026-11-11",
+        "id": "2939e4be-67fe-4483-bf51-60cdc73e721e",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "bom": {
+          "id": "2ffb5b25-5c6b-4ebf-aba3-aab1f86cd190",
+          "code": "QA-DB-1794334037670-BOM3",
+          "items": [
+            {
+              "name": "QA-DB-1794334037670-mismatch-material",
+              "unit": "kg",
+              "amount": 1000,
+              "quantity": 1,
+              "unitCost": 1000,
+              "materialId": "19aea5ff-2092-4abf-84ac-5d2dd76cacde"
+            }
+          ],
+          "status": "ACTIVE",
+          "version": 1,
+          "laborCost": 200000,
+          "laborRate": 100000,
+          "productId": "6ec9e8d5-7115-47d7-b86c-0df4ef39380d",
+          "wasteRate": 0,
+          "laborHours": 2,
+          "marginRate": 0,
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "machineCost": 10000,
+          "productName": "QA-DB-1794334037670-product-A",
+          "materialCost": 1000,
+          "suggestedPrice": 210000,
+          "estimatedUnitCost": 210000,
+          "syncStatus": "LOCAL_DEMO"
+        },
+        "materialCost": 1000,
+        "laborHours": 2,
+        "laborRate": 100000,
+        "machineCost": 10000,
+        "wasteRate": 0,
+        "marginRate": 0,
+        "customerName": "",
+        "costEstimate": 211000,
+        "suggestedUnitPrice": 211000,
+        "items": [
+          {
+            "productId": "79f33113-d788-457d-8bc6-dfc6f7a414ae",
+            "name": "QA-DB-1794334037670-product-B",
+            "unit": "unit",
+            "quantity": 1,
+            "unitPrice": 1000000,
+            "taxRuleId": "",
+            "taxRate": 0,
+            "subtotal": 1000000,
+            "amount": 1000000,
+            "taxAmount": 0
+          }
+        ],
+        "direction": "OUTPUT",
+        "type": "OUTPUT",
+        "taxRate": 0,
+        "name": "QA-DB-1794334037670-product-B",
+        "unit": "unit",
+        "subtotal": 1000000,
+        "taxAmount": 0,
+        "discountAmount": 0,
+        "taxRoundingAdjustment": 0,
+        "roundingAdjustment": 0,
+        "total": 1000000,
+        "totalAmount": 1000000,
+        "status": "DRAFT",
+        "version": 1,
+        "syncStatus": "LOCAL_DEMO"
+      },
+      "job": {
+        "id": "180324f7-e8a3-431d-af7d-27105d9a2250",
+        "code": "SX-2026-00BC80",
+        "quotationId": "2939e4be-67fe-4483-bf51-60cdc73e721e",
+        "quotationCode": "QA-DB-1794334037670-Q-MISMATCH",
+        "productName": "QA-DB-1794334037670-product-B",
+        "customerName": "",
+        "quantity": 1,
+        "productId": "79f33113-d788-457d-8bc6-dfc6f7a414ae",
+        "bomId": "2ffb5b25-5c6b-4ebf-aba3-aab1f86cd190",
+        "bom": {
+          "id": "2ffb5b25-5c6b-4ebf-aba3-aab1f86cd190",
+          "code": "QA-DB-1794334037670-BOM3",
+          "items": [
+            {
+              "name": "QA-DB-1794334037670-mismatch-material",
+              "unit": "kg",
+              "amount": 1000,
+              "quantity": 1,
+              "unitCost": 1000,
+              "materialId": "19aea5ff-2092-4abf-84ac-5d2dd76cacde"
+            }
+          ],
+          "status": "ACTIVE",
+          "version": 1,
+          "laborCost": 200000,
+          "laborRate": 100000,
+          "productId": "6ec9e8d5-7115-47d7-b86c-0df4ef39380d",
+          "wasteRate": 0,
+          "laborHours": 2,
+          "marginRate": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "machineCost": 10000,
+          "productName": "QA-DB-1794334037670-product-A",
+          "materialCost": 1000,
+          "suggestedPrice": 210000,
+          "estimatedUnitCost": 210000
+        },
+        "items": [
+          {
+            "name": "QA-DB-1794334037670-product-B",
+            "unit": "unit",
+            "amount": 1000000,
+            "taxRate": 0,
+            "quantity": 1,
+            "subtotal": 1000000,
+            "productId": "79f33113-d788-457d-8bc6-dfc6f7a414ae",
+            "taxAmount": 0,
+            "taxRuleId": "",
+            "unitPrice": 1000000
+          }
+        ],
+        "laborRate": 100000,
+        "plannedLaborHours": 2,
+        "laborHours": 0,
+        "plannedMachineCost": 10000,
+        "costEstimate": 211000,
+        "date": "2026-11-11",
+        "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537",
+        "stage": "Chờ phân công",
+        "progress": 0,
+        "status": "DRAFT",
+        "dueDate": "",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692"
+      },
+      "expected": "Reject mismatched BOM product before quotation saving/conversion.",
+      "requests": [
+        38,
+        47
+      ]
+    },
+    {
+      "name": "Any tiny positive labor log bypasses required reason for labor below plan",
+      "confirmed": true,
+      "job": {
+        "productName": "QA-DB-1794334037670-short-labor",
+        "quantity": 1,
+        "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537",
+        "plannedLaborHours": 8,
+        "laborRate": 100000,
+        "date": "2026-11-11",
+        "id": "401ae0c6-bf24-46ac-9fc7-c44784d28d1d",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "code": "SX-1794334040055",
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      },
+      "completed": {
+        "id": "401ae0c6-bf24-46ac-9fc7-c44784d28d1d",
+        "code": "SX-1794334040055",
+        "productName": "QA-DB-1794334037670-short-labor",
+        "quantity": 1,
+        "stage": "Hoàn thành dịch vụ",
+        "progress": 100,
+        "laborHours": 0.01,
+        "plannedLaborHours": 8,
+        "status": "COMPLETED",
+        "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537"
+      },
+      "expected": "If below-plan labor requires discrepancy reason, 0.01/8h should require it instead of accepting empty note.",
+      "requests": [
+        48,
+        51
+      ]
+    }
+  ],
+  "http": [
+    {
+      "method": "POST",
+      "path": "/auth/register",
+      "role": "ANON",
+      "request": {
+        "name": "QA-DB-1794334037670",
+        "workshopName": "QA-DB-1794334037670",
+        "mode": "CREATE_WORKSHOP"
+      },
+      "status": 201,
+      "response": {
+        "ok": true,
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "approvalStatus": "APPROVED",
+        "odooSyncStatus": "PENDING_SYNC",
+        "message": "Đã tạo không gian làm việc. Bạn có thể đăng nhập; ERP sẽ đồng bộ nền."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "role": "ANON",
+      "request": {},
+      "status": 200,
+      "response": {
+        "user": {
+          "id": "0b3f164b-bde2-4029-89d8-383b33b02283",
+          "email": "qa-db-1794334037670@fintax.invalid",
+          "name": "QA-DB-1794334037670",
+          "role": "OWNER",
+          "roleLabel": "Chủ doanh nghiệp",
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "workshopName": "QA-DB-1794334037670",
+          "permissions": {
+            "entities": "*",
+            "actions": "*"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users",
+      "role": "OWNER",
+      "request": {
+        "name": "QA-DB-1794334037670-WORKSHOP",
+        "role": "WORKSHOP"
+      },
+      "status": 201,
+      "response": {
+        "id": "ad3a51c3-df70-4774-b8bb-8c9172424537",
+        "email": "qa-db-1794334037670-workshop@fintax.invalid",
+        "name": "QA-DB-1794334037670-WORKSHOP",
+        "role": "WORKSHOP",
+        "roleLabel": "Thợ xưởng",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "workshopName": "QA-DB-1794334037670"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "role": "ANON",
+      "request": {},
+      "status": 200,
+      "response": {
+        "user": {
+          "id": "ad3a51c3-df70-4774-b8bb-8c9172424537",
+          "email": "qa-db-1794334037670-workshop@fintax.invalid",
+          "name": "QA-DB-1794334037670-WORKSHOP",
+          "role": "WORKSHOP",
+          "roleLabel": "Thợ xưởng",
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "workshopName": "QA-DB-1794334037670",
+          "permissions": {
+            "entities": [
+              "production-orders",
+              "stock-movements",
+              "materials",
+              "labor-logs"
+            ],
+            "actions": [
+              "read",
+              "start",
+              "complete",
+              "progress",
+              "record-movement",
+              "record-labor"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users",
+      "role": "OWNER",
+      "request": {
+        "name": "QA-DB-1794334037670-WAREHOUSE",
+        "role": "WAREHOUSE"
+      },
+      "status": 201,
+      "response": {
+        "id": "36dd0ea4-3908-4e41-b894-6dadf44b4772",
+        "email": "qa-db-1794334037670-warehouse@fintax.invalid",
+        "name": "QA-DB-1794334037670-WAREHOUSE",
+        "role": "WAREHOUSE",
+        "roleLabel": "Thủ kho",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "workshopName": "QA-DB-1794334037670"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "role": "ANON",
+      "request": {},
+      "status": 200,
+      "response": {
+        "user": {
+          "id": "36dd0ea4-3908-4e41-b894-6dadf44b4772",
+          "email": "qa-db-1794334037670-warehouse@fintax.invalid",
+          "name": "QA-DB-1794334037670-WAREHOUSE",
+          "role": "WAREHOUSE",
+          "roleLabel": "Thủ kho",
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "workshopName": "QA-DB-1794334037670",
+          "permissions": {
+            "entities": [
+              "production-orders",
+              "stock-movements",
+              "materials",
+              "products"
+            ],
+            "actions": [
+              "read",
+              "record-movement",
+              "receive-finished"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/materials",
+      "role": "OWNER",
+      "request": {
+        "name": "QA-DB-1794334037670-rounding",
+        "unit": "unit",
+        "unitCost": 1
+      },
+      "status": 201,
+      "response": {
+        "name": "QA-DB-1794334037670-rounding",
+        "unit": "unit",
+        "unitCost": 1,
+        "id": "4f1e78e0-19da-43ca-b6d2-a181fff23b4d",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "status": "ACTIVE",
+        "code": "",
+        "trackInventory": true,
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stock-movements",
+      "role": "OWNER",
+      "request": {
+        "type": "OPENING",
+        "materialId": "4f1e78e0-19da-43ca-b6d2-a181fff23b4d",
+        "quantity": 10,
+        "unitCost": 1,
+        "date": "2026-11-11",
+        "reason": "QA-DB-1794334037670"
+      },
+      "status": 201,
+      "response": {
+        "type": "OPENING",
+        "materialId": "4f1e78e0-19da-43ca-b6d2-a181fff23b4d",
+        "quantity": 10,
+        "unitCost": 1,
+        "date": "2026-11-11",
+        "reason": "QA-DB-1794334037670",
+        "id": "8ae97b98-086a-4f64-b6a1-925d7ffb26ea",
+        "sequence": 1,
+        "itemEntity": "materials",
+        "materialName": "QA-DB-1794334037670-rounding",
+        "unit": "unit",
+        "amount": 10,
+        "status": "CONFIRMED",
+        "stockBefore": 0,
+        "stockAfter": 10,
+        "stockValueBefore": 0,
+        "stockValueAfter": 10,
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stock-movements",
+      "role": "OWNER",
+      "request": {
+        "type": "RECEIPT",
+        "materialId": "4f1e78e0-19da-43ca-b6d2-a181fff23b4d",
+        "quantity": 1,
+        "unitCost": 7,
+        "date": "2026-11-11"
+      },
+      "status": 201,
+      "response": {
+        "type": "RECEIPT",
+        "materialId": "4f1e78e0-19da-43ca-b6d2-a181fff23b4d",
+        "quantity": 1,
+        "unitCost": 7,
+        "date": "2026-11-11",
+        "id": "1ebbddbc-1829-4c10-bf55-e0521a3ed85c",
+        "sequence": 2,
+        "itemEntity": "materials",
+        "materialName": "QA-DB-1794334037670-rounding",
+        "unit": "unit",
+        "amount": 7,
+        "status": "CONFIRMED",
+        "stockBefore": 10,
+        "stockAfter": 11,
+        "stockValueBefore": 10,
+        "stockValueAfter": 17,
+        "reason": "",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/materials",
+      "role": "OWNER",
+      "status": 200,
+      "response": [
+        {
+          "id": "4f1e78e0-19da-43ca-b6d2-a181fff23b4d",
+          "code": "",
+          "name": "QA-DB-1794334037670-rounding",
+          "unit": "unit",
+          "stock": 11,
+          "status": "ACTIVE",
+          "unitCost": 2,
+          "stockValue": 17,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "trackInventory": true
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/stock-movements",
+      "role": "OWNER",
+      "request": {
+        "type": "ADJUST_OUT",
+        "materialId": "4f1e78e0-19da-43ca-b6d2-a181fff23b4d",
+        "quantity": 10,
+        "date": "2026-11-11",
+        "reason": "QA-DB-1794334037670"
+      },
+      "status": 201,
+      "response": {
+        "type": "ADJUST_OUT",
+        "materialId": "4f1e78e0-19da-43ca-b6d2-a181fff23b4d",
+        "quantity": 10,
+        "date": "2026-11-11",
+        "reason": "QA-DB-1794334037670",
+        "id": "2a6ac335-33c8-44f7-9ece-a65ce2de7901",
+        "sequence": 3,
+        "itemEntity": "materials",
+        "materialName": "QA-DB-1794334037670-rounding",
+        "unit": "unit",
+        "unitCost": 2,
+        "amount": 20,
+        "status": "CONFIRMED",
+        "stockBefore": 11,
+        "stockAfter": 1,
+        "stockValueBefore": 17,
+        "stockValueAfter": -3,
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/materials",
+      "role": "OWNER",
+      "status": 200,
+      "response": [
+        {
+          "id": "4f1e78e0-19da-43ca-b6d2-a181fff23b4d",
+          "code": "",
+          "name": "QA-DB-1794334037670-rounding",
+          "unit": "unit",
+          "stock": 1,
+          "status": "ACTIVE",
+          "unitCost": -3,
+          "stockValue": -3,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "trackInventory": true
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/materials",
+      "role": "OWNER",
+      "request": {
+        "name": "QA-DB-1794334037670-cost-edit",
+        "unit": "kg",
+        "unitCost": 1000
+      },
+      "status": 201,
+      "response": {
+        "name": "QA-DB-1794334037670-cost-edit",
+        "unit": "kg",
+        "unitCost": 1000,
+        "id": "855f5e7d-90b3-411e-9f42-158247e2f1f6",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "status": "ACTIVE",
+        "code": "",
+        "trackInventory": true,
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stock-movements",
+      "role": "OWNER",
+      "request": {
+        "type": "OPENING",
+        "materialId": "855f5e7d-90b3-411e-9f42-158247e2f1f6",
+        "quantity": 10,
+        "unitCost": 1000,
+        "date": "2026-11-11",
+        "reason": "QA-DB-1794334037670"
+      },
+      "status": 201,
+      "response": {
+        "type": "OPENING",
+        "materialId": "855f5e7d-90b3-411e-9f42-158247e2f1f6",
+        "quantity": 10,
+        "unitCost": 1000,
+        "date": "2026-11-11",
+        "reason": "QA-DB-1794334037670",
+        "id": "36be58f3-ca34-44e0-b471-a1ccacf9ca2d",
+        "sequence": 1,
+        "itemEntity": "materials",
+        "materialName": "QA-DB-1794334037670-cost-edit",
+        "unit": "kg",
+        "amount": 10000,
+        "status": "CONFIRMED",
+        "stockBefore": 0,
+        "stockAfter": 10,
+        "stockValueBefore": 0,
+        "stockValueAfter": 10000,
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/materials/855f5e7d-90b3-411e-9f42-158247e2f1f6",
+      "role": "OWNER",
+      "request": {
+        "unitCost": 9000
+      },
+      "status": 200,
+      "response": {
+        "id": "855f5e7d-90b3-411e-9f42-158247e2f1f6",
+        "code": "",
+        "name": "QA-DB-1794334037670-cost-edit",
+        "unit": "kg",
+        "stock": 10,
+        "status": "ACTIVE",
+        "unitCost": 9000,
+        "stockValue": 10000,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "trackInventory": true
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stock-movements",
+      "role": "OWNER",
+      "request": {
+        "type": "ADJUST_OUT",
+        "materialId": "855f5e7d-90b3-411e-9f42-158247e2f1f6",
+        "quantity": 1,
+        "date": "2026-11-11",
+        "reason": "QA-DB-1794334037670"
+      },
+      "status": 201,
+      "response": {
+        "type": "ADJUST_OUT",
+        "materialId": "855f5e7d-90b3-411e-9f42-158247e2f1f6",
+        "quantity": 1,
+        "date": "2026-11-11",
+        "reason": "QA-DB-1794334037670",
+        "id": "457de0f1-09d5-4ba0-93e5-7473b9acec4a",
+        "sequence": 2,
+        "itemEntity": "materials",
+        "materialName": "QA-DB-1794334037670-cost-edit",
+        "unit": "kg",
+        "unitCost": 9000,
+        "amount": 9000,
+        "status": "CONFIRMED",
+        "stockBefore": 10,
+        "stockAfter": 9,
+        "stockValueBefore": 10000,
+        "stockValueAfter": 1000,
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/materials",
+      "role": "OWNER",
+      "status": 200,
+      "response": [
+        {
+          "id": "855f5e7d-90b3-411e-9f42-158247e2f1f6",
+          "code": "",
+          "name": "QA-DB-1794334037670-cost-edit",
+          "unit": "kg",
+          "stock": 9,
+          "status": "ACTIVE",
+          "unitCost": 111,
+          "stockValue": 1000,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "trackInventory": true
+        },
+        {
+          "id": "4f1e78e0-19da-43ca-b6d2-a181fff23b4d",
+          "code": "",
+          "name": "QA-DB-1794334037670-rounding",
+          "unit": "unit",
+          "stock": 1,
+          "status": "ACTIVE",
+          "unitCost": -3,
+          "stockValue": -3,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "trackInventory": true
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/products",
+      "role": "OWNER",
+      "request": {
+        "name": "QA-DB-1794334037670-zero",
+        "unit": "unit",
+        "trackInventory": true
+      },
+      "status": 201,
+      "response": {
+        "name": "QA-DB-1794334037670-zero",
+        "unit": "unit",
+        "trackInventory": true,
+        "id": "af93234a-1967-4c8b-b3dc-6b6219a01307",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "status": "ACTIVE",
+        "code": "",
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders",
+      "role": "OWNER",
+      "request": {
+        "productId": "af93234a-1967-4c8b-b3dc-6b6219a01307",
+        "quantity": 1,
+        "date": "2026-11-11"
+      },
+      "status": 201,
+      "response": {
+        "productId": "af93234a-1967-4c8b-b3dc-6b6219a01307",
+        "quantity": 1,
+        "date": "2026-11-11",
+        "id": "a5cc831d-fe92-4ecb-80c1-898177245184",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "productName": "QA-DB-1794334037670-zero",
+        "code": "SX-1794334039438",
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/production-orders/a5cc831d-fe92-4ecb-80c1-898177245184",
+      "role": "OWNER",
+      "request": {
+        "quantity": 0
+      },
+      "status": 200,
+      "response": {
+        "id": "a5cc831d-fe92-4ecb-80c1-898177245184",
+        "code": "SX-1794334039438",
+        "date": "2026-11-11",
+        "status": "DRAFT",
+        "progress": 0,
+        "quantity": 0,
+        "productId": "af93234a-1967-4c8b-b3dc-6b6219a01307",
+        "laborHours": 0,
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "productName": "QA-DB-1794334037670-zero",
+        "syncStatus": "LOCAL_DEMO",
+        "laborCost": 0,
+        "estimatedUnitCost": 0,
+        "suggestedPrice": 0,
+        "wasteRate": 0,
+        "marginRate": 0
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products",
+      "role": "OWNER",
+      "request": {
+        "name": "QA-DB-1794334037670-warehouse-cost",
+        "unit": "unit",
+        "trackInventory": true
+      },
+      "status": 201,
+      "response": {
+        "name": "QA-DB-1794334037670-warehouse-cost",
+        "unit": "unit",
+        "trackInventory": true,
+        "id": "b0fd77a7-8ae4-467a-b236-b19eba6a4d5a",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "status": "ACTIVE",
+        "code": "",
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders",
+      "role": "OWNER",
+      "request": {
+        "productId": "b0fd77a7-8ae4-467a-b236-b19eba6a4d5a",
+        "quantity": 1,
+        "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537",
+        "plannedMachineCost": 1000,
+        "date": "2026-11-11"
+      },
+      "status": 201,
+      "response": {
+        "productId": "b0fd77a7-8ae4-467a-b236-b19eba6a4d5a",
+        "quantity": 1,
+        "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537",
+        "plannedMachineCost": 1000,
+        "date": "2026-11-11",
+        "id": "46798021-9a1f-49bc-8c0d-89f882e9c895",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "productName": "QA-DB-1794334037670-warehouse-cost",
+        "code": "SX-1794334039486",
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders/46798021-9a1f-49bc-8c0d-89f882e9c895/actions/start",
+      "role": "WORKSHOP",
+      "request": {},
+      "status": 200,
+      "response": {
+        "id": "46798021-9a1f-49bc-8c0d-89f882e9c895",
+        "code": "SX-1794334039486",
+        "productId": "b0fd77a7-8ae4-467a-b236-b19eba6a4d5a",
+        "productName": "QA-DB-1794334037670-warehouse-cost",
+        "quantity": 1,
+        "stage": "Đang sản xuất",
+        "progress": 0,
+        "laborHours": 0,
+        "status": "IN_PROGRESS",
+        "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders/46798021-9a1f-49bc-8c0d-89f882e9c895/actions/complete",
+      "role": "WORKSHOP",
+      "request": {},
+      "status": 200,
+      "response": {
+        "id": "46798021-9a1f-49bc-8c0d-89f882e9c895",
+        "code": "SX-1794334039486",
+        "productId": "b0fd77a7-8ae4-467a-b236-b19eba6a4d5a",
+        "productName": "QA-DB-1794334037670-warehouse-cost",
+        "quantity": 1,
+        "stage": "Chờ nghiệm thu thành phẩm",
+        "progress": 100,
+        "laborHours": 0,
+        "status": "READY_FOR_RECEIPT",
+        "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders/46798021-9a1f-49bc-8c0d-89f882e9c895/actions/receive-finished",
+      "role": "WAREHOUSE",
+      "request": {
+        "date": "2026-11-11",
+        "machineCost": 1000000
+      },
+      "status": 200,
+      "response": {
+        "id": "46798021-9a1f-49bc-8c0d-89f882e9c895",
+        "code": "SX-1794334039486",
+        "productId": "b0fd77a7-8ae4-467a-b236-b19eba6a4d5a",
+        "productName": "QA-DB-1794334037670-warehouse-cost",
+        "quantity": 1,
+        "stage": "Đã nghiệm thu",
+        "progress": 100,
+        "laborHours": 0,
+        "status": "COMPLETED",
+        "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537",
+        "finishedReceiptId": "3a702214-d995-4a19-b8cd-9a52f2b87bb0"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/production-orders",
+      "role": "OWNER",
+      "status": 200,
+      "response": [
+        {
+          "id": "46798021-9a1f-49bc-8c0d-89f882e9c895",
+          "code": "SX-1794334039486",
+          "date": "2026-11-11",
+          "stage": "Đã nghiệm thu",
+          "status": "COMPLETED",
+          "progress": 100,
+          "quantity": 1,
+          "unitCost": 1000000,
+          "productId": "b0fd77a7-8ae4-467a-b236-b19eba6a4d5a",
+          "startedAt": "2026-11-10T18:07:19.504Z",
+          "totalCost": 1000000,
+          "acceptedAt": "2026-11-10T18:07:19.542Z",
+          "acceptedBy": "QA-DB-1794334037670-WAREHOUSE",
+          "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537",
+          "laborHours": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "completedAt": "2026-11-10T18:07:19.522Z",
+          "productName": "QA-DB-1794334037670-warehouse-cost",
+          "completionNote": "",
+          "actualLaborCost": 0,
+          "actualMachineCost": 1000000,
+          "finishedReceiptId": "3a702214-d995-4a19-b8cd-9a52f2b87bb0",
+          "actualMaterialCost": 0,
+          "plannedMachineCost": 1000
+        },
+        {
+          "id": "a5cc831d-fe92-4ecb-80c1-898177245184",
+          "code": "SX-1794334039438",
+          "date": "2026-11-11",
+          "status": "DRAFT",
+          "progress": 0,
+          "quantity": 0,
+          "laborCost": 0,
+          "productId": "af93234a-1967-4c8b-b3dc-6b6219a01307",
+          "wasteRate": 0,
+          "laborHours": 0,
+          "marginRate": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "productName": "QA-DB-1794334037670-zero",
+          "suggestedPrice": 0,
+          "estimatedUnitCost": 0
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/products",
+      "role": "OWNER",
+      "status": 200,
+      "response": [
+        {
+          "id": "b0fd77a7-8ae4-467a-b236-b19eba6a4d5a",
+          "code": "",
+          "name": "QA-DB-1794334037670-warehouse-cost",
+          "unit": "unit",
+          "stock": 1,
+          "status": "ACTIVE",
+          "unitCost": 1000000,
+          "stockValue": 1000000,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "trackInventory": true
+        },
+        {
+          "id": "af93234a-1967-4c8b-b3dc-6b6219a01307",
+          "code": "",
+          "name": "QA-DB-1794334037670-zero",
+          "unit": "unit",
+          "stock": 0,
+          "status": "ACTIVE",
+          "stockValue": 0,
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "trackInventory": true,
+          "syncStatus": "LOCAL_DEMO"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders",
+      "role": "OWNER",
+      "request": {
+        "productName": "QA-DB-1794334037670-assignment",
+        "quantity": 1,
+        "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537",
+        "date": "2026-11-11"
+      },
+      "status": 201,
+      "response": {
+        "productName": "QA-DB-1794334037670-assignment",
+        "quantity": 1,
+        "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537",
+        "date": "2026-11-11",
+        "id": "6150e211-0c39-4a6b-bd7b-05fa590d2842",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "code": "SX-1794334039604",
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/production-orders/6150e211-0c39-4a6b-bd7b-05fa590d2842",
+      "role": "OWNER",
+      "request": {
+        "assignedTo": "00000000-0000-0000-0000-000000000000"
+      },
+      "status": 200,
+      "response": {
+        "id": "6150e211-0c39-4a6b-bd7b-05fa590d2842",
+        "code": "SX-1794334039604",
+        "date": "2026-11-11",
+        "status": "DRAFT",
+        "progress": 0,
+        "quantity": 1,
+        "assignedTo": "00000000-0000-0000-0000-000000000000",
+        "laborHours": 0,
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "productName": "QA-DB-1794334037670-assignment",
+        "syncStatus": "LOCAL_DEMO",
+        "laborCost": 0,
+        "estimatedUnitCost": 0,
+        "suggestedPrice": 0,
+        "wasteRate": 0,
+        "marginRate": 0
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/materials",
+      "role": "OWNER",
+      "request": {
+        "name": "QA-DB-1794334037670-bom-material",
+        "unit": "kg",
+        "unitCost": 1000
+      },
+      "status": 201,
+      "response": {
+        "name": "QA-DB-1794334037670-bom-material",
+        "unit": "kg",
+        "unitCost": 1000,
+        "id": "c9157783-ad53-4979-9a48-0def7c9838a9",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "status": "ACTIVE",
+        "code": "",
+        "trackInventory": true,
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products",
+      "role": "OWNER",
+      "request": {
+        "name": "QA-DB-1794334037670-bom-product",
+        "unit": "unit"
+      },
+      "status": 201,
+      "response": {
+        "name": "QA-DB-1794334037670-bom-product",
+        "unit": "unit",
+        "id": "c5cedfd3-50be-4811-ad6b-b783081a9b7d",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "status": "ACTIVE",
+        "code": "",
+        "trackInventory": true,
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boms",
+      "role": "OWNER",
+      "request": {
+        "code": "QA-DB-1794334037670-BOM",
+        "productId": "c5cedfd3-50be-4811-ad6b-b783081a9b7d",
+        "productName": "QA-DB-1794334037670-bom-product",
+        "items": [
+          {
+            "materialId": "c9157783-ad53-4979-9a48-0def7c9838a9",
+            "quantity": 1
+          }
+        ],
+        "laborHours": 2,
+        "laborRate": 100000,
+        "machineCost": 10000
+      },
+      "status": 201,
+      "response": {
+        "code": "QA-DB-1794334037670-BOM",
+        "productId": "c5cedfd3-50be-4811-ad6b-b783081a9b7d",
+        "productName": "QA-DB-1794334037670-bom-product",
+        "items": [
+          {
+            "materialId": "c9157783-ad53-4979-9a48-0def7c9838a9",
+            "name": "QA-DB-1794334037670-bom-material",
+            "unit": "kg",
+            "quantity": 1,
+            "unitCost": 1000,
+            "amount": 1000
+          }
+        ],
+        "laborHours": 2,
+        "laborRate": 100000,
+        "machineCost": 10000,
+        "id": "a097f203-aeed-44b1-b2d4-b67a34e54970",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "laborCost": 200000,
+        "estimatedUnitCost": 210000,
+        "suggestedPrice": 210000,
+        "wasteRate": 0,
+        "marginRate": 0,
+        "materialCost": 1000,
+        "version": 1,
+        "status": "ACTIVE",
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders",
+      "role": "OWNER",
+      "request": {
+        "productId": "c5cedfd3-50be-4811-ad6b-b783081a9b7d",
+        "bomId": "a097f203-aeed-44b1-b2d4-b67a34e54970",
+        "date": "2026-11-11"
+      },
+      "status": 201,
+      "response": {
+        "productId": "c5cedfd3-50be-4811-ad6b-b783081a9b7d",
+        "bomId": "a097f203-aeed-44b1-b2d4-b67a34e54970",
+        "date": "2026-11-11",
+        "id": "7e4f8b8c-87dd-463e-a300-84605fad17dd",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "productName": "QA-DB-1794334037670-bom-product",
+        "bom": {
+          "id": "a097f203-aeed-44b1-b2d4-b67a34e54970",
+          "code": "QA-DB-1794334037670-BOM",
+          "items": [
+            {
+              "name": "QA-DB-1794334037670-bom-material",
+              "unit": "kg",
+              "amount": 1000,
+              "quantity": 1,
+              "unitCost": 1000,
+              "materialId": "c9157783-ad53-4979-9a48-0def7c9838a9"
+            }
+          ],
+          "status": "ACTIVE",
+          "version": 1,
+          "laborCost": 200000,
+          "laborRate": 100000,
+          "productId": "c5cedfd3-50be-4811-ad6b-b783081a9b7d",
+          "wasteRate": 0,
+          "laborHours": 2,
+          "marginRate": 0,
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "machineCost": 10000,
+          "productName": "QA-DB-1794334037670-bom-product",
+          "materialCost": 1000,
+          "suggestedPrice": 210000,
+          "estimatedUnitCost": 210000,
+          "syncStatus": "LOCAL_DEMO"
+        },
+        "laborRate": 100000,
+        "plannedLaborHours": 0,
+        "plannedMachineCost": 0,
+        "quantity": 1,
+        "code": "SX-1794334039689",
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/materials",
+      "role": "OWNER",
+      "request": {
+        "name": "QA-DB-1794334037670-rescale-material",
+        "unit": "kg",
+        "unitCost": 1000
+      },
+      "status": 201,
+      "response": {
+        "name": "QA-DB-1794334037670-rescale-material",
+        "unit": "kg",
+        "unitCost": 1000,
+        "id": "2b06f5eb-16da-4c42-9f3b-1c1a2e75c943",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "status": "ACTIVE",
+        "code": "",
+        "trackInventory": true,
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products",
+      "role": "OWNER",
+      "request": {
+        "name": "QA-DB-1794334037670-rescale-product",
+        "unit": "unit"
+      },
+      "status": 201,
+      "response": {
+        "name": "QA-DB-1794334037670-rescale-product",
+        "unit": "unit",
+        "id": "01ca050d-4431-49a3-894f-153ca7f1369a",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "status": "ACTIVE",
+        "code": "",
+        "trackInventory": true,
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boms",
+      "role": "OWNER",
+      "request": {
+        "code": "QA-DB-1794334037670-BOM2",
+        "productId": "01ca050d-4431-49a3-894f-153ca7f1369a",
+        "productName": "QA-DB-1794334037670-rescale-product",
+        "items": [
+          {
+            "materialId": "2b06f5eb-16da-4c42-9f3b-1c1a2e75c943",
+            "quantity": 1
+          }
+        ],
+        "laborHours": 2,
+        "laborRate": 100000,
+        "machineCost": 10000
+      },
+      "status": 201,
+      "response": {
+        "code": "QA-DB-1794334037670-BOM2",
+        "productId": "01ca050d-4431-49a3-894f-153ca7f1369a",
+        "productName": "QA-DB-1794334037670-rescale-product",
+        "items": [
+          {
+            "materialId": "2b06f5eb-16da-4c42-9f3b-1c1a2e75c943",
+            "name": "QA-DB-1794334037670-rescale-material",
+            "unit": "kg",
+            "quantity": 1,
+            "unitCost": 1000,
+            "amount": 1000
+          }
+        ],
+        "laborHours": 2,
+        "laborRate": 100000,
+        "machineCost": 10000,
+        "id": "87f366c2-061b-4d68-8873-ffe9d384b65d",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "laborCost": 200000,
+        "estimatedUnitCost": 210000,
+        "suggestedPrice": 210000,
+        "wasteRate": 0,
+        "marginRate": 0,
+        "materialCost": 1000,
+        "version": 1,
+        "status": "ACTIVE",
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders",
+      "role": "OWNER",
+      "request": {
+        "productId": "01ca050d-4431-49a3-894f-153ca7f1369a",
+        "bomId": "87f366c2-061b-4d68-8873-ffe9d384b65d",
+        "quantity": 1,
+        "date": "2026-11-11"
+      },
+      "status": 201,
+      "response": {
+        "productId": "01ca050d-4431-49a3-894f-153ca7f1369a",
+        "bomId": "87f366c2-061b-4d68-8873-ffe9d384b65d",
+        "quantity": 1,
+        "date": "2026-11-11",
+        "id": "79f313e9-8686-45cc-af2e-4e922a463756",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "productName": "QA-DB-1794334037670-rescale-product",
+        "bom": {
+          "id": "87f366c2-061b-4d68-8873-ffe9d384b65d",
+          "code": "QA-DB-1794334037670-BOM2",
+          "items": [
+            {
+              "name": "QA-DB-1794334037670-rescale-material",
+              "unit": "kg",
+              "amount": 1000,
+              "quantity": 1,
+              "unitCost": 1000,
+              "materialId": "2b06f5eb-16da-4c42-9f3b-1c1a2e75c943"
+            }
+          ],
+          "status": "ACTIVE",
+          "version": 1,
+          "laborCost": 200000,
+          "laborRate": 100000,
+          "productId": "01ca050d-4431-49a3-894f-153ca7f1369a",
+          "wasteRate": 0,
+          "laborHours": 2,
+          "marginRate": 0,
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "machineCost": 10000,
+          "productName": "QA-DB-1794334037670-rescale-product",
+          "materialCost": 1000,
+          "suggestedPrice": 210000,
+          "estimatedUnitCost": 210000,
+          "syncStatus": "LOCAL_DEMO"
+        },
+        "laborRate": 100000,
+        "plannedLaborHours": 2,
+        "plannedMachineCost": 10000,
+        "code": "SX-1794334039749",
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/production-orders/79f313e9-8686-45cc-af2e-4e922a463756",
+      "role": "OWNER",
+      "request": {
+        "quantity": 10
+      },
+      "status": 200,
+      "response": {
+        "id": "79f313e9-8686-45cc-af2e-4e922a463756",
+        "bom": {
+          "id": "87f366c2-061b-4d68-8873-ffe9d384b65d",
+          "code": "QA-DB-1794334037670-BOM2",
+          "items": [
+            {
+              "name": "QA-DB-1794334037670-rescale-material",
+              "unit": "kg",
+              "amount": 1000,
+              "quantity": 1,
+              "unitCost": 1000,
+              "materialId": "2b06f5eb-16da-4c42-9f3b-1c1a2e75c943"
+            }
+          ],
+          "status": "ACTIVE",
+          "version": 1,
+          "laborCost": 200000,
+          "laborRate": 100000,
+          "productId": "01ca050d-4431-49a3-894f-153ca7f1369a",
+          "wasteRate": 0,
+          "laborHours": 2,
+          "marginRate": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "machineCost": 10000,
+          "productName": "QA-DB-1794334037670-rescale-product",
+          "materialCost": 1000,
+          "suggestedPrice": 210000,
+          "estimatedUnitCost": 210000
+        },
+        "code": "SX-1794334039749",
+        "date": "2026-11-11",
+        "bomId": "87f366c2-061b-4d68-8873-ffe9d384b65d",
+        "status": "DRAFT",
+        "progress": 0,
+        "quantity": 10,
+        "laborRate": 100000,
+        "productId": "01ca050d-4431-49a3-894f-153ca7f1369a",
+        "laborHours": 0,
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "productName": "QA-DB-1794334037670-rescale-product",
+        "plannedLaborHours": 2,
+        "plannedMachineCost": 10000,
+        "syncStatus": "LOCAL_DEMO",
+        "laborCost": 0,
+        "estimatedUnitCost": 0,
+        "suggestedPrice": 0,
+        "wasteRate": 0,
+        "marginRate": 0
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/materials",
+      "role": "OWNER",
+      "request": {
+        "name": "QA-DB-1794334037670-mismatch-material",
+        "unit": "kg",
+        "unitCost": 1000
+      },
+      "status": 201,
+      "response": {
+        "name": "QA-DB-1794334037670-mismatch-material",
+        "unit": "kg",
+        "unitCost": 1000,
+        "id": "19aea5ff-2092-4abf-84ac-5d2dd76cacde",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "status": "ACTIVE",
+        "code": "",
+        "trackInventory": true,
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products",
+      "role": "OWNER",
+      "request": {
+        "name": "QA-DB-1794334037670-product-A",
+        "unit": "unit"
+      },
+      "status": 201,
+      "response": {
+        "name": "QA-DB-1794334037670-product-A",
+        "unit": "unit",
+        "id": "6ec9e8d5-7115-47d7-b86c-0df4ef39380d",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "status": "ACTIVE",
+        "code": "",
+        "trackInventory": true,
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products",
+      "role": "OWNER",
+      "request": {
+        "name": "QA-DB-1794334037670-product-B",
+        "unit": "unit"
+      },
+      "status": 201,
+      "response": {
+        "name": "QA-DB-1794334037670-product-B",
+        "unit": "unit",
+        "id": "79f33113-d788-457d-8bc6-dfc6f7a414ae",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "status": "ACTIVE",
+        "code": "",
+        "trackInventory": true,
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boms",
+      "role": "OWNER",
+      "request": {
+        "code": "QA-DB-1794334037670-BOM3",
+        "productId": "6ec9e8d5-7115-47d7-b86c-0df4ef39380d",
+        "productName": "QA-DB-1794334037670-product-A",
+        "items": [
+          {
+            "materialId": "19aea5ff-2092-4abf-84ac-5d2dd76cacde",
+            "quantity": 1
+          }
+        ],
+        "laborHours": 2,
+        "laborRate": 100000,
+        "machineCost": 10000
+      },
+      "status": 201,
+      "response": {
+        "code": "QA-DB-1794334037670-BOM3",
+        "productId": "6ec9e8d5-7115-47d7-b86c-0df4ef39380d",
+        "productName": "QA-DB-1794334037670-product-A",
+        "items": [
+          {
+            "materialId": "19aea5ff-2092-4abf-84ac-5d2dd76cacde",
+            "name": "QA-DB-1794334037670-mismatch-material",
+            "unit": "kg",
+            "quantity": 1,
+            "unitCost": 1000,
+            "amount": 1000
+          }
+        ],
+        "laborHours": 2,
+        "laborRate": 100000,
+        "machineCost": 10000,
+        "id": "2ffb5b25-5c6b-4ebf-aba3-aab1f86cd190",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "laborCost": 200000,
+        "estimatedUnitCost": 210000,
+        "suggestedPrice": 210000,
+        "wasteRate": 0,
+        "marginRate": 0,
+        "materialCost": 1000,
+        "version": 1,
+        "status": "ACTIVE",
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/quotations",
+      "role": "OWNER",
+      "request": {
+        "code": "QA-DB-1794334037670-Q-MISMATCH",
+        "title": "QA-DB-1794334037670-product-B",
+        "productId": "79f33113-d788-457d-8bc6-dfc6f7a414ae",
+        "bomId": "2ffb5b25-5c6b-4ebf-aba3-aab1f86cd190",
+        "quantity": 1,
+        "unitPrice": 1000000,
+        "date": "2026-11-11"
+      },
+      "status": 201,
+      "response": {
+        "code": "QA-DB-1794334037670-Q-MISMATCH",
+        "title": "QA-DB-1794334037670-product-B",
+        "productId": "79f33113-d788-457d-8bc6-dfc6f7a414ae",
+        "bomId": "2ffb5b25-5c6b-4ebf-aba3-aab1f86cd190",
+        "quantity": 1,
+        "unitPrice": 1000000,
+        "date": "2026-11-11",
+        "id": "2939e4be-67fe-4483-bf51-60cdc73e721e",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "bom": {
+          "id": "2ffb5b25-5c6b-4ebf-aba3-aab1f86cd190",
+          "code": "QA-DB-1794334037670-BOM3",
+          "items": [
+            {
+              "name": "QA-DB-1794334037670-mismatch-material",
+              "unit": "kg",
+              "amount": 1000,
+              "quantity": 1,
+              "unitCost": 1000,
+              "materialId": "19aea5ff-2092-4abf-84ac-5d2dd76cacde"
+            }
+          ],
+          "status": "ACTIVE",
+          "version": 1,
+          "laborCost": 200000,
+          "laborRate": 100000,
+          "productId": "6ec9e8d5-7115-47d7-b86c-0df4ef39380d",
+          "wasteRate": 0,
+          "laborHours": 2,
+          "marginRate": 0,
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "machineCost": 10000,
+          "productName": "QA-DB-1794334037670-product-A",
+          "materialCost": 1000,
+          "suggestedPrice": 210000,
+          "estimatedUnitCost": 210000,
+          "syncStatus": "LOCAL_DEMO"
+        },
+        "materialCost": 1000,
+        "laborHours": 2,
+        "laborRate": 100000,
+        "machineCost": 10000,
+        "wasteRate": 0,
+        "marginRate": 0,
+        "customerName": "",
+        "costEstimate": 211000,
+        "suggestedUnitPrice": 211000,
+        "items": [
+          {
+            "productId": "79f33113-d788-457d-8bc6-dfc6f7a414ae",
+            "name": "QA-DB-1794334037670-product-B",
+            "unit": "unit",
+            "quantity": 1,
+            "unitPrice": 1000000,
+            "taxRuleId": "",
+            "taxRate": 0,
+            "subtotal": 1000000,
+            "amount": 1000000,
+            "taxAmount": 0
+          }
+        ],
+        "direction": "OUTPUT",
+        "type": "OUTPUT",
+        "taxRate": 0,
+        "name": "QA-DB-1794334037670-product-B",
+        "unit": "unit",
+        "subtotal": 1000000,
+        "taxAmount": 0,
+        "discountAmount": 0,
+        "taxRoundingAdjustment": 0,
+        "roundingAdjustment": 0,
+        "total": 1000000,
+        "totalAmount": 1000000,
+        "status": "DRAFT",
+        "version": 1,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/quotations/2939e4be-67fe-4483-bf51-60cdc73e721e/actions/submit-for-approval",
+      "role": "OWNER",
+      "request": {},
+      "status": 200,
+      "response": {
+        "id": "2939e4be-67fe-4483-bf51-60cdc73e721e",
+        "bom": {
+          "id": "2ffb5b25-5c6b-4ebf-aba3-aab1f86cd190",
+          "code": "QA-DB-1794334037670-BOM3",
+          "items": [
+            {
+              "name": "QA-DB-1794334037670-mismatch-material",
+              "unit": "kg",
+              "amount": 1000,
+              "quantity": 1,
+              "unitCost": 1000,
+              "materialId": "19aea5ff-2092-4abf-84ac-5d2dd76cacde"
+            }
+          ],
+          "status": "ACTIVE",
+          "version": 1,
+          "laborCost": 200000,
+          "laborRate": 100000,
+          "productId": "6ec9e8d5-7115-47d7-b86c-0df4ef39380d",
+          "wasteRate": 0,
+          "laborHours": 2,
+          "marginRate": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "machineCost": 10000,
+          "productName": "QA-DB-1794334037670-product-A",
+          "materialCost": 1000,
+          "suggestedPrice": 210000,
+          "estimatedUnitCost": 210000
+        },
+        "code": "QA-DB-1794334037670-Q-MISMATCH",
+        "date": "2026-11-11",
+        "name": "QA-DB-1794334037670-product-B",
+        "type": "OUTPUT",
+        "unit": "unit",
+        "bomId": "2ffb5b25-5c6b-4ebf-aba3-aab1f86cd190",
+        "items": [
+          {
+            "name": "QA-DB-1794334037670-product-B",
+            "unit": "unit",
+            "amount": 1000000,
+            "taxRate": 0,
+            "quantity": 1,
+            "subtotal": 1000000,
+            "productId": "79f33113-d788-457d-8bc6-dfc6f7a414ae",
+            "taxAmount": 0,
+            "taxRuleId": "",
+            "unitPrice": 1000000
+          }
+        ],
+        "title": "QA-DB-1794334037670-product-B",
+        "total": 1000000,
+        "status": "PENDING_APPROVAL",
+        "taxRate": 0,
+        "version": 1,
+        "quantity": 1,
+        "subtotal": 1000000,
+        "direction": "OUTPUT",
+        "laborRate": 100000,
+        "productId": "79f33113-d788-457d-8bc6-dfc6f7a414ae",
+        "taxAmount": 0,
+        "unitPrice": 1000000,
+        "wasteRate": 0,
+        "laborHours": 2,
+        "marginRate": 0,
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "machineCost": 10000,
+        "totalAmount": 1000000,
+        "costEstimate": 211000,
+        "customerName": "",
+        "materialCost": 1000,
+        "discountAmount": 0,
+        "roundingAdjustment": 0,
+        "suggestedUnitPrice": 211000,
+        "taxRoundingAdjustment": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/quotations/2939e4be-67fe-4483-bf51-60cdc73e721e/actions/approve",
+      "role": "OWNER",
+      "request": {},
+      "status": 200,
+      "response": {
+        "id": "2939e4be-67fe-4483-bf51-60cdc73e721e",
+        "bom": {
+          "id": "2ffb5b25-5c6b-4ebf-aba3-aab1f86cd190",
+          "code": "QA-DB-1794334037670-BOM3",
+          "items": [
+            {
+              "name": "QA-DB-1794334037670-mismatch-material",
+              "unit": "kg",
+              "amount": 1000,
+              "quantity": 1,
+              "unitCost": 1000,
+              "materialId": "19aea5ff-2092-4abf-84ac-5d2dd76cacde"
+            }
+          ],
+          "status": "ACTIVE",
+          "version": 1,
+          "laborCost": 200000,
+          "laborRate": 100000,
+          "productId": "6ec9e8d5-7115-47d7-b86c-0df4ef39380d",
+          "wasteRate": 0,
+          "laborHours": 2,
+          "marginRate": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "machineCost": 10000,
+          "productName": "QA-DB-1794334037670-product-A",
+          "materialCost": 1000,
+          "suggestedPrice": 210000,
+          "estimatedUnitCost": 210000
+        },
+        "code": "QA-DB-1794334037670-Q-MISMATCH",
+        "date": "2026-11-11",
+        "name": "QA-DB-1794334037670-product-B",
+        "type": "OUTPUT",
+        "unit": "unit",
+        "bomId": "2ffb5b25-5c6b-4ebf-aba3-aab1f86cd190",
+        "items": [
+          {
+            "name": "QA-DB-1794334037670-product-B",
+            "unit": "unit",
+            "amount": 1000000,
+            "taxRate": 0,
+            "quantity": 1,
+            "subtotal": 1000000,
+            "productId": "79f33113-d788-457d-8bc6-dfc6f7a414ae",
+            "taxAmount": 0,
+            "taxRuleId": "",
+            "unitPrice": 1000000
+          }
+        ],
+        "title": "QA-DB-1794334037670-product-B",
+        "total": 1000000,
+        "status": "APPROVED",
+        "taxRate": 0,
+        "version": 1,
+        "quantity": 1,
+        "subtotal": 1000000,
+        "direction": "OUTPUT",
+        "laborRate": 100000,
+        "productId": "79f33113-d788-457d-8bc6-dfc6f7a414ae",
+        "taxAmount": 0,
+        "unitPrice": 1000000,
+        "wasteRate": 0,
+        "laborHours": 2,
+        "marginRate": 0,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "machineCost": 10000,
+        "totalAmount": 1000000,
+        "costEstimate": 211000,
+        "customerName": "",
+        "materialCost": 1000,
+        "discountAmount": 0,
+        "roundingAdjustment": 0,
+        "suggestedUnitPrice": 211000,
+        "taxRoundingAdjustment": 0
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/quotations/2939e4be-67fe-4483-bf51-60cdc73e721e/actions/mark-sent",
+      "role": "OWNER",
+      "request": {},
+      "status": 200,
+      "response": {
+        "id": "2939e4be-67fe-4483-bf51-60cdc73e721e",
+        "bom": {
+          "id": "2ffb5b25-5c6b-4ebf-aba3-aab1f86cd190",
+          "code": "QA-DB-1794334037670-BOM3",
+          "items": [
+            {
+              "name": "QA-DB-1794334037670-mismatch-material",
+              "unit": "kg",
+              "amount": 1000,
+              "quantity": 1,
+              "unitCost": 1000,
+              "materialId": "19aea5ff-2092-4abf-84ac-5d2dd76cacde"
+            }
+          ],
+          "status": "ACTIVE",
+          "version": 1,
+          "laborCost": 200000,
+          "laborRate": 100000,
+          "productId": "6ec9e8d5-7115-47d7-b86c-0df4ef39380d",
+          "wasteRate": 0,
+          "laborHours": 2,
+          "marginRate": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "machineCost": 10000,
+          "productName": "QA-DB-1794334037670-product-A",
+          "materialCost": 1000,
+          "suggestedPrice": 210000,
+          "estimatedUnitCost": 210000
+        },
+        "code": "QA-DB-1794334037670-Q-MISMATCH",
+        "date": "2026-11-11",
+        "name": "QA-DB-1794334037670-product-B",
+        "type": "OUTPUT",
+        "unit": "unit",
+        "bomId": "2ffb5b25-5c6b-4ebf-aba3-aab1f86cd190",
+        "items": [
+          {
+            "name": "QA-DB-1794334037670-product-B",
+            "unit": "unit",
+            "amount": 1000000,
+            "taxRate": 0,
+            "quantity": 1,
+            "subtotal": 1000000,
+            "productId": "79f33113-d788-457d-8bc6-dfc6f7a414ae",
+            "taxAmount": 0,
+            "taxRuleId": "",
+            "unitPrice": 1000000
+          }
+        ],
+        "title": "QA-DB-1794334037670-product-B",
+        "total": 1000000,
+        "status": "SENT",
+        "taxRate": 0,
+        "version": 1,
+        "quantity": 1,
+        "subtotal": 1000000,
+        "direction": "OUTPUT",
+        "laborRate": 100000,
+        "productId": "79f33113-d788-457d-8bc6-dfc6f7a414ae",
+        "taxAmount": 0,
+        "unitPrice": 1000000,
+        "wasteRate": 0,
+        "laborHours": 2,
+        "marginRate": 0,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "machineCost": 10000,
+        "totalAmount": 1000000,
+        "costEstimate": 211000,
+        "customerName": "",
+        "materialCost": 1000,
+        "discountAmount": 0,
+        "roundingAdjustment": 0,
+        "suggestedUnitPrice": 211000,
+        "taxRoundingAdjustment": 0,
+        "sentAt": "2026-11-10T18:07:19.956Z"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/quotations/2939e4be-67fe-4483-bf51-60cdc73e721e/actions/accept",
+      "role": "OWNER",
+      "request": {},
+      "status": 200,
+      "response": {
+        "id": "2939e4be-67fe-4483-bf51-60cdc73e721e",
+        "bom": {
+          "id": "2ffb5b25-5c6b-4ebf-aba3-aab1f86cd190",
+          "code": "QA-DB-1794334037670-BOM3",
+          "items": [
+            {
+              "name": "QA-DB-1794334037670-mismatch-material",
+              "unit": "kg",
+              "amount": 1000,
+              "quantity": 1,
+              "unitCost": 1000,
+              "materialId": "19aea5ff-2092-4abf-84ac-5d2dd76cacde"
+            }
+          ],
+          "status": "ACTIVE",
+          "version": 1,
+          "laborCost": 200000,
+          "laborRate": 100000,
+          "productId": "6ec9e8d5-7115-47d7-b86c-0df4ef39380d",
+          "wasteRate": 0,
+          "laborHours": 2,
+          "marginRate": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "machineCost": 10000,
+          "productName": "QA-DB-1794334037670-product-A",
+          "materialCost": 1000,
+          "suggestedPrice": 210000,
+          "estimatedUnitCost": 210000
+        },
+        "code": "QA-DB-1794334037670-Q-MISMATCH",
+        "date": "2026-11-11",
+        "name": "QA-DB-1794334037670-product-B",
+        "type": "OUTPUT",
+        "unit": "unit",
+        "bomId": "2ffb5b25-5c6b-4ebf-aba3-aab1f86cd190",
+        "items": [
+          {
+            "name": "QA-DB-1794334037670-product-B",
+            "unit": "unit",
+            "amount": 1000000,
+            "taxRate": 0,
+            "quantity": 1,
+            "subtotal": 1000000,
+            "productId": "79f33113-d788-457d-8bc6-dfc6f7a414ae",
+            "taxAmount": 0,
+            "taxRuleId": "",
+            "unitPrice": 1000000
+          }
+        ],
+        "title": "QA-DB-1794334037670-product-B",
+        "total": 1000000,
+        "sentAt": "2026-11-10T18:07:19.956Z",
+        "status": "ACCEPTED",
+        "taxRate": 0,
+        "version": 1,
+        "quantity": 1,
+        "subtotal": 1000000,
+        "direction": "OUTPUT",
+        "laborRate": 100000,
+        "productId": "79f33113-d788-457d-8bc6-dfc6f7a414ae",
+        "taxAmount": 0,
+        "unitPrice": 1000000,
+        "wasteRate": 0,
+        "laborHours": 2,
+        "marginRate": 0,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "machineCost": 10000,
+        "totalAmount": 1000000,
+        "costEstimate": 211000,
+        "customerName": "",
+        "materialCost": 1000,
+        "discountAmount": 0,
+        "roundingAdjustment": 0,
+        "suggestedUnitPrice": 211000,
+        "taxRoundingAdjustment": 0,
+        "acceptedAt": "2026-11-10T18:07:19.989Z"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/quotations/2939e4be-67fe-4483-bf51-60cdc73e721e/actions/create-production",
+      "role": "OWNER",
+      "request": {
+        "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537"
+      },
+      "status": 200,
+      "response": {
+        "id": "2939e4be-67fe-4483-bf51-60cdc73e721e",
+        "bom": {
+          "id": "2ffb5b25-5c6b-4ebf-aba3-aab1f86cd190",
+          "code": "QA-DB-1794334037670-BOM3",
+          "items": [
+            {
+              "name": "QA-DB-1794334037670-mismatch-material",
+              "unit": "kg",
+              "amount": 1000,
+              "quantity": 1,
+              "unitCost": 1000,
+              "materialId": "19aea5ff-2092-4abf-84ac-5d2dd76cacde"
+            }
+          ],
+          "status": "ACTIVE",
+          "version": 1,
+          "laborCost": 200000,
+          "laborRate": 100000,
+          "productId": "6ec9e8d5-7115-47d7-b86c-0df4ef39380d",
+          "wasteRate": 0,
+          "laborHours": 2,
+          "marginRate": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+          "machineCost": 10000,
+          "productName": "QA-DB-1794334037670-product-A",
+          "materialCost": 1000,
+          "suggestedPrice": 210000,
+          "estimatedUnitCost": 210000
+        },
+        "code": "QA-DB-1794334037670-Q-MISMATCH",
+        "date": "2026-11-11",
+        "name": "QA-DB-1794334037670-product-B",
+        "type": "OUTPUT",
+        "unit": "unit",
+        "bomId": "2ffb5b25-5c6b-4ebf-aba3-aab1f86cd190",
+        "items": [
+          {
+            "name": "QA-DB-1794334037670-product-B",
+            "unit": "unit",
+            "amount": 1000000,
+            "taxRate": 0,
+            "quantity": 1,
+            "subtotal": 1000000,
+            "productId": "79f33113-d788-457d-8bc6-dfc6f7a414ae",
+            "taxAmount": 0,
+            "taxRuleId": "",
+            "unitPrice": 1000000
+          }
+        ],
+        "title": "QA-DB-1794334037670-product-B",
+        "total": 1000000,
+        "sentAt": "2026-11-10T18:07:19.956Z",
+        "status": "ACCEPTED",
+        "taxRate": 0,
+        "version": 1,
+        "quantity": 1,
+        "subtotal": 1000000,
+        "direction": "OUTPUT",
+        "laborRate": 100000,
+        "productId": "79f33113-d788-457d-8bc6-dfc6f7a414ae",
+        "taxAmount": 0,
+        "unitPrice": 1000000,
+        "wasteRate": 0,
+        "acceptedAt": "2026-11-10T18:07:19.989Z",
+        "laborHours": 2,
+        "marginRate": 0,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "machineCost": 10000,
+        "totalAmount": 1000000,
+        "costEstimate": 211000,
+        "customerName": "",
+        "materialCost": 1000,
+        "discountAmount": 0,
+        "roundingAdjustment": 0,
+        "suggestedUnitPrice": 211000,
+        "taxRoundingAdjustment": 0,
+        "productionOrderId": "180324f7-e8a3-431d-af7d-27105d9a2250",
+        "productionCreatedAt": "2026-11-10T18:07:20.024Z",
+        "createdProduction": {
+          "id": "180324f7-e8a3-431d-af7d-27105d9a2250",
+          "code": "SX-2026-00BC80",
+          "quotationId": "2939e4be-67fe-4483-bf51-60cdc73e721e",
+          "quotationCode": "QA-DB-1794334037670-Q-MISMATCH",
+          "productName": "QA-DB-1794334037670-product-B",
+          "customerName": "",
+          "quantity": 1,
+          "productId": "79f33113-d788-457d-8bc6-dfc6f7a414ae",
+          "bomId": "2ffb5b25-5c6b-4ebf-aba3-aab1f86cd190",
+          "bom": {
+            "id": "2ffb5b25-5c6b-4ebf-aba3-aab1f86cd190",
+            "code": "QA-DB-1794334037670-BOM3",
+            "items": [
+              {
+                "name": "QA-DB-1794334037670-mismatch-material",
+                "unit": "kg",
+                "amount": 1000,
+                "quantity": 1,
+                "unitCost": 1000,
+                "materialId": "19aea5ff-2092-4abf-84ac-5d2dd76cacde"
+              }
+            ],
+            "status": "ACTIVE",
+            "version": 1,
+            "laborCost": 200000,
+            "laborRate": 100000,
+            "productId": "6ec9e8d5-7115-47d7-b86c-0df4ef39380d",
+            "wasteRate": 0,
+            "laborHours": 2,
+            "marginRate": 0,
+            "syncStatus": "LOCAL_DEMO",
+            "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+            "machineCost": 10000,
+            "productName": "QA-DB-1794334037670-product-A",
+            "materialCost": 1000,
+            "suggestedPrice": 210000,
+            "estimatedUnitCost": 210000
+          },
+          "items": [
+            {
+              "name": "QA-DB-1794334037670-product-B",
+              "unit": "unit",
+              "amount": 1000000,
+              "taxRate": 0,
+              "quantity": 1,
+              "subtotal": 1000000,
+              "productId": "79f33113-d788-457d-8bc6-dfc6f7a414ae",
+              "taxAmount": 0,
+              "taxRuleId": "",
+              "unitPrice": 1000000
+            }
+          ],
+          "laborRate": 100000,
+          "plannedLaborHours": 2,
+          "laborHours": 0,
+          "plannedMachineCost": 10000,
+          "costEstimate": 211000,
+          "date": "2026-11-11",
+          "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537",
+          "stage": "Chờ phân công",
+          "progress": 0,
+          "status": "DRAFT",
+          "dueDate": "",
+          "workshopId": "767970ec-c093-42e3-900b-3789223b5692"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders",
+      "role": "OWNER",
+      "request": {
+        "productName": "QA-DB-1794334037670-short-labor",
+        "quantity": 1,
+        "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537",
+        "plannedLaborHours": 8,
+        "laborRate": 100000,
+        "date": "2026-11-11"
+      },
+      "status": 201,
+      "response": {
+        "productName": "QA-DB-1794334037670-short-labor",
+        "quantity": 1,
+        "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537",
+        "plannedLaborHours": 8,
+        "laborRate": 100000,
+        "date": "2026-11-11",
+        "id": "401ae0c6-bf24-46ac-9fc7-c44784d28d1d",
+        "workshopId": "767970ec-c093-42e3-900b-3789223b5692",
+        "code": "SX-1794334040055",
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders/401ae0c6-bf24-46ac-9fc7-c44784d28d1d/actions/start",
+      "role": "WORKSHOP",
+      "request": {},
+      "status": 200,
+      "response": {
+        "id": "401ae0c6-bf24-46ac-9fc7-c44784d28d1d",
+        "code": "SX-1794334040055",
+        "productName": "QA-DB-1794334037670-short-labor",
+        "quantity": 1,
+        "stage": "Đang sản xuất",
+        "progress": 0,
+        "laborHours": 0,
+        "plannedLaborHours": 8,
+        "status": "IN_PROGRESS",
+        "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/labor-logs",
+      "role": "WORKSHOP",
+      "request": {
+        "productionOrderId": "401ae0c6-bf24-46ac-9fc7-c44784d28d1d",
+        "hours": 0.01,
+        "date": "2026-11-11"
+      },
+      "status": 201,
+      "response": {
+        "id": "30b0d0ef-ef4c-4787-8bcf-e384ee473b9f",
+        "productionOrderId": "401ae0c6-bf24-46ac-9fc7-c44784d28d1d",
+        "employeeName": "QA-DB-1794334037670-WORKSHOP",
+        "hours": 0.01,
+        "date": "2026-11-11"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders/401ae0c6-bf24-46ac-9fc7-c44784d28d1d/actions/complete",
+      "role": "WORKSHOP",
+      "request": {},
+      "status": 200,
+      "response": {
+        "id": "401ae0c6-bf24-46ac-9fc7-c44784d28d1d",
+        "code": "SX-1794334040055",
+        "productName": "QA-DB-1794334037670-short-labor",
+        "quantity": 1,
+        "stage": "Hoàn thành dịch vụ",
+        "progress": 100,
+        "laborHours": 0.01,
+        "plannedLaborHours": 8,
+        "status": "COMPLETED",
+        "assignedTo": "ad3a51c3-df70-4774-b8bb-8c9172424537"
+      }
+    }
+  ]
+}

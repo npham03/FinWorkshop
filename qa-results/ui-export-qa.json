@@ -1,0 +1,69 @@
+{
+  "results": [
+    {
+      "route": "/customers",
+      "suggestedFilename": "Khách hàng.xlsx",
+      "file": "C:\\Users\\ASUS TUF\\Downloads\\FinWorkshop-QA-20261111\\qa-results\\export-customers.xlsx",
+      "bytes": 18153,
+      "sheets": [
+        {
+          "name": "Khách hàng",
+          "rows": 6,
+          "range": "A1:G6"
+        }
+      ]
+    },
+    {
+      "route": "/invoices",
+      "suggestedFilename": "Hóa đơn bán ra.xlsx",
+      "file": "C:\\Users\\ASUS TUF\\Downloads\\FinWorkshop-QA-20261111\\qa-results\\export-invoices.xlsx",
+      "bytes": 33584,
+      "sheets": [
+        {
+          "name": "Hóa đơn bán ra",
+          "rows": 36,
+          "range": "A1:K36"
+        }
+      ]
+    },
+    {
+      "route": "/reports",
+      "suggestedFilename": "FinWorkshop-SME-2026-11-01-2026-11-11.xlsx",
+      "file": "C:\\Users\\ASUS TUF\\Downloads\\FinWorkshop-QA-20261111\\qa-results\\export-reports.xlsx",
+      "bytes": 70804,
+      "sheets": [
+        {
+          "name": "SME-NKC",
+          "rows": 81,
+          "range": "A1:G81"
+        },
+        {
+          "name": "SME-TK",
+          "rows": 18,
+          "range": "A1:E18"
+        },
+        {
+          "name": "SME-KHO",
+          "rows": 19,
+          "range": "A1:F19"
+        },
+        {
+          "name": "SME-GT",
+          "rows": 11,
+          "range": "A1:H11"
+        },
+        {
+          "name": "SME-CN",
+          "rows": 8,
+          "range": "A1:F8"
+        },
+        {
+          "name": "SME-VAT",
+          "rows": 30,
+          "range": "A1:K30"
+        }
+      ]
+    }
+  ],
+  "pageErrors": []
+}

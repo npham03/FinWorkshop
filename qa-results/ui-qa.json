@@ -1,0 +1,765 @@
+{
+  "startedAt": "2026-11-10T18:04:53.267Z",
+  "browser": "Microsoft Edge, isolated headless QA context",
+  "routes": [
+    {
+      "role": "owner",
+      "route": "/app",
+      "actualPath": "/app",
+      "title": "Bàn làm việc · FinWorkshop",
+      "headings": [
+        "Xin chào, Chủ xưởng Demo",
+        "Thao tác nghiệp vụ nhanh",
+        "Dòng tiền thu – chi & Số dư lũy kế",
+        "Cơ cấu chi phí & Thuế",
+        "Tuổi nợ phải thu",
+        "Cần xử lý ngay",
+        "Tiến độ xưởng & Cảnh báo tồn kho",
+        "Chứng từ phát sinh gần nhất"
+      ],
+      "alerts": [],
+      "bodyChars": 3022,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "owner",
+      "route": "/transactions",
+      "actualPath": "/transactions",
+      "title": "Thu chi · FinWorkshop",
+      "headings": [
+        "Thu chi"
+      ],
+      "alerts": [],
+      "bodyChars": 3425,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "owner",
+      "route": "/payments",
+      "actualPath": "/payments",
+      "title": "Ai nợ ai · FinWorkshop",
+      "headings": [
+        "Ai nợ ai"
+      ],
+      "alerts": [],
+      "bodyChars": 3452,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "owner",
+      "route": "/reconciliation",
+      "actualPath": "/reconciliation",
+      "title": "Khớp với ngân hàng · FinWorkshop",
+      "headings": [
+        "Khớp với ngân hàng"
+      ],
+      "alerts": [],
+      "bodyChars": 1009,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "owner",
+      "route": "/invoices",
+      "actualPath": "/invoices",
+      "title": "Hóa đơn · FinWorkshop",
+      "headings": [
+        "Hóa đơn"
+      ],
+      "alerts": [],
+      "bodyChars": 2621,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "owner",
+      "route": "/reports",
+      "actualPath": "/reports",
+      "title": "Thuế và 7 sổ sách · FinWorkshop",
+      "headings": [
+        "Thuế và báo cáo",
+        "Sổ sách"
+      ],
+      "alerts": [],
+      "bodyChars": 1196,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "owner",
+      "route": "/quotations",
+      "actualPath": "/quotations",
+      "title": "Báo giá · FinWorkshop",
+      "headings": [
+        "Báo giá"
+      ],
+      "alerts": [],
+      "bodyChars": 1783,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "owner",
+      "route": "/catalog",
+      "actualPath": "/catalog",
+      "title": "Sản phẩm & vật tư · FinWorkshop",
+      "headings": [
+        "Sản phẩm"
+      ],
+      "alerts": [],
+      "bodyChars": 1275,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "owner",
+      "route": "/workshop",
+      "actualPath": "/workshop",
+      "title": "Việc làm trong xưởng · FinWorkshop",
+      "headings": [
+        "Việc làm trong xưởng"
+      ],
+      "alerts": [],
+      "bodyChars": 1442,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "owner",
+      "route": "/inventory",
+      "actualPath": "/inventory",
+      "title": "Quản lý kho · FinWorkshop",
+      "headings": [
+        "Kho"
+      ],
+      "alerts": [],
+      "bodyChars": 1410,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "owner",
+      "route": "/customers",
+      "actualPath": "/customers",
+      "title": "Khách hàng · FinWorkshop",
+      "headings": [
+        "Khách hàng"
+      ],
+      "alerts": [],
+      "bodyChars": 830,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "owner",
+      "route": "/suppliers",
+      "actualPath": "/suppliers",
+      "title": "Người bán / NCC · FinWorkshop",
+      "headings": [
+        "Người bán"
+      ],
+      "alerts": [],
+      "bodyChars": 819,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "owner",
+      "route": "/settings",
+      "actualPath": "/settings",
+      "title": "Cài đặt · FinWorkshop",
+      "headings": [
+        "Cài đặt hệ thống",
+        "Thông tin xưởng của bạn",
+        "Cơ sở xưởng"
+      ],
+      "alerts": [],
+      "bodyChars": 1194,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "accountant",
+      "route": "/app",
+      "actualPath": "/app",
+      "title": "Bàn làm việc · FinWorkshop",
+      "headings": [
+        "Xin chào, Kế toán Demo",
+        "Thao tác nghiệp vụ nhanh",
+        "Dòng tiền thu – chi & Số dư lũy kế",
+        "Cơ cấu chi phí & Thuế",
+        "Tuổi nợ phải thu",
+        "Cần xử lý ngay",
+        "Tiến độ xưởng & Cảnh báo tồn kho",
+        "Chứng từ phát sinh gần nhất"
+      ],
+      "alerts": [],
+      "bodyChars": 2972,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "accountant",
+      "route": "/transactions",
+      "actualPath": "/transactions",
+      "title": "Thu chi · FinWorkshop",
+      "headings": [
+        "Thu chi"
+      ],
+      "alerts": [],
+      "bodyChars": 3378,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "accountant",
+      "route": "/payments",
+      "actualPath": "/payments",
+      "title": "Ai nợ ai · FinWorkshop",
+      "headings": [
+        "Ai nợ ai"
+      ],
+      "alerts": [],
+      "bodyChars": 3401,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "accountant",
+      "route": "/reconciliation",
+      "actualPath": "/reconciliation",
+      "title": "Khớp với ngân hàng · FinWorkshop",
+      "headings": [
+        "Khớp với ngân hàng"
+      ],
+      "alerts": [],
+      "bodyChars": 983,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "accountant",
+      "route": "/invoices",
+      "actualPath": "/invoices",
+      "title": "Hóa đơn · FinWorkshop",
+      "headings": [
+        "Hóa đơn"
+      ],
+      "alerts": [],
+      "bodyChars": 2570,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "accountant",
+      "route": "/reports",
+      "actualPath": "/reports",
+      "title": "Thuế và 7 sổ sách · FinWorkshop",
+      "headings": [
+        "Thuế và báo cáo",
+        "Sổ sách"
+      ],
+      "alerts": [],
+      "bodyChars": 1185,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "accountant",
+      "route": "/quotations",
+      "actualPath": "/quotations",
+      "title": "Báo giá · FinWorkshop",
+      "headings": [
+        "Báo giá"
+      ],
+      "alerts": [],
+      "bodyChars": 1740,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "accountant",
+      "route": "/catalog",
+      "actualPath": "/catalog",
+      "title": "Sản phẩm & vật tư · FinWorkshop",
+      "headings": [
+        "Sản phẩm"
+      ],
+      "alerts": [],
+      "bodyChars": 1236,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "accountant",
+      "route": "/workshop",
+      "actualPath": "/workshop",
+      "title": "Việc làm trong xưởng · FinWorkshop",
+      "headings": [
+        "Việc làm trong xưởng"
+      ],
+      "alerts": [],
+      "bodyChars": 1351,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "accountant",
+      "route": "/inventory",
+      "actualPath": "/inventory",
+      "title": "Quản lý kho · FinWorkshop",
+      "headings": [
+        "Kho"
+      ],
+      "alerts": [],
+      "bodyChars": 1371,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "accountant",
+      "route": "/customers",
+      "actualPath": "/customers",
+      "title": "Khách hàng · FinWorkshop",
+      "headings": [
+        "Khách hàng"
+      ],
+      "alerts": [],
+      "bodyChars": 797,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "accountant",
+      "route": "/suppliers",
+      "actualPath": "/suppliers",
+      "title": "Người bán / NCC · FinWorkshop",
+      "headings": [
+        "Người bán"
+      ],
+      "alerts": [],
+      "bodyChars": 786,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "accountant",
+      "route": "/settings",
+      "actualPath": "/settings",
+      "title": "Cài đặt · FinWorkshop",
+      "headings": [
+        "Cài đặt hệ thống",
+        "Thông tin xưởng của bạn"
+      ],
+      "alerts": [],
+      "bodyChars": 865,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "workshop",
+      "route": "/app",
+      "actualPath": "/app",
+      "title": "Bàn làm việc · FinWorkshop",
+      "headings": [
+        "Xin chào, Thợ xưởng Demo",
+        "Bạn muốn làm gì?",
+        "Việc đang làm"
+      ],
+      "alerts": [],
+      "bodyChars": 732,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "workshop",
+      "route": "/transactions",
+      "actualPath": "/settings",
+      "title": "Cài đặt · FinWorkshop",
+      "headings": [
+        "Cài đặt",
+        "Thợ xưởng Demo",
+        "Cài đặt ngôn ngữ hiển thị"
+      ],
+      "alerts": [],
+      "bodyChars": 842,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "workshop",
+      "route": "/payments",
+      "actualPath": "/settings",
+      "title": "Cài đặt · FinWorkshop",
+      "headings": [
+        "Cài đặt",
+        "Thợ xưởng Demo",
+        "Cài đặt ngôn ngữ hiển thị"
+      ],
+      "alerts": [],
+      "bodyChars": 842,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "workshop",
+      "route": "/reconciliation",
+      "actualPath": "/settings",
+      "title": "Cài đặt · FinWorkshop",
+      "headings": [
+        "Cài đặt",
+        "Thợ xưởng Demo",
+        "Cài đặt ngôn ngữ hiển thị"
+      ],
+      "alerts": [],
+      "bodyChars": 842,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "workshop",
+      "route": "/invoices",
+      "actualPath": "/settings",
+      "title": "Cài đặt · FinWorkshop",
+      "headings": [
+        "Cài đặt",
+        "Thợ xưởng Demo",
+        "Cài đặt ngôn ngữ hiển thị"
+      ],
+      "alerts": [],
+      "bodyChars": 842,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "workshop",
+      "route": "/reports",
+      "actualPath": "/settings",
+      "title": "Cài đặt · FinWorkshop",
+      "headings": [
+        "Cài đặt",
+        "Thợ xưởng Demo",
+        "Cài đặt ngôn ngữ hiển thị"
+      ],
+      "alerts": [],
+      "bodyChars": 842,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "workshop",
+      "route": "/quotations",
+      "actualPath": "/settings",
+      "title": "Cài đặt · FinWorkshop",
+      "headings": [
+        "Cài đặt",
+        "Thợ xưởng Demo",
+        "Cài đặt ngôn ngữ hiển thị"
+      ],
+      "alerts": [],
+      "bodyChars": 842,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "workshop",
+      "route": "/catalog",
+      "actualPath": "/settings",
+      "title": "Cài đặt · FinWorkshop",
+      "headings": [
+        "Cài đặt",
+        "Thợ xưởng Demo",
+        "Cài đặt ngôn ngữ hiển thị"
+      ],
+      "alerts": [],
+      "bodyChars": 842,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "workshop",
+      "route": "/workshop",
+      "actualPath": "/workshop",
+      "title": "Việc làm trong xưởng · FinWorkshop",
+      "headings": [
+        "Việc làm trong xưởng"
+      ],
+      "alerts": [],
+      "bodyChars": 1194,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "workshop",
+      "route": "/inventory",
+      "actualPath": "/inventory",
+      "title": "Quản lý kho · FinWorkshop",
+      "headings": [
+        "Kho"
+      ],
+      "alerts": [],
+      "bodyChars": 1216,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "workshop",
+      "route": "/customers",
+      "actualPath": "/settings",
+      "title": "Cài đặt · FinWorkshop",
+      "headings": [
+        "Cài đặt",
+        "Thợ xưởng Demo",
+        "Cài đặt ngôn ngữ hiển thị"
+      ],
+      "alerts": [],
+      "bodyChars": 842,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "workshop",
+      "route": "/suppliers",
+      "actualPath": "/settings",
+      "title": "Cài đặt · FinWorkshop",
+      "headings": [
+        "Cài đặt",
+        "Thợ xưởng Demo",
+        "Cài đặt ngôn ngữ hiển thị"
+      ],
+      "alerts": [],
+      "bodyChars": 842,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "workshop",
+      "route": "/settings",
+      "actualPath": "/settings",
+      "title": "Cài đặt · FinWorkshop",
+      "headings": [
+        "Cài đặt",
+        "Thợ xưởng Demo",
+        "Cài đặt ngôn ngữ hiển thị"
+      ],
+      "alerts": [],
+      "bodyChars": 842,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "warehouse",
+      "route": "/app",
+      "actualPath": "/app",
+      "title": "Bàn làm việc · FinWorkshop",
+      "headings": [
+        "Xin chào, Thủ kho Demo",
+        "Bạn muốn làm gì?",
+        "Việc đang làm",
+        "Vật tư sắp hết"
+      ],
+      "alerts": [],
+      "bodyChars": 822,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "warehouse",
+      "route": "/transactions",
+      "actualPath": "/settings",
+      "title": "Cài đặt · FinWorkshop",
+      "headings": [
+        "Cài đặt hệ thống",
+        "Thông tin xưởng của bạn"
+      ],
+      "alerts": [],
+      "bodyChars": 831,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "warehouse",
+      "route": "/payments",
+      "actualPath": "/settings",
+      "title": "Cài đặt · FinWorkshop",
+      "headings": [
+        "Cài đặt hệ thống",
+        "Thông tin xưởng của bạn"
+      ],
+      "alerts": [],
+      "bodyChars": 831,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "warehouse",
+      "route": "/reconciliation",
+      "actualPath": "/settings",
+      "title": "Cài đặt · FinWorkshop",
+      "headings": [
+        "Cài đặt hệ thống",
+        "Thông tin xưởng của bạn"
+      ],
+      "alerts": [],
+      "bodyChars": 831,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "warehouse",
+      "route": "/invoices",
+      "actualPath": "/settings",
+      "title": "Cài đặt · FinWorkshop",
+      "headings": [
+        "Cài đặt hệ thống",
+        "Thông tin xưởng của bạn"
+      ],
+      "alerts": [],
+      "bodyChars": 831,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "warehouse",
+      "route": "/reports",
+      "actualPath": "/settings",
+      "title": "Cài đặt · FinWorkshop",
+      "headings": [
+        "Cài đặt hệ thống",
+        "Thông tin xưởng của bạn"
+      ],
+      "alerts": [],
+      "bodyChars": 831,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "warehouse",
+      "route": "/quotations",
+      "actualPath": "/settings",
+      "title": "Cài đặt · FinWorkshop",
+      "headings": [
+        "Cài đặt hệ thống",
+        "Thông tin xưởng của bạn"
+      ],
+      "alerts": [],
+      "bodyChars": 831,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "warehouse",
+      "route": "/catalog",
+      "actualPath": "/catalog",
+      "title": "Sản phẩm & vật tư · FinWorkshop",
+      "headings": [
+        "Sản phẩm"
+      ],
+      "alerts": [],
+      "bodyChars": 987,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "warehouse",
+      "route": "/workshop",
+      "actualPath": "/workshop",
+      "title": "Việc làm trong xưởng · FinWorkshop",
+      "headings": [
+        "Việc làm trong xưởng"
+      ],
+      "alerts": [],
+      "bodyChars": 1148,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "warehouse",
+      "route": "/inventory",
+      "actualPath": "/inventory",
+      "title": "Quản lý kho · FinWorkshop",
+      "headings": [
+        "Kho"
+      ],
+      "alerts": [],
+      "bodyChars": 1326,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "warehouse",
+      "route": "/customers",
+      "actualPath": "/settings",
+      "title": "Cài đặt · FinWorkshop",
+      "headings": [
+        "Cài đặt hệ thống",
+        "Thông tin xưởng của bạn"
+      ],
+      "alerts": [],
+      "bodyChars": 831,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "warehouse",
+      "route": "/suppliers",
+      "actualPath": "/settings",
+      "title": "Cài đặt · FinWorkshop",
+      "headings": [
+        "Cài đặt hệ thống",
+        "Thông tin xưởng của bạn"
+      ],
+      "alerts": [],
+      "bodyChars": 831,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "warehouse",
+      "route": "/settings",
+      "actualPath": "/settings",
+      "title": "Cài đặt · FinWorkshop",
+      "headings": [
+        "Cài đặt hệ thống",
+        "Thông tin xưởng của bạn"
+      ],
+      "alerts": [],
+      "bodyChars": 831,
+      "horizontalOverflow": false
+    }
+  ],
+  "checks": [
+    {
+      "name": "AUTH-invalid-login",
+      "url": "http://127.0.0.1:5184/login",
+      "alert": "Email hoặc mật khẩu chưa chính xác."
+    },
+    {
+      "name": "AUTH-valid-owner",
+      "url": "http://127.0.0.1:5184/app"
+    },
+    {
+      "name": "ESC-generic-customer-modal",
+      "stillOpenAfterEscape": true,
+      "advertisedEscape": true
+    },
+    {
+      "name": "BOM-clear-retains-formula",
+      "selectedBom": "DEMO-BOM · v1",
+      "retainsFormulaAfterClear": true,
+      "beforePreview": " 0 nếu muốn hệ thống gợi ý)\nTính giá từ chi phí (không bắt buộc)\nMức thuế\nTheo mức thuế ghi bên cạnh\nMức thuế (%)\nBáo giá có hiệu lực đến\nGhi chú cho khách\nGiá gợi ý mỗi sản phẩm\n341.250 ₫\nTiền hàng\n341.250 ₫\nThuế\n27.300 ₫\nKhách trả\n368.550 ₫\nHủy\nLưu",
+      "afterPreview": " 0 nếu muốn hệ thống gợi ý)\nTính giá từ chi phí (không bắt buộc)\nMức thuế\nTheo mức thuế ghi bên cạnh\nMức thuế (%)\nBáo giá có hiệu lực đến\nGhi chú cho khách\nGiá gợi ý mỗi sản phẩm\n341.250 ₫\nTiền hàng\n341.250 ₫\nThuế\n27.300 ₫\nKhách trả\n368.550 ₫\nHủy\nLưu"
+    },
+    {
+      "name": "Workshop-material-job-selector",
+      "originalJob": "fefa8d79-80f3-4396-9823-5d90dfd8af48",
+      "selectedJob": "31715d97-8c7d-47f0-b8cc-dd214c890399",
+      "selectedText": "DEMO-SX · Tủ điện Demo",
+      "jobSelectionEditable": true,
+      "note": "Submit override to be validated independently; no stock posted by this check."
+    },
+    {
+      "name": "mobile-/app",
+      "horizontalOverflow": false,
+      "headings": [
+        "Xin chào, Chủ xưởng Demo",
+        "Thao tác nghiệp vụ nhanh",
+        "Dòng tiền thu – chi & Số dư lũy kế",
+        "Cơ cấu chi phí & Thuế",
+        "Tuổi nợ phải thu",
+        "Cần xử lý ngay",
+        "Tiến độ xưởng & Cảnh báo tồn kho",
+        "Chứng từ phát sinh gần nhất"
+      ]
+    },
+    {
+      "name": "mobile-/invoices",
+      "horizontalOverflow": false,
+      "headings": [
+        "Hóa đơn"
+      ]
+    },
+    {
+      "name": "mobile-/workshop",
+      "horizontalOverflow": false,
+      "headings": [
+        "Việc làm trong xưởng"
+      ]
+    },
+    {
+      "name": "mobile-/settings",
+      "horizontalOverflow": false,
+      "headings": [
+        "Cài đặt hệ thống",
+        "Thông tin xưởng của bạn",
+        "Cơ sở xưởng"
+      ]
+    },
+    {
+      "name": "AUTH-valid-accountant",
+      "url": "http://127.0.0.1:5184/app"
+    },
+    {
+      "name": "AUTH-valid-workshop",
+      "url": "http://127.0.0.1:5184/app"
+    },
+    {
+      "name": "AUTH-valid-warehouse",
+      "url": "http://127.0.0.1:5184/app"
+    }
+  ],
+  "errors": [],
+  "finishedAt": "2026-11-10T18:05:46.846Z"
+}

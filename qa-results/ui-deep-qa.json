@@ -1,0 +1,46 @@
+{
+  "completedAt": "2026-11-10T18:08:07.577Z",
+  "results": [
+    {
+      "name": "global-search-same-route",
+      "url": "http://127.0.0.1:5184/transactions?q=UI-QA-NOT-EXISTS-815799",
+      "rowsBefore": 10,
+      "rowsAfter": 10,
+      "tableSearchValue": "",
+      "expected": "No matching records for non-existing query"
+    },
+    {
+      "name": "owner-DRAFT-quotation-actions",
+      "buttons": [
+        "Chi tiết",
+        "Excel",
+        "PDF / In",
+        "Sửa",
+        "Hủy"
+      ],
+      "hasSubmit": false,
+      "note": "Owner create and revise both generate DRAFT; API permits submit but owner UI does not show it"
+    },
+    {
+      "name": "invoice-partner-tax-code-retention",
+      "error": "locator.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('textbox', { name: 'Đối tác', exact: true })\u001b[22m\n"
+    },
+    {
+      "name": "stock-selector-saves-original-job-real",
+      "fixturePrefix": "UI-QA-1794334085929",
+      "originalJob": {
+        "id": "fdebe585-6225-420c-98c0-a4f60f198f80",
+        "code": "UI-QA-1794334085929-A"
+      },
+      "userSelectedJob": {
+        "id": "850c1b80-4b5a-4427-884b-a4532416c6c5",
+        "code": "UI-QA-1794334085929-B"
+      },
+      "requestJobId": "fdebe585-6225-420c-98c0-a4f60f198f80",
+      "responseStatus": 201,
+      "savedJobId": "fdebe585-6225-420c-98c0-a4f60f198f80",
+      "savedMovementId": "f856cc6b-1c8e-4902-b19e-1ef3436c03a8",
+      "savedMaterialId": "a4b2a700-4099-4a83-adb8-33ff20a5c760"
+    }
+  ]
+}

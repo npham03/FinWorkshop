@@ -1,0 +1,80 @@
+{
+  "base": "http://127.0.0.1:3005/api",
+  "tag": "FIX-1794333778101",
+  "date": "2026-10-27",
+  "at": "2026-11-10T18:03:03.534Z",
+  "results": [
+    {
+      "name": "Business registration creates a separate empty workspace and owner can log in offline",
+      "result": "PASS"
+    },
+    {
+      "name": "Create four roles and no finance access for warehouse or worker",
+      "result": "PASS"
+    },
+    {
+      "name": "Invitation is bound to email, company, role and consumed once",
+      "result": "PASS"
+    },
+    {
+      "name": "Master schema rejects blank data, duplicate codes, negative cost and invented stock",
+      "result": "PASS"
+    },
+    {
+      "name": "INPUT posts correct tax and debt, partner editor cannot overwrite balance",
+      "result": "PASS"
+    },
+    {
+      "name": "Receipt links invoice line, updates quantity/value, duplicate receipt is rejected",
+      "result": "PASS"
+    },
+    {
+      "name": "Inventory purchases are capitalized and not counted as operating expense",
+      "result": "PASS"
+    },
+    {
+      "name": "Create itemized BOM and quotation headers remain consistent after editing",
+      "result": "PASS"
+    },
+    {
+      "name": "Approval and conversion preserve BOM and planned costs in production",
+      "result": "PASS"
+    },
+    {
+      "name": "State machine blocks finish-before-start and financial field injection",
+      "result": "PASS"
+    },
+    {
+      "name": "Returns require source issue and cannot exceed issued remainder",
+      "result": "PASS"
+    },
+    {
+      "name": "Worker can record hours but cannot set payroll rate or read it from response",
+      "result": "PASS"
+    },
+    {
+      "name": "Finished receipt requires acceptance role and capitalizes exact cost",
+      "result": "PASS"
+    },
+    {
+      "name": "Sales delivery recognizes COGS; golden inventory and margin reconcile",
+      "result": "PASS"
+    },
+    {
+      "name": "Concurrent duplicate invoices create one row and one payable",
+      "result": "PASS"
+    },
+    {
+      "name": "Opening debt has its own dated document and cannot be overwritten",
+      "result": "PASS"
+    },
+    {
+      "name": "Tenant records and permission settings remain isolated",
+      "result": "PASS"
+    },
+    {
+      "name": "Tax method mismatch and unreviewed rule are blocked for a configured SME",
+      "result": "PASS"
+    }
+  ]
+}

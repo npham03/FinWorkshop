@@ -1,0 +1,235 @@
+{
+  "base": "http://127.0.0.1:3002/api",
+  "today": "2026-11-11",
+  "from": "2026-11-01",
+  "metrics": {
+    "balance": 305900705,
+    "cashBalance": 81737100,
+    "bankBalance": 224163605,
+    "revenue": 46702900,
+    "expenses": 22228495,
+    "netRevenue": 54650000,
+    "operatingCost": 30575995,
+    "rawMaterials": 1403216000,
+    "finishedGoods": 0,
+    "wip": 3285000,
+    "cogs": 0,
+    "actualReceipts": 46702900,
+    "inputInvoices": 30475000,
+    "receivable": 35519700,
+    "payable": 26702400,
+    "overdueAmount": 26344800,
+    "overdueCount": 13,
+    "unpaidCount": 19,
+    "upcomingCount": 4,
+    "upcomingAmount": 8675100,
+    "taxLiability": 8134000,
+    "netCash": 24474405
+  },
+  "totals": {
+    "customers": 35519700,
+    "suppliers": 26702400,
+    "outputOpen": 35519700,
+    "inputOpen": 26702400,
+    "outputComputedAsOfToday": 35519700,
+    "inputComputedAsOfToday": 26702400
+  },
+  "customers": [
+    {
+      "id": "f3477111-20d3-48f6-ae0c-2b8c64891e80",
+      "code": "DEMO-KH",
+      "date": "2026-11-11",
+      "name": "Khách hàng sản xuất Demo",
+      "seeded": true,
+      "status": "ACTIVE",
+      "taxCode": "0102345678",
+      "receivable": 35519700,
+      "syncStatus": "LOCAL_DEMO",
+      "workshopId": "00000000-0000-0000-0000-000000000002",
+      "openingBalance": 0
+    }
+  ],
+  "suppliers": [
+    {
+      "id": "88566b4b-09d1-4b50-b007-4f9c4400ae0a",
+      "code": "DEMO-NCC",
+      "date": "2026-11-11",
+      "name": "Nhà cung cấp vật tư Demo",
+      "seeded": true,
+      "status": "ACTIVE",
+      "payable": 26702400,
+      "taxCode": "0312345678",
+      "syncStatus": "LOCAL_DEMO",
+      "workshopId": "00000000-0000-0000-0000-000000000002",
+      "openingBalance": 0
+    }
+  ],
+  "discrepancies": [],
+  "operatingCost": {
+    "smeSummary": {
+      "revenue": 54650000,
+      "cogs": 0,
+      "grossProfit": 54650000,
+      "operatingExpense": 30576000,
+      "financeExpense": 0,
+      "financeIncome": 5,
+      "operatingProfit": 24074005,
+      "rawMaterials": 1403216000,
+      "finishedGoods": 0,
+      "wip": 3285000,
+      "debit": 163276600,
+      "credit": 163276600
+    },
+    "s3Total": 31821000,
+    "s3BySource": {
+      "INPUT_INVOICE": 30475000,
+      "LABOR": 1345000,
+      "ALLOCATION_FEE": 1000
+    },
+    "s3Rows": [
+      {
+        "code": "DEMO-HD-INPUT",
+        "date": "2026-11-11",
+        "expense": 1000000,
+        "source": "INPUT_INVOICE",
+        "purchaseCategory": "OPERATING",
+        "taxAmount": 100000,
+        "subtotal": 1000000
+      },
+      {
+        "code": "DEMO-30D-MV-20261101",
+        "date": "2026-11-01",
+        "expense": 3672000,
+        "source": "INPUT_INVOICE",
+        "inputVatDeductible": true,
+        "taxAmount": 367200,
+        "subtotal": 3672000
+      },
+      {
+        "code": "DEMO-30D-MV-20261102",
+        "date": "2026-11-02",
+        "expense": 3900000,
+        "source": "INPUT_INVOICE",
+        "inputVatDeductible": true,
+        "taxAmount": 312000,
+        "subtotal": 3900000
+      },
+      {
+        "code": "DEMO-30D-MV-20261103",
+        "date": "2026-11-03",
+        "expense": 1235000,
+        "source": "INPUT_INVOICE",
+        "inputVatDeductible": true,
+        "taxAmount": 98800,
+        "subtotal": 1235000
+      },
+      {
+        "code": "DEMO-30D-MV-20261104",
+        "date": "2026-11-04",
+        "expense": 2565000,
+        "source": "INPUT_INVOICE",
+        "inputVatDeductible": true,
+        "taxAmount": 205200,
+        "subtotal": 2565000
+      },
+      {
+        "code": "DEMO-30D-MV-20261105",
+        "date": "2026-11-05",
+        "expense": 1800000,
+        "source": "INPUT_INVOICE",
+        "inputVatDeductible": true,
+        "taxAmount": 144000,
+        "subtotal": 1800000
+      },
+      {
+        "code": "DEMO-30D-MV-20261106",
+        "date": "2026-11-06",
+        "expense": 2508000,
+        "source": "INPUT_INVOICE",
+        "inputVatDeductible": true,
+        "taxAmount": 250800,
+        "subtotal": 2508000
+      },
+      {
+        "code": "DEMO-30D-MV-20261107",
+        "date": "2026-11-07",
+        "expense": 4080000,
+        "source": "INPUT_INVOICE",
+        "inputVatDeductible": true,
+        "taxAmount": 408000,
+        "subtotal": 4080000
+      },
+      {
+        "code": "DEMO-30D-MV-20261108",
+        "date": "2026-11-08",
+        "expense": 3900000,
+        "source": "INPUT_INVOICE",
+        "inputVatDeductible": true,
+        "taxAmount": 312000,
+        "subtotal": 3900000
+      },
+      {
+        "code": "DEMO-30D-MV-20261109",
+        "date": "2026-11-09",
+        "expense": 1330000,
+        "source": "INPUT_INVOICE",
+        "inputVatDeductible": true,
+        "taxAmount": 106400,
+        "subtotal": 1330000
+      },
+      {
+        "code": "DEMO-30D-MV-20261110",
+        "date": "2026-11-10",
+        "expense": 2685000,
+        "source": "INPUT_INVOICE",
+        "inputVatDeductible": true,
+        "taxAmount": 214800,
+        "subtotal": 2685000
+      },
+      {
+        "code": "DEMO-30D-MV-20261111",
+        "date": "2026-11-11",
+        "expense": 1800000,
+        "source": "INPUT_INVOICE",
+        "inputVatDeductible": true,
+        "taxAmount": 144000,
+        "subtotal": 1800000
+      },
+      {
+        "code": "DEMO-LABOR",
+        "date": "2026-11-11",
+        "expense": 110000,
+        "source": "LABOR"
+      },
+      {
+        "code": "DEMO-GIO-20261111",
+        "date": "2026-11-11",
+        "expense": 260000,
+        "source": "LABOR"
+      },
+      {
+        "code": "DEMO-GIO-20261108",
+        "date": "2026-11-08",
+        "expense": 325000,
+        "source": "LABOR"
+      },
+      {
+        "code": "DEMO-GIO-20261105",
+        "date": "2026-11-05",
+        "expense": 390000,
+        "source": "LABOR"
+      },
+      {
+        "code": "DEMO-GIO-20261102",
+        "date": "2026-11-02",
+        "expense": 260000,
+        "source": "LABOR"
+      },
+      {
+        "date": "2026-11-11",
+        "expense": 1000,
+        "source": "ALLOCATION_FEE"
+      }
+    ]
+  }
+}
