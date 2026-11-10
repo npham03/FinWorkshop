@@ -1,7 +1,8 @@
 import { useEffect,useMemo,useState,useRef } from 'react';
 import { Link,Navigate,Outlet,Route,Routes,useLocation,useNavigate } from 'react-router-dom';
-import { ArrowLeftRight,Bell,Boxes,BriefcaseBusiness,ChevronDown,ChevronUp,Eye,EyeOff,FileCheck2,FileClock,FileText,Factory,LayoutDashboard,LogOut,Menu,Package,Search,Settings2,ShieldCheck,Users,Wallet,X } from 'lucide-react';
+import { ArrowLeftRight,Bell,Boxes,BriefcaseBusiness,ChevronDown,ChevronUp,Eye,EyeOff,FileCheck2,FileClock,FileText,Factory,Globe,LayoutDashboard,LogOut,Menu,Package,Search,Settings2,ShieldCheck,Users,Wallet,X } from 'lucide-react';
 import { useAuth } from './auth';
+import { useLanguage } from './language';
 import { CatalogPage,CustomersPage,DashboardPage,InventoryPage,InvoicesPage,PaymentsPage,QuotationsPage,ReconciliationPage,ReportsPage,SettingsPage,SuppliersPage,TransactionsPage,WorkshopPage } from './pages';
 import { type Role,type User } from './api';
 
@@ -107,8 +108,9 @@ const userCanAccess = (user: User | null, entity: string) =>
 
 function Gate() {
   const { user, loading } = useAuth();
+  const { isEn } = useLanguage();
   const location = useLocation();
-  if (loading) return <div className="flex min-h-screen items-center justify-center text-xs text-slate-500">Đang xác thực phiên…</div>;
+  if (loading) return <div className="flex min-h-screen items-center justify-center text-xs text-slate-500">{isEn ? 'Authenticating session…' : 'Đang xác thực phiên…'}</div>;
   if (!user) return <Navigate to="/login" replace state={{ from: location.pathname }} />;
   const entity = location.pathname === '/app' && ['WORKSHOP', 'WAREHOUSE'].includes(user.role) ? undefined : pageAccessEntities[location.pathname];
   if (entity && !userCanAccess(user, entity)) return <Navigate to="/settings" replace />;
@@ -123,6 +125,7 @@ function HomePage() {
 
 function AppShell() {
   const { user, logout } = useAuth();
+  const { language, setLanguage, t, isEn } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -134,7 +137,7 @@ function AppShell() {
   const [subBarCollapsed, setSubBarCollapsed] = useState(() => localStorage.getItem('fin_subbar_collapsed') === 'true');
 
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const currentTitle = titles[location.pathname] || 'FinTax';
+  const currentTitle = t(titles[location.pathname] || 'FinTax');
 
   useEffect(() => {
     document.title = `${currentTitle} · FinWorkshop`;
@@ -187,13 +190,13 @@ function AppShell() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col">
-      {/* 1. TOP NAVIGATION BAR (Thanh chuyển hướng trên cùng - Nền trắng sạch sẽ) */}
+      {/* 1. TOP NAVIGATION BAR */}
       <header className="sticky top-0 z-40 bg-white text-slate-800 border-b border-slate-200 shadow-xs">
         <div className="mx-auto flex h-14 items-center justify-between px-3 sm:px-6">
           {/* Left: Brand & Workshop Badge */}
           <div className="flex items-center gap-3">
             <button
-              aria-label="Mở menu di động"
+              aria-label={t('Mở menu di động')}
               onClick={() => setMobileNav(true)}
               className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 hover:text-slate-900 lg:hidden"
             >
@@ -231,7 +234,7 @@ function AppShell() {
                       }`}
                     >
                       <group.icon size={15} className={isGroupActive ? 'text-brand-600' : 'text-slate-400'} />
-                      <span>{group.section}</span>
+                      <span>{t(group.section)}</span>
                       <ChevronDown size={13} className={`text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
                     </button>
                   ) : (
@@ -245,7 +248,7 @@ function AppShell() {
                       }`}
                     >
                       <group.icon size={15} className={isGroupActive ? 'text-brand-600' : 'text-slate-400'} />
-                      <span>{group.section}</span>
+                      <span>{t(group.section)}</span>
                     </Link>
                   )}
 
@@ -256,7 +259,7 @@ function AppShell() {
                       className="absolute left-0 top-full mt-1.5 z-50 min-w-56 rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl animate-in fade-in zoom-in-95 duration-100 text-slate-800"
                     >
                       <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100 mb-1">
-                        {group.section}
+                        {t(group.section)}
                       </div>
                       {group.items.map((item) => {
                         const isItemActive = location.pathname === item.to;
@@ -272,7 +275,7 @@ function AppShell() {
                             }`}
                           >
                             <item.icon size={15} className={isItemActive ? 'text-brand-600' : 'text-slate-400'} />
-                            <span>{item.label}</span>
+                            <span>{t(item.label)}</span>
                           </Link>
                         );
                       })}
@@ -283,29 +286,29 @@ function AppShell() {
             })}
           </nav>
 
-          {/* Right: Quick Search, User Profile, Role */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          {/* Right: Quick Search, Language Switcher, User Profile, Role */}
+          <div className="flex items-center gap-2 sm:gap-2.5">
             <div className={`flex items-center overflow-hidden transition-all duration-150 ${searchOpen ? 'w-40 sm:w-56' : 'w-0'}`}>
               <form onSubmit={search} className="relative w-full">
                 <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
-                  aria-label="Tìm nhanh"
+                  aria-label={t('Tìm nhanh')}
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
-                  placeholder="Tìm kiếm..."
+                  placeholder={t('Tìm kiếm...')}
                   className="w-full rounded-lg border border-slate-200 bg-slate-50 py-1 pl-7 pr-2 text-xs text-slate-800 outline-none focus:border-brand-500 focus:bg-white"
                 />
               </form>
             </div>
             <button
-              aria-label="Mở tìm kiếm"
+              aria-label={t('Mở tìm kiếm')}
               onClick={() => setSearchOpen((v) => !v)}
               className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 hover:text-slate-800"
             >
               <Search size={16} />
             </button>
 
-            <Link to="/app" aria-label="Trung tâm thông báo" className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 hover:text-slate-800">
+            <Link to="/app" aria-label={t('Trung tâm thông báo')} className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 hover:text-slate-800">
               <Bell size={16} />
             </Link>
 
@@ -339,7 +342,7 @@ function AppShell() {
               </button>
 
               {profileOpen && (
-                <div className="absolute right-0 top-10 z-50 w-48 rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl text-slate-800">
+                <div className="absolute right-0 top-10 z-50 w-52 rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl text-slate-800">
                   <div className="border-b border-slate-100 px-3 py-2">
                     <p className="truncate text-xs font-semibold text-slate-900">{user?.email}</p>
                     <p className="text-[10px] text-brand-700 font-medium">{user?.roleLabel}</p>
@@ -361,7 +364,7 @@ function AppShell() {
                     className="mt-1 flex w-full items-center gap-2 rounded-lg px-3 py-1.5 text-left text-xs text-rose-600 hover:bg-rose-50 hover:text-rose-700 transition-colors"
                   >
                     <LogOut size={13} />
-                    <span>Đăng xuất</span>
+                    <span>{t('Đăng xuất')}</span>
                   </button>
                 </div>
               )}
@@ -370,13 +373,13 @@ function AppShell() {
         </div>
       </header>
 
-      {/* 2. SECONDARY SUB-NAVIGATION BAR (Thanh menu con ngang có thể ẩn/hiện) */}
+      {/* 2. SECONDARY SUB-NAVIGATION BAR */}
       {activeGroup && activeGroup.items.length > 1 && (
         <div className="border-b border-slate-200 bg-white shadow-sm">
           <div className="mx-auto flex h-10 items-center justify-between px-3 sm:px-6">
             <div className="flex items-center gap-1.5 overflow-x-auto py-1 scrollbar-none">
               <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mr-2 shrink-0 hidden sm:inline">
-                {activeGroup.section}:
+                {t(activeGroup.section)}:
               </span>
               {!subBarCollapsed ? (
                 activeGroup.items.map((item) => {
@@ -392,7 +395,7 @@ function AppShell() {
                       }`}
                     >
                       <item.icon size={13} className={isItemActive ? 'text-brand-600' : 'text-slate-400'} />
-                      <span>{item.label}</span>
+                      <span>{t(item.label)}</span>
                     </Link>
                   );
                 })
@@ -407,19 +410,19 @@ function AppShell() {
             {/* Toggle Collapse Sub-bar Button */}
             <button
               onClick={toggleSubBar}
-              title={subBarCollapsed ? 'Mở rộng menu con' : 'Thu gọn menu con để mở rộng bảng'}
+              title={subBarCollapsed ? t('Hiện menu con') : t('Ẩn menu con (Toàn màn hình)')}
               className="ml-2 inline-flex items-center gap-1 rounded px-2 py-0.5 text-[11px] font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-800 transition-colors shrink-0"
             >
               {subBarCollapsed ? (
                 <>
                   <Eye size={12} className="text-brand-600" />
-                  <span className="hidden sm:inline">Hiện menu con</span>
+                  <span className="hidden sm:inline">{t('Hiện menu con')}</span>
                   <ChevronDown size={11} />
                 </>
               ) : (
                 <>
                   <EyeOff size={12} />
-                  <span className="hidden sm:inline">Ẩn menu con (Toàn màn hình)</span>
+                  <span className="hidden sm:inline">{t('Ẩn menu con (Toàn màn hình)')}</span>
                   <ChevronUp size={11} />
                 </>
               )}
@@ -432,7 +435,7 @@ function AppShell() {
       {mobileNav && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <button
-            aria-label="Đóng điều hướng"
+            aria-label={t('Đóng điều hướng')}
             className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
             onClick={() => setMobileNav(false)}
           />
@@ -448,7 +451,7 @@ function AppShell() {
             <nav className="flex-1 overflow-y-auto p-3 space-y-4">
               {visibleNav.map((group) => (
                 <div key={group.id}>
-                  <p className="px-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">{group.section}</p>
+                  <p className="px-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">{t(group.section)}</p>
                   <div className="space-y-0.5">
                     {group.items.map((item) => {
                       const active = location.pathname === item.to;
@@ -464,7 +467,7 @@ function AppShell() {
                           }`}
                         >
                           <item.icon size={15} className={active ? 'text-brand-600' : 'text-slate-400'} />
-                          <span>{item.label}</span>
+                          <span>{t(item.label)}</span>
                         </Link>
                       );
                     })}
@@ -472,7 +475,15 @@ function AppShell() {
                 </div>
               ))}
             </nav>
-            <div className="border-t border-slate-200 p-3 bg-slate-50/70">
+            <div className="border-t border-slate-200 p-3 bg-slate-50/70 space-y-2">
+              <button
+                type="button"
+                onClick={() => setLanguage(language === 'vi' ? 'en' : 'vi')}
+                className="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 shadow-xs"
+              >
+                <Globe size={14} className="text-brand-600" />
+                <span>{language === 'vi' ? 'Chuyển sang English' : 'Switch to Tiếng Việt'}</span>
+              </button>
               <button
                 onClick={() => {
                   logout();
@@ -481,14 +492,14 @@ function AppShell() {
                 className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 shadow-xs"
               >
                 <LogOut size={13} />
-                <span>Đăng xuất</span>
+                <span>{t('Đăng xuất')}</span>
               </button>
             </div>
           </aside>
         </div>
       )}
 
-      {/* 4. MAIN CONTENT AREA (Trải rộng 100% màn hình, không bị trừ 256px bên trái) */}
+      {/* 4. MAIN CONTENT AREA */}
       <main className="flex-1 w-full max-w-full px-3.5 sm:px-6 py-4">
         <Routes>
           <Route path="app" element={<HomePage />} />
@@ -508,10 +519,10 @@ function AppShell() {
         </Routes>
 
         <footer className="mt-8 flex flex-col gap-2 border-t border-slate-200/80 pt-3 text-[11px] text-slate-400 sm:flex-row sm:items-center sm:justify-between">
-          <span>© 2026 FinWorkshop · Chuẩn phần mềm kế toán & sản xuất ERP</span>
+          <span>{isEn ? '© 2026 FinWorkshop · Accounting & Workshop ERP Platform' : '© 2026 FinWorkshop · Chuẩn phần mềm kế toán & sản xuất ERP'}</span>
           <span className="flex items-center gap-1.5">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            Hệ thống vận hành đầy màn hình · Đã tối ưu hóa thao tác
+            {isEn ? 'Full-screen mode · Performance-tuned operations' : 'Hệ thống vận hành đầy màn hình · Đã tối ưu hóa thao tác'}
           </span>
         </footer>
       </main>
