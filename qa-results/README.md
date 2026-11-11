@@ -4,6 +4,8 @@
 
 Ngày: 11/11/2026. Tất cả hiện để OPEN, chưa sửa ứng dụng. Chỉ ghi dữ liệu QA riêng. Không commit/push tự động.
 
+**Cập nhật sau vòng QA:** website công khai đã được triển khai ở một công việc riêng; xem [kiểm thử website mới](website/QA-results.md) và [bàn giao](../docs/WEBSITE-PRODUCT-HANDOFF.md). Bốn mươi lăm phát hiện phía trên vẫn là mốc kiểm thử trên399cbdd, không được tự coi đã sửa/đóng khi thay trang chủ. Source hiện có thay đổi cho website và form liên hệ; câu “chưa sửa ứng dụng” phía trên mô tả thời điểm kết thúc hai vòng tìm lỗi.
+
 ## Dùng để sửa, ít tốn ngữ cảnh
 
 1. Đọc [bảng lỗi mới](BAO_CAO_BO_SUNG_VONG_2.md).

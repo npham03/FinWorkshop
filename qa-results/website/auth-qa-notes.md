@@ -1,0 +1,11 @@
+# Auth contract and public-site QA boundaries
+
+- Existing `POST /api/auth/login` takes only email/password and returns token/user (`apps/middleware-api/src/server.js:628`). No new financial workflow API is required for marketing.
+- `AuthProvider.login` updates context and persists `fintax_token`/`fintax_user` (`apps/web-client/src/auth.tsx:21`). Reuse this method rather than duplicating token handling on demo pages.
+- Demo must disclose synthetic data and require explicit role selection/start. Never place the password or bearer token in a URL, console, screenshots of input values, or QA evidence. Session token persistence already belongs to the existing application's auth contract; QA checks only its presence, not its contents.
+- `Gate` checks permissions on protected routes. Marketing must not bypass it. Existing role-dependent `/app` destination correctly provides worker/warehouse home.
+- Login destination should be an exact internal allowlist. Reject external origins, protocol-relative `//...`, backslashes, malformed paths and auth/public redirect loops. Preserve an existing session when visiting public pages. Main owns the implementation of safe `?next=`.
+- Public routes agreed with main: `/`, `/san-pham`, `/giai-phap/san-xuat`, `/giai-phap/ke-toan`, `/trien-khai`, `/tai-lieu`, `/lien-he`, `/demo`, `/bao-mat`, `/dieu-khoan`. Unknown-route 404 changes are explicitly out of scope; protected wildcard remains intact.
+- `verify-marketing.cjs` checks all public routes at desktop and mobile390; h1/title uniqueness; nonhash navigation; known-link destinations; broken image assets; browser runtime errors; actual demo auth; safe next; synthetic inquiry negative/positive requests. It does not register a financial workshop or change any invoice, stock, banking, production or permission data.
+- Inquiry test budget: one direct invalid request and one valid UI request, both synthetic. Invalid client-side blank/email/consent attempts must not send a network request. API agent separately verifies SQL persistence/rate limiting; QA response reference is recorded without personal data.
+- Do not run until main confirms rebuilt UI and inquiry endpoint are ready, to avoid testing stale routes and consuming shared rate limit.

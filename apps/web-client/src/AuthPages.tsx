@@ -3,6 +3,7 @@ import { Link,Navigate,useLocation,useNavigate,useSearchParams } from 'react-rou
 import { ChevronDown,Factory,FileText,ShieldCheck,Sparkles } from 'lucide-react';
 import { useAuth } from './auth';
 import { api,messageOf } from './api';
+import { safeAppDestination } from './marketing/entry';
 
 function AuthLayout({ eyebrow, title, description, children }: { eyebrow: string; title: string; description: string; children: ReactNode }) {
   return <div className="grid min-h-screen bg-white lg:grid-cols-[1.05fr_.95fr]">
@@ -32,14 +33,17 @@ function FormError({ children }: { children: string }) { return children ? <p ro
 export function LoginPage() {
   const { user, login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [loginParams] = useSearchParams();
+  const destination = safeAppDestination(loginParams.get('next') || location.state?.from);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
-  if (user) return <Navigate to="/app" replace />;
+  if (user) return <Navigate to={destination} replace />;
   const submit = async (event: FormEvent) => {
     event.preventDefault(); setError(''); setBusy(true);
-    try { await login(email, password); navigate('/app'); }
+    try { await login(email, password); navigate(destination, { replace: true }); }
     catch (reason) { setError(messageOf(reason)); }
     finally { setBusy(false); }
   };

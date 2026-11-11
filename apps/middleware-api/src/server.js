@@ -28,6 +28,7 @@ import { sendResetCodeEmail, smtpStatus } from './mailer.js';
 import {currencyStatus,configureOdooVnd} from './odoo-currency.js';
 import { syncOdooInvoice, syncOdooPayment, syncOdooQuotation, syncOdooAdjustment, syncOdooAllocation } from './odoo-documents.js';
 import { setupSwagger } from './swagger.js';
+import { createWebsiteRouter, initWebsiteInquiries } from './website.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const uploadDir = path.resolve(__dirname, '../uploads');
@@ -53,6 +54,7 @@ app.use((req, res, next) => {
   return helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } })(req, res, next);
 });
 app.use(cors({ origin: process.env.WEB_ORIGIN?.split(',') || ['http://localhost:5173'], credentials: false }));
+app.use('/api/website', createWebsiteRouter());
 app.use(express.json({ limit: '8mb' }));
 app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 setupSwagger(app);
@@ -1365,6 +1367,7 @@ app.use((error, _req, res, _next) => {
 });
 
 await initDb();
+await initWebsiteInquiries();
 await hydrateRolePermissions();
 await seedDemoData();
 await migrateBaselines();

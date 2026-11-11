@@ -32,6 +32,8 @@ Compose hiện gắn database Odoo `fintax_clean` và addon tại `infrastructur
 
 ## Trang giới thiệu và ứng dụng
 
+Website công khai đã được làm lại theo hướng sản phẩm B2B, có trang Sản phẩm, Giải pháp, Triển khai, Tài liệu, Demo và Liên hệ riêng. Form liên hệ lưu thật trong PostgreSQL; chưa tự gửi email. Xem [bàn giao website](docs/WEBSITE-PRODUCT-HANDOFF.md), [prompt triển khai](docs/PROMPT-WEBSITE-PRODUCT.md) và [kiểm thử website](qa-results/website/QA-results.md). Các phát hiện QA cũ không mặc định được đóng bởi lần thay giao diện này.
+
 Trang `/` giới thiệu giải pháp cho HKD, SME và xưởng sản xuất với màu đỏ FinTax hiện có. Khách có thể khám phá phân hệ, mô hình kinh doanh, quy trình và FAQ; nút Demo/Đăng nhập đi tới `/login`. Sau đăng nhập, Dashboard ở `/app`; tài khoản Thợ về lệnh sản xuất được phân công. Các URL nghiệp vụ cũ vẫn hoạt động.
 
 Landing dùng dữ liệu minh họa, không tải số liệu xưởng thật. Workspace và các thư viện biểu đồ/Excel được tải lười. [Prompt triển khai](docs/PROMPT-LANDING-ODOO-VND.md) và [hướng dẫn trang giới thiệu/VND](docs/LANDING-ODOO-VND.md).

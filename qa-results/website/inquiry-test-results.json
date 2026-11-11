@@ -1,0 +1,43 @@
+{
+  "executedAt": "2026-11-11T07:06:57.374Z",
+  "cases": [
+    {
+      "name": "DEMO: HTTP 201 + SQL persistence",
+      "passed": true
+    },
+    {
+      "name": "CONTACT: HTTP 201 + SQL persistence",
+      "passed": true
+    },
+    {
+      "name": "IMPLEMENTATION: HTTP 201 + SQL persistence",
+      "passed": true
+    },
+    {
+      "name": "Parameterized literal quote/SQL text remains data",
+      "passed": true
+    },
+    {
+      "name": "Invalid input HTTP 400 does not persist",
+      "passed": true
+    },
+    {
+      "name": "Malformed/oversize JSON and public list/detail blocked",
+      "passed": true
+    },
+    {
+      "name": "Financial records untouched",
+      "passed": true
+    },
+    {
+      "name": "Records visible through another SQL connection",
+      "passed": true
+    }
+  ],
+  "references": [
+    "FW-DC8FF2F8-B3AB-4BCD-857A-47928B661309",
+    "FW-232711AD-6D94-4DE5-AE92-DD7729943C92",
+    "FW-77435650-97BE-4233-8189-A17C4B2BB681",
+    "FW-5A554C2E-7582-4271-85C1-17B7C6381304"
+  ]
+}

@@ -1,0 +1,3111 @@
+{
+  "tag": "WEBSITE-QA-1794381371273",
+  "base": "http://127.0.0.1:5184",
+  "api": "http://127.0.0.1:3005/api",
+  "startedAt": "2026-11-11T07:16:11.274Z",
+  "browser": "Microsoft Edge / isolated headless contexts",
+  "checks": [
+    {
+      "name": "desktop /",
+      "status": "PASS",
+      "route": "/",
+      "size": "desktop",
+      "h1": "Vận hành xưởng.Kiểm soát tài chính.",
+      "linkCount": 32,
+      "screenshot": "screenshots/desktop-home.png"
+    },
+    {
+      "name": "desktop /san-pham",
+      "status": "PASS",
+      "route": "/san-pham",
+      "size": "desktop",
+      "h1": "Một hồ sơ xuyên suốt công việc của xưởng.",
+      "linkCount": 28,
+      "screenshot": "screenshots/desktop-san-pham.png"
+    },
+    {
+      "name": "desktop /giai-phap/san-xuat",
+      "status": "PASS",
+      "route": "/giai-phap/san-xuat",
+      "size": "desktop",
+      "h1": "Biết một đơn hàng đang ở đâu và tốn bao nhiêu.",
+      "linkCount": 24,
+      "screenshot": "screenshots/desktop-giai-phap-san-xuat.png"
+    },
+    {
+      "name": "desktop /giai-phap/ke-toan",
+      "status": "PASS",
+      "route": "/giai-phap/ke-toan",
+      "size": "desktop",
+      "h1": "Đi từ chứng từ đến số liệu có thể đối chiếu.",
+      "linkCount": 24,
+      "screenshot": "screenshots/desktop-giai-phap-ke-toan.png"
+    },
+    {
+      "name": "desktop /trien-khai",
+      "status": "PASS",
+      "route": "/trien-khai",
+      "size": "desktop",
+      "h1": "Bắt đầu từ quy trình, không phải một lời hứa phần mềm.",
+      "linkCount": 21,
+      "screenshot": "screenshots/desktop-trien-khai.png"
+    },
+    {
+      "name": "desktop /tai-lieu",
+      "status": "PASS",
+      "route": "/tai-lieu",
+      "size": "desktop",
+      "h1": "Hướng dẫn gắn với công việc hằng ngày.",
+      "linkCount": 31,
+      "screenshot": "screenshots/desktop-tai-lieu.png"
+    },
+    {
+      "name": "desktop /lien-he",
+      "status": "PASS",
+      "route": "/lien-he",
+      "size": "desktop",
+      "h1": "Trao đổi về bài toán của doanh nghiệp bạn.",
+      "linkCount": 21,
+      "screenshot": "screenshots/desktop-lien-he.png"
+    },
+    {
+      "name": "desktop /demo",
+      "status": "PASS",
+      "route": "/demo",
+      "size": "desktop",
+      "h1": "Tự kiểm tra sản phẩm bằng một phiên dùng thử.",
+      "linkCount": 21,
+      "screenshot": "screenshots/desktop-demo.png"
+    },
+    {
+      "name": "desktop /bao-mat",
+      "status": "PASS",
+      "route": "/bao-mat",
+      "size": "desktop",
+      "h1": "Minh bạch về dữ liệu và giới hạn bảo vệ.",
+      "linkCount": 21,
+      "screenshot": "screenshots/desktop-bao-mat.png"
+    },
+    {
+      "name": "desktop /dieu-khoan",
+      "status": "PASS",
+      "route": "/dieu-khoan",
+      "size": "desktop",
+      "h1": "Điều kiện sử dụng rõ ràng ngay từ đầu.",
+      "linkCount": 22,
+      "screenshot": "screenshots/desktop-dieu-khoan.png"
+    },
+    {
+      "name": "Homepage preview tabs support keyboard and load the selected real screenshot",
+      "status": "PASS",
+      "transitions": [
+        {
+          "key": "ArrowRight",
+          "selected": "fw-tab-production",
+          "source": "finworkshop-production.png"
+        },
+        {
+          "key": "End",
+          "selected": "fw-tab-invoices",
+          "source": "finworkshop-invoices.png"
+        },
+        {
+          "key": "Home",
+          "selected": "fw-tab-dashboard",
+          "source": "finworkshop-dashboard.png"
+        }
+      ],
+      "keyboardRovingFocus": true
+    },
+    {
+      "name": "Homepage FAQ opens another answer and closes it again",
+      "status": "PASS",
+      "questionCount": 4,
+      "opensAndCloses": true,
+      "previousAnswerClosed": true
+    },
+    {
+      "name": "Desktop solution disclosure opens real routes and closes with Escape",
+      "status": "PASS",
+      "destinationCount": 2,
+      "escapeCloses": true
+    },
+    {
+      "name": "mobile390 /",
+      "status": "PASS",
+      "route": "/",
+      "size": "mobile",
+      "h1": "Vận hành xưởng.Kiểm soát tài chính.",
+      "linkCount": 32,
+      "screenshot": "screenshots/mobile-home.png"
+    },
+    {
+      "name": "mobile390 /san-pham",
+      "status": "PASS",
+      "route": "/san-pham",
+      "size": "mobile",
+      "h1": "Một hồ sơ xuyên suốt công việc của xưởng.",
+      "linkCount": 28,
+      "screenshot": "screenshots/mobile-san-pham.png"
+    },
+    {
+      "name": "mobile390 /giai-phap/san-xuat",
+      "status": "PASS",
+      "route": "/giai-phap/san-xuat",
+      "size": "mobile",
+      "h1": "Biết một đơn hàng đang ở đâu và tốn bao nhiêu.",
+      "linkCount": 24,
+      "screenshot": "screenshots/mobile-giai-phap-san-xuat.png"
+    },
+    {
+      "name": "mobile390 /giai-phap/ke-toan",
+      "status": "PASS",
+      "route": "/giai-phap/ke-toan",
+      "size": "mobile",
+      "h1": "Đi từ chứng từ đến số liệu có thể đối chiếu.",
+      "linkCount": 24,
+      "screenshot": "screenshots/mobile-giai-phap-ke-toan.png"
+    },
+    {
+      "name": "mobile390 /trien-khai",
+      "status": "PASS",
+      "route": "/trien-khai",
+      "size": "mobile",
+      "h1": "Bắt đầu từ quy trình, không phải một lời hứa phần mềm.",
+      "linkCount": 21,
+      "screenshot": "screenshots/mobile-trien-khai.png"
+    },
+    {
+      "name": "mobile390 /tai-lieu",
+      "status": "PASS",
+      "route": "/tai-lieu",
+      "size": "mobile",
+      "h1": "Hướng dẫn gắn với công việc hằng ngày.",
+      "linkCount": 31,
+      "screenshot": "screenshots/mobile-tai-lieu.png"
+    },
+    {
+      "name": "mobile390 /lien-he",
+      "status": "PASS",
+      "route": "/lien-he",
+      "size": "mobile",
+      "h1": "Trao đổi về bài toán của doanh nghiệp bạn.",
+      "linkCount": 21,
+      "screenshot": "screenshots/mobile-lien-he.png"
+    },
+    {
+      "name": "mobile390 /demo",
+      "status": "PASS",
+      "route": "/demo",
+      "size": "mobile",
+      "h1": "Tự kiểm tra sản phẩm bằng một phiên dùng thử.",
+      "linkCount": 21,
+      "screenshot": "screenshots/mobile-demo.png"
+    },
+    {
+      "name": "mobile390 /bao-mat",
+      "status": "PASS",
+      "route": "/bao-mat",
+      "size": "mobile",
+      "h1": "Minh bạch về dữ liệu và giới hạn bảo vệ.",
+      "linkCount": 21,
+      "screenshot": "screenshots/mobile-bao-mat.png"
+    },
+    {
+      "name": "mobile390 /dieu-khoan",
+      "status": "PASS",
+      "route": "/dieu-khoan",
+      "size": "mobile",
+      "h1": "Điều kiện sử dụng rõ ràng ngay từ đầu.",
+      "linkCount": 22,
+      "screenshot": "screenshots/mobile-dieu-khoan.png"
+    },
+    {
+      "name": "Mobile navigation opens and reaches a different public page",
+      "status": "PASS",
+      "actualPath": "/san-pham"
+    },
+    {
+      "name": "Documentation search, negative result, category and article have real behavior",
+      "status": "PASS",
+      "resetCount": 6,
+      "financeCount": 2,
+      "articlePath": "/tai-lieu?bai=doi-chieu-cong-no",
+      "screenshot": "screenshots/docs-article.png"
+    },
+    {
+      "name": "Implementation CTA contact type is preserved in form",
+      "status": "PASS",
+      "type": "IMPLEMENTATION"
+    },
+    {
+      "name": "Inquiry API rejects malformed synthetic request with field errors",
+      "status": "PASS",
+      "statusCode": 400,
+      "fieldNames": [
+        "name",
+        "message",
+        "email",
+        "consent"
+      ]
+    },
+    {
+      "name": "Contact form validates client side then persists one real synthetic inquiry",
+      "status": "PASS",
+      "statusCode": 201,
+      "reference": "FW-B3A2D939-FC2B-4D35-94E2-AADC4E43337B",
+      "posts": 1,
+      "clientInvalidBlocked": true,
+      "persistence": {
+        "localKeys": [],
+        "sessionKeys": [],
+        "contactDataPersisted": false
+      },
+      "screenshot": "screenshots/contact-success.png"
+    },
+    {
+      "name": "Public demo performs actual seeded login and opens dashboard",
+      "status": "PASS",
+      "loginStatus": 200,
+      "path": "/app",
+      "tokenPresent": true,
+      "role": "OWNER",
+      "passwordPersisted": false,
+      "screenshot": "screenshots/demo-dashboard.png"
+    },
+    {
+      "name": "Public marketing visit does not force logout",
+      "status": "PASS",
+      "tokenPresent": true
+    },
+    {
+      "name": "Login honors safe internal next destination",
+      "status": "PASS",
+      "actualPath": "/inventory"
+    },
+    {
+      "name": "Malicious next cannot redirect an authenticated session outside app",
+      "status": "PASS",
+      "actualOrigin": "http://127.0.0.1:5184",
+      "actualPath": "/app"
+    },
+    {
+      "name": "Public routes have distinct titles and meaningful destination content",
+      "status": "PASS",
+      "uniqueTitles": 10,
+      "uniqueH1s": 10
+    }
+  ],
+  "routes": [
+    {
+      "route": "/",
+      "size": "desktop",
+      "pathname": "/",
+      "title": "Quản trị sản xuất và tài chính | FinWorkshop",
+      "h1s": [
+        "Vận hành xưởng.Kiểm soát tài chính."
+      ],
+      "overflow": false,
+      "brokenImages": [],
+      "links": [
+        {
+          "text": "Đến nội dung chính",
+          "href": "#fw-content",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopFINANCE & OPERATIONS",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Sản phẩm",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Tài liệu",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Đăng nhập",
+          "href": "/login",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm sản phẩm",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm sản phẩm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Tìm hiểu nền tảng",
+          "href": "/san-pham",
+          "nav": false
+        },
+        {
+          "text": "Xem toàn bộ chức năng",
+          "href": "/san-pham",
+          "nav": false
+        },
+        {
+          "text": "Mở và thao tác trực tiếp",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "01Báo giáXây dựng giá từ vật tư, nhân công và chi phí máy.",
+          "href": "/giai-phap/san-xuat",
+          "nav": false
+        },
+        {
+          "text": "02Sản xuấtChuyển đơn đã chốt thành lệnh và phân công công việc.",
+          "href": "/giai-phap/san-xuat",
+          "nav": false
+        },
+        {
+          "text": "03Kho & giá thànhGhi nhận xuất dùng, vật tư trả lại và thành phẩm.",
+          "href": "/san-pham",
+          "nav": false
+        },
+        {
+          "text": "04Tài chínhLiên kết hóa đơn, thanh toán và khoản còn phải thu.",
+          "href": "/giai-phap/ke-toan",
+          "nav": false
+        },
+        {
+          "text": "Tìm hiểu phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": false
+        },
+        {
+          "text": "Giải pháp quản lý sản xuất",
+          "href": "/giai-phap/san-xuat",
+          "nav": false
+        },
+        {
+          "text": "Giải pháp tài chính & kế toán",
+          "href": "/giai-phap/ke-toan",
+          "nav": false
+        },
+        {
+          "text": "Xem các bước triển khai",
+          "href": "/trien-khai",
+          "nav": false
+        },
+        {
+          "text": "Đọc hướng dẫn sử dụng",
+          "href": "/tai-lieu",
+          "nav": false
+        },
+        {
+          "text": "Mở bản trải nghiệm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Trao đổi về nhu cầu",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopBY FINTAX AUTOMATION",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Chức năng nền tảng",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm ứng dụng",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Sản xuất & kho",
+          "href": "/giai-phap/san-xuat",
+          "nav": true
+        },
+        {
+          "text": "Tài chính & kế toán",
+          "href": "/giai-phap/ke-toan",
+          "nav": true
+        },
+        {
+          "text": "Hướng dẫn sử dụng",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Liên hệ",
+          "href": "/lien-he",
+          "nav": true
+        },
+        {
+          "text": "Dữ liệu & bảo mật",
+          "href": "/bao-mat",
+          "nav": true
+        },
+        {
+          "text": "Điều khoản sử dụng",
+          "href": "/dieu-khoan",
+          "nav": true
+        }
+      ],
+      "passwordsPersisted": false,
+      "invalidLinks": [],
+      "screenshot": "screenshots/desktop-home.png"
+    },
+    {
+      "route": "/san-pham",
+      "size": "desktop",
+      "pathname": "/san-pham",
+      "title": "Nền tảng FinWorkshop | FinWorkshop",
+      "h1s": [
+        "Một hồ sơ xuyên suốt công việc của xưởng."
+      ],
+      "overflow": false,
+      "brokenImages": [],
+      "links": [
+        {
+          "text": "Đến nội dung chính",
+          "href": "#fw-content",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopFINANCE & OPERATIONS",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Sản phẩm",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Tài liệu",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Đăng nhập",
+          "href": "/login",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm sản phẩm",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm các phân hệ",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Xem cách triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Xem báo giá",
+          "href": "/login?next=%2Fquotations",
+          "nav": false
+        },
+        {
+          "text": "Xem việc trong xưởng",
+          "href": "/login?next=%2Fworkshop",
+          "nav": false
+        },
+        {
+          "text": "Xem quản lý kho",
+          "href": "/login?next=%2Finventory",
+          "nav": false
+        },
+        {
+          "text": "Xem hóa đơn",
+          "href": "/login?next=%2Finvoices",
+          "nav": false
+        },
+        {
+          "text": "Xem sổ thu chi",
+          "href": "/login?next=%2Ftransactions",
+          "nav": false
+        },
+        {
+          "text": "Xem báo cáo",
+          "href": "/login?next=%2Freports",
+          "nav": false
+        },
+        {
+          "text": "Đọc giới hạn bản trải nghiệm",
+          "href": "/tai-lieu?bai=pham-vi-ban-demo",
+          "nav": false
+        },
+        {
+          "text": "Mở bản trải nghiệm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Trao đổi về nhu cầu",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopBY FINTAX AUTOMATION",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Chức năng nền tảng",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm ứng dụng",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Sản xuất & kho",
+          "href": "/giai-phap/san-xuat",
+          "nav": true
+        },
+        {
+          "text": "Tài chính & kế toán",
+          "href": "/giai-phap/ke-toan",
+          "nav": true
+        },
+        {
+          "text": "Hướng dẫn sử dụng",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Liên hệ",
+          "href": "/lien-he",
+          "nav": true
+        },
+        {
+          "text": "Dữ liệu & bảo mật",
+          "href": "/bao-mat",
+          "nav": true
+        },
+        {
+          "text": "Điều khoản sử dụng",
+          "href": "/dieu-khoan",
+          "nav": true
+        }
+      ],
+      "passwordsPersisted": false,
+      "invalidLinks": [],
+      "screenshot": "screenshots/desktop-san-pham.png"
+    },
+    {
+      "route": "/giai-phap/san-xuat",
+      "size": "desktop",
+      "pathname": "/giai-phap/san-xuat",
+      "title": "Giải pháp cho xưởng sản xuất | FinWorkshop",
+      "h1s": [
+        "Biết một đơn hàng đang ở đâu và tốn bao nhiêu."
+      ],
+      "overflow": false,
+      "brokenImages": [],
+      "links": [
+        {
+          "text": "Đến nội dung chính",
+          "href": "#fw-content",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopFINANCE & OPERATIONS",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Sản phẩm",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Tài liệu",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Đăng nhập",
+          "href": "/login",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm sản phẩm",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Thử vai trò chủ xưởng",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Trao đổi quy trình xưởng",
+          "href": "/lien-he?type=IMPLEMENTATION",
+          "nav": true
+        },
+        {
+          "text": "Mở phiếu kho",
+          "href": "/login?next=%2Finventory",
+          "nav": false
+        },
+        {
+          "text": "Mở danh sách việc",
+          "href": "/login?next=%2Fworkshop",
+          "nav": false
+        },
+        {
+          "text": "Xem phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": false
+        },
+        {
+          "text": "Mở bản trải nghiệm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Trao đổi về nhu cầu",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopBY FINTAX AUTOMATION",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Chức năng nền tảng",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm ứng dụng",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Sản xuất & kho",
+          "href": "/giai-phap/san-xuat",
+          "nav": true
+        },
+        {
+          "text": "Tài chính & kế toán",
+          "href": "/giai-phap/ke-toan",
+          "nav": true
+        },
+        {
+          "text": "Hướng dẫn sử dụng",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Liên hệ",
+          "href": "/lien-he",
+          "nav": true
+        },
+        {
+          "text": "Dữ liệu & bảo mật",
+          "href": "/bao-mat",
+          "nav": true
+        },
+        {
+          "text": "Điều khoản sử dụng",
+          "href": "/dieu-khoan",
+          "nav": true
+        }
+      ],
+      "passwordsPersisted": false,
+      "invalidLinks": [],
+      "screenshot": "screenshots/desktop-giai-phap-san-xuat.png"
+    },
+    {
+      "route": "/giai-phap/ke-toan",
+      "size": "desktop",
+      "pathname": "/giai-phap/ke-toan",
+      "title": "Giải pháp tài chính và kế toán | FinWorkshop",
+      "h1s": [
+        "Đi từ chứng từ đến số liệu có thể đối chiếu."
+      ],
+      "overflow": false,
+      "brokenImages": [],
+      "links": [
+        {
+          "text": "Đến nội dung chính",
+          "href": "#fw-content",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopFINANCE & OPERATIONS",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Sản phẩm",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Tài liệu",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Đăng nhập",
+          "href": "/login",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm sản phẩm",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Thử vai trò kế toán",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Đọc luồng đối chiếu",
+          "href": "/tai-lieu?bai=doi-chieu-cong-no",
+          "nav": true
+        },
+        {
+          "text": "Mở sổ thu chi",
+          "href": "/login?next=%2Ftransactions",
+          "nav": false
+        },
+        {
+          "text": "Mở báo cáo và kỳ chốt sổ",
+          "href": "/login?next=%2Freports",
+          "nav": false
+        },
+        {
+          "text": "Xem giới hạn và trách nhiệm rà soát",
+          "href": "/tai-lieu?bai=pham-vi-ban-demo",
+          "nav": false
+        },
+        {
+          "text": "Mở bản trải nghiệm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Trao đổi về nhu cầu",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopBY FINTAX AUTOMATION",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Chức năng nền tảng",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm ứng dụng",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Sản xuất & kho",
+          "href": "/giai-phap/san-xuat",
+          "nav": true
+        },
+        {
+          "text": "Tài chính & kế toán",
+          "href": "/giai-phap/ke-toan",
+          "nav": true
+        },
+        {
+          "text": "Hướng dẫn sử dụng",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Liên hệ",
+          "href": "/lien-he",
+          "nav": true
+        },
+        {
+          "text": "Dữ liệu & bảo mật",
+          "href": "/bao-mat",
+          "nav": true
+        },
+        {
+          "text": "Điều khoản sử dụng",
+          "href": "/dieu-khoan",
+          "nav": true
+        }
+      ],
+      "passwordsPersisted": false,
+      "invalidLinks": [],
+      "screenshot": "screenshots/desktop-giai-phap-ke-toan.png"
+    },
+    {
+      "route": "/trien-khai",
+      "size": "desktop",
+      "pathname": "/trien-khai",
+      "title": "Phạm vi và triển khai | FinWorkshop",
+      "h1s": [
+        "Bắt đầu từ quy trình, không phải một lời hứa phần mềm."
+      ],
+      "overflow": false,
+      "brokenImages": [],
+      "links": [
+        {
+          "text": "Đến nội dung chính",
+          "href": "#fw-content",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopFINANCE & OPERATIONS",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Sản phẩm",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Tài liệu",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Đăng nhập",
+          "href": "/login",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm sản phẩm",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Gửi nhu cầu triển khai",
+          "href": "/lien-he?type=IMPLEMENTATION",
+          "nav": true
+        },
+        {
+          "text": "Mở bản trải nghiệm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Mở bản trải nghiệm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Trao đổi về nhu cầu",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopBY FINTAX AUTOMATION",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Chức năng nền tảng",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm ứng dụng",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Sản xuất & kho",
+          "href": "/giai-phap/san-xuat",
+          "nav": true
+        },
+        {
+          "text": "Tài chính & kế toán",
+          "href": "/giai-phap/ke-toan",
+          "nav": true
+        },
+        {
+          "text": "Hướng dẫn sử dụng",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Liên hệ",
+          "href": "/lien-he",
+          "nav": true
+        },
+        {
+          "text": "Dữ liệu & bảo mật",
+          "href": "/bao-mat",
+          "nav": true
+        },
+        {
+          "text": "Điều khoản sử dụng",
+          "href": "/dieu-khoan",
+          "nav": true
+        }
+      ],
+      "passwordsPersisted": false,
+      "invalidLinks": [],
+      "screenshot": "screenshots/desktop-trien-khai.png"
+    },
+    {
+      "route": "/tai-lieu",
+      "size": "desktop",
+      "pathname": "/tai-lieu",
+      "title": "Hướng dẫn sử dụng | FinWorkshop",
+      "h1s": [
+        "Hướng dẫn gắn với công việc hằng ngày."
+      ],
+      "overflow": false,
+      "brokenImages": [],
+      "links": [
+        {
+          "text": "Đến nội dung chính",
+          "href": "#fw-content",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopFINANCE & OPERATIONS",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Sản phẩm",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Tài liệu",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Đăng nhập",
+          "href": "/login",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm sản phẩm",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Chuẩn bị doanh nghiệp và phân vai trò",
+          "href": "/tai-lieu?bai=bat-dau-voi-doanh-nghiep",
+          "nav": false
+        },
+        {
+          "text": "Đọc hướng dẫn",
+          "href": "/tai-lieu?bai=bat-dau-voi-doanh-nghiep",
+          "nav": false
+        },
+        {
+          "text": "Lập báo giá từ định mức sản xuất",
+          "href": "/tai-lieu?bai=bao-gia-va-dinh-muc",
+          "nav": false
+        },
+        {
+          "text": "Đọc hướng dẫn",
+          "href": "/tai-lieu?bai=bao-gia-va-dinh-muc",
+          "nav": false
+        },
+        {
+          "text": "Ghi vật tư và giờ công theo việc làm",
+          "href": "/tai-lieu?bai=ghi-vat-tu-va-gio-cong",
+          "nav": false
+        },
+        {
+          "text": "Đọc hướng dẫn",
+          "href": "/tai-lieu?bai=ghi-vat-tu-va-gio-cong",
+          "nav": false
+        },
+        {
+          "text": "Gán thanh toán và đối chiếu khoản còn nợ",
+          "href": "/tai-lieu?bai=doi-chieu-cong-no",
+          "nav": false
+        },
+        {
+          "text": "Đọc hướng dẫn",
+          "href": "/tai-lieu?bai=doi-chieu-cong-no",
+          "nav": false
+        },
+        {
+          "text": "Đọc và xuất báo cáo quản trị",
+          "href": "/tai-lieu?bai=doc-bao-cao",
+          "nav": false
+        },
+        {
+          "text": "Đọc hướng dẫn",
+          "href": "/tai-lieu?bai=doc-bao-cao",
+          "nav": false
+        },
+        {
+          "text": "Phạm vi và giới hạn bản trải nghiệm",
+          "href": "/tai-lieu?bai=pham-vi-ban-demo",
+          "nav": false
+        },
+        {
+          "text": "Đọc hướng dẫn",
+          "href": "/tai-lieu?bai=pham-vi-ban-demo",
+          "nav": false
+        },
+        {
+          "text": "Mở bản trải nghiệm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Trao đổi về nhu cầu",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopBY FINTAX AUTOMATION",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Chức năng nền tảng",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm ứng dụng",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Sản xuất & kho",
+          "href": "/giai-phap/san-xuat",
+          "nav": true
+        },
+        {
+          "text": "Tài chính & kế toán",
+          "href": "/giai-phap/ke-toan",
+          "nav": true
+        },
+        {
+          "text": "Hướng dẫn sử dụng",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Liên hệ",
+          "href": "/lien-he",
+          "nav": true
+        },
+        {
+          "text": "Dữ liệu & bảo mật",
+          "href": "/bao-mat",
+          "nav": true
+        },
+        {
+          "text": "Điều khoản sử dụng",
+          "href": "/dieu-khoan",
+          "nav": true
+        }
+      ],
+      "passwordsPersisted": false,
+      "invalidLinks": [],
+      "screenshot": "screenshots/desktop-tai-lieu.png"
+    },
+    {
+      "route": "/lien-he",
+      "size": "desktop",
+      "pathname": "/lien-he",
+      "title": "Liên hệ và yêu cầu tư vấn | FinWorkshop",
+      "h1s": [
+        "Trao đổi về bài toán của doanh nghiệp bạn."
+      ],
+      "overflow": false,
+      "brokenImages": [],
+      "links": [
+        {
+          "text": "Đến nội dung chính",
+          "href": "#fw-content",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopFINANCE & OPERATIONS",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Sản phẩm",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Tài liệu",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Đăng nhập",
+          "href": "/login",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm sản phẩm",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Cách xử lý dữ liệu liên hệ",
+          "href": "/bao-mat",
+          "nav": false
+        },
+        {
+          "text": "thông tin bảo mật",
+          "href": "/bao-mat",
+          "nav": false
+        },
+        {
+          "text": "Mở bản trải nghiệm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Trao đổi về nhu cầu",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopBY FINTAX AUTOMATION",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Chức năng nền tảng",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm ứng dụng",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Sản xuất & kho",
+          "href": "/giai-phap/san-xuat",
+          "nav": true
+        },
+        {
+          "text": "Tài chính & kế toán",
+          "href": "/giai-phap/ke-toan",
+          "nav": true
+        },
+        {
+          "text": "Hướng dẫn sử dụng",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Liên hệ",
+          "href": "/lien-he",
+          "nav": true
+        },
+        {
+          "text": "Dữ liệu & bảo mật",
+          "href": "/bao-mat",
+          "nav": true
+        },
+        {
+          "text": "Điều khoản sử dụng",
+          "href": "/dieu-khoan",
+          "nav": true
+        }
+      ],
+      "passwordsPersisted": false,
+      "invalidLinks": [],
+      "screenshot": "screenshots/desktop-lien-he.png"
+    },
+    {
+      "route": "/demo",
+      "size": "desktop",
+      "pathname": "/demo",
+      "title": "Trải nghiệm sản phẩm | FinWorkshop",
+      "h1s": [
+        "Tự kiểm tra sản phẩm bằng một phiên dùng thử."
+      ],
+      "overflow": false,
+      "brokenImages": [],
+      "links": [
+        {
+          "text": "Đến nội dung chính",
+          "href": "#fw-content",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopFINANCE & OPERATIONS",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Sản phẩm",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Tài liệu",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Đăng nhập",
+          "href": "/login",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm sản phẩm",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Đọc phạm vi bản trải nghiệm",
+          "href": "/tai-lieu?bai=pham-vi-ban-demo",
+          "nav": false
+        },
+        {
+          "text": "Trao đổi về buổi giới thiệu",
+          "href": "/lien-he?type=DEMO",
+          "nav": false
+        },
+        {
+          "text": "Mở bản trải nghiệm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Trao đổi về nhu cầu",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopBY FINTAX AUTOMATION",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Chức năng nền tảng",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm ứng dụng",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Sản xuất & kho",
+          "href": "/giai-phap/san-xuat",
+          "nav": true
+        },
+        {
+          "text": "Tài chính & kế toán",
+          "href": "/giai-phap/ke-toan",
+          "nav": true
+        },
+        {
+          "text": "Hướng dẫn sử dụng",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Liên hệ",
+          "href": "/lien-he",
+          "nav": true
+        },
+        {
+          "text": "Dữ liệu & bảo mật",
+          "href": "/bao-mat",
+          "nav": true
+        },
+        {
+          "text": "Điều khoản sử dụng",
+          "href": "/dieu-khoan",
+          "nav": true
+        }
+      ],
+      "passwordsPersisted": false,
+      "invalidLinks": [],
+      "screenshot": "screenshots/desktop-demo.png"
+    },
+    {
+      "route": "/bao-mat",
+      "size": "desktop",
+      "pathname": "/bao-mat",
+      "title": "Dữ liệu và bảo mật | FinWorkshop",
+      "h1s": [
+        "Minh bạch về dữ liệu và giới hạn bảo vệ."
+      ],
+      "overflow": false,
+      "brokenImages": [],
+      "links": [
+        {
+          "text": "Đến nội dung chính",
+          "href": "#fw-content",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopFINANCE & OPERATIONS",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Sản phẩm",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Tài liệu",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Đăng nhập",
+          "href": "/login",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm sản phẩm",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "biểu mẫu liên hệ",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "tài liệu bản trải nghiệm",
+          "href": "/tai-lieu?bai=pham-vi-ban-demo",
+          "nav": false
+        },
+        {
+          "text": "Mở bản trải nghiệm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Trao đổi về nhu cầu",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopBY FINTAX AUTOMATION",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Chức năng nền tảng",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm ứng dụng",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Sản xuất & kho",
+          "href": "/giai-phap/san-xuat",
+          "nav": true
+        },
+        {
+          "text": "Tài chính & kế toán",
+          "href": "/giai-phap/ke-toan",
+          "nav": true
+        },
+        {
+          "text": "Hướng dẫn sử dụng",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Liên hệ",
+          "href": "/lien-he",
+          "nav": true
+        },
+        {
+          "text": "Dữ liệu & bảo mật",
+          "href": "/bao-mat",
+          "nav": true
+        },
+        {
+          "text": "Điều khoản sử dụng",
+          "href": "/dieu-khoan",
+          "nav": true
+        }
+      ],
+      "passwordsPersisted": false,
+      "invalidLinks": [],
+      "screenshot": "screenshots/desktop-bao-mat.png"
+    },
+    {
+      "route": "/dieu-khoan",
+      "size": "desktop",
+      "pathname": "/dieu-khoan",
+      "title": "Điều khoản sử dụng | FinWorkshop",
+      "h1s": [
+        "Điều kiện sử dụng rõ ràng ngay từ đầu."
+      ],
+      "overflow": false,
+      "brokenImages": [],
+      "links": [
+        {
+          "text": "Đến nội dung chính",
+          "href": "#fw-content",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopFINANCE & OPERATIONS",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Sản phẩm",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Tài liệu",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Đăng nhập",
+          "href": "/login",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm sản phẩm",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "thông tin bảo mật",
+          "href": "/bao-mat",
+          "nav": false
+        },
+        {
+          "text": "phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": false
+        },
+        {
+          "text": "gửi yêu cầu trao đổi",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "Mở bản trải nghiệm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Trao đổi về nhu cầu",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopBY FINTAX AUTOMATION",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Chức năng nền tảng",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm ứng dụng",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Sản xuất & kho",
+          "href": "/giai-phap/san-xuat",
+          "nav": true
+        },
+        {
+          "text": "Tài chính & kế toán",
+          "href": "/giai-phap/ke-toan",
+          "nav": true
+        },
+        {
+          "text": "Hướng dẫn sử dụng",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Liên hệ",
+          "href": "/lien-he",
+          "nav": true
+        },
+        {
+          "text": "Dữ liệu & bảo mật",
+          "href": "/bao-mat",
+          "nav": true
+        },
+        {
+          "text": "Điều khoản sử dụng",
+          "href": "/dieu-khoan",
+          "nav": true
+        }
+      ],
+      "passwordsPersisted": false,
+      "invalidLinks": [],
+      "screenshot": "screenshots/desktop-dieu-khoan.png"
+    },
+    {
+      "route": "/",
+      "size": "mobile",
+      "pathname": "/",
+      "title": "Quản trị sản xuất và tài chính | FinWorkshop",
+      "h1s": [
+        "Vận hành xưởng.Kiểm soát tài chính."
+      ],
+      "overflow": false,
+      "brokenImages": [],
+      "links": [
+        {
+          "text": "Đến nội dung chính",
+          "href": "#fw-content",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopFINANCE & OPERATIONS",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Sản phẩm",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Tài liệu",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Đăng nhập",
+          "href": "/login",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm sản phẩm",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm sản phẩm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Tìm hiểu nền tảng",
+          "href": "/san-pham",
+          "nav": false
+        },
+        {
+          "text": "Xem toàn bộ chức năng",
+          "href": "/san-pham",
+          "nav": false
+        },
+        {
+          "text": "Mở và thao tác trực tiếp",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "01Báo giáXây dựng giá từ vật tư, nhân công và chi phí máy.",
+          "href": "/giai-phap/san-xuat",
+          "nav": false
+        },
+        {
+          "text": "02Sản xuấtChuyển đơn đã chốt thành lệnh và phân công công việc.",
+          "href": "/giai-phap/san-xuat",
+          "nav": false
+        },
+        {
+          "text": "03Kho & giá thànhGhi nhận xuất dùng, vật tư trả lại và thành phẩm.",
+          "href": "/san-pham",
+          "nav": false
+        },
+        {
+          "text": "04Tài chínhLiên kết hóa đơn, thanh toán và khoản còn phải thu.",
+          "href": "/giai-phap/ke-toan",
+          "nav": false
+        },
+        {
+          "text": "Tìm hiểu phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": false
+        },
+        {
+          "text": "Giải pháp quản lý sản xuất",
+          "href": "/giai-phap/san-xuat",
+          "nav": false
+        },
+        {
+          "text": "Giải pháp tài chính & kế toán",
+          "href": "/giai-phap/ke-toan",
+          "nav": false
+        },
+        {
+          "text": "Xem các bước triển khai",
+          "href": "/trien-khai",
+          "nav": false
+        },
+        {
+          "text": "Đọc hướng dẫn sử dụng",
+          "href": "/tai-lieu",
+          "nav": false
+        },
+        {
+          "text": "Mở bản trải nghiệm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Trao đổi về nhu cầu",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopBY FINTAX AUTOMATION",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Chức năng nền tảng",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm ứng dụng",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Sản xuất & kho",
+          "href": "/giai-phap/san-xuat",
+          "nav": true
+        },
+        {
+          "text": "Tài chính & kế toán",
+          "href": "/giai-phap/ke-toan",
+          "nav": true
+        },
+        {
+          "text": "Hướng dẫn sử dụng",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Liên hệ",
+          "href": "/lien-he",
+          "nav": true
+        },
+        {
+          "text": "Dữ liệu & bảo mật",
+          "href": "/bao-mat",
+          "nav": true
+        },
+        {
+          "text": "Điều khoản sử dụng",
+          "href": "/dieu-khoan",
+          "nav": true
+        }
+      ],
+      "passwordsPersisted": false,
+      "invalidLinks": [],
+      "screenshot": "screenshots/mobile-home.png"
+    },
+    {
+      "route": "/san-pham",
+      "size": "mobile",
+      "pathname": "/san-pham",
+      "title": "Nền tảng FinWorkshop | FinWorkshop",
+      "h1s": [
+        "Một hồ sơ xuyên suốt công việc của xưởng."
+      ],
+      "overflow": false,
+      "brokenImages": [],
+      "links": [
+        {
+          "text": "Đến nội dung chính",
+          "href": "#fw-content",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopFINANCE & OPERATIONS",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Sản phẩm",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Tài liệu",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Đăng nhập",
+          "href": "/login",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm sản phẩm",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm các phân hệ",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Xem cách triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Xem báo giá",
+          "href": "/login?next=%2Fquotations",
+          "nav": false
+        },
+        {
+          "text": "Xem việc trong xưởng",
+          "href": "/login?next=%2Fworkshop",
+          "nav": false
+        },
+        {
+          "text": "Xem quản lý kho",
+          "href": "/login?next=%2Finventory",
+          "nav": false
+        },
+        {
+          "text": "Xem hóa đơn",
+          "href": "/login?next=%2Finvoices",
+          "nav": false
+        },
+        {
+          "text": "Xem sổ thu chi",
+          "href": "/login?next=%2Ftransactions",
+          "nav": false
+        },
+        {
+          "text": "Xem báo cáo",
+          "href": "/login?next=%2Freports",
+          "nav": false
+        },
+        {
+          "text": "Đọc giới hạn bản trải nghiệm",
+          "href": "/tai-lieu?bai=pham-vi-ban-demo",
+          "nav": false
+        },
+        {
+          "text": "Mở bản trải nghiệm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Trao đổi về nhu cầu",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopBY FINTAX AUTOMATION",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Chức năng nền tảng",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm ứng dụng",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Sản xuất & kho",
+          "href": "/giai-phap/san-xuat",
+          "nav": true
+        },
+        {
+          "text": "Tài chính & kế toán",
+          "href": "/giai-phap/ke-toan",
+          "nav": true
+        },
+        {
+          "text": "Hướng dẫn sử dụng",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Liên hệ",
+          "href": "/lien-he",
+          "nav": true
+        },
+        {
+          "text": "Dữ liệu & bảo mật",
+          "href": "/bao-mat",
+          "nav": true
+        },
+        {
+          "text": "Điều khoản sử dụng",
+          "href": "/dieu-khoan",
+          "nav": true
+        }
+      ],
+      "passwordsPersisted": false,
+      "invalidLinks": [],
+      "screenshot": "screenshots/mobile-san-pham.png"
+    },
+    {
+      "route": "/giai-phap/san-xuat",
+      "size": "mobile",
+      "pathname": "/giai-phap/san-xuat",
+      "title": "Giải pháp cho xưởng sản xuất | FinWorkshop",
+      "h1s": [
+        "Biết một đơn hàng đang ở đâu và tốn bao nhiêu."
+      ],
+      "overflow": false,
+      "brokenImages": [],
+      "links": [
+        {
+          "text": "Đến nội dung chính",
+          "href": "#fw-content",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopFINANCE & OPERATIONS",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Sản phẩm",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Tài liệu",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Đăng nhập",
+          "href": "/login",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm sản phẩm",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Thử vai trò chủ xưởng",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Trao đổi quy trình xưởng",
+          "href": "/lien-he?type=IMPLEMENTATION",
+          "nav": true
+        },
+        {
+          "text": "Mở phiếu kho",
+          "href": "/login?next=%2Finventory",
+          "nav": false
+        },
+        {
+          "text": "Mở danh sách việc",
+          "href": "/login?next=%2Fworkshop",
+          "nav": false
+        },
+        {
+          "text": "Xem phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": false
+        },
+        {
+          "text": "Mở bản trải nghiệm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Trao đổi về nhu cầu",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopBY FINTAX AUTOMATION",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Chức năng nền tảng",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm ứng dụng",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Sản xuất & kho",
+          "href": "/giai-phap/san-xuat",
+          "nav": true
+        },
+        {
+          "text": "Tài chính & kế toán",
+          "href": "/giai-phap/ke-toan",
+          "nav": true
+        },
+        {
+          "text": "Hướng dẫn sử dụng",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Liên hệ",
+          "href": "/lien-he",
+          "nav": true
+        },
+        {
+          "text": "Dữ liệu & bảo mật",
+          "href": "/bao-mat",
+          "nav": true
+        },
+        {
+          "text": "Điều khoản sử dụng",
+          "href": "/dieu-khoan",
+          "nav": true
+        }
+      ],
+      "passwordsPersisted": false,
+      "invalidLinks": [],
+      "screenshot": "screenshots/mobile-giai-phap-san-xuat.png"
+    },
+    {
+      "route": "/giai-phap/ke-toan",
+      "size": "mobile",
+      "pathname": "/giai-phap/ke-toan",
+      "title": "Giải pháp tài chính và kế toán | FinWorkshop",
+      "h1s": [
+        "Đi từ chứng từ đến số liệu có thể đối chiếu."
+      ],
+      "overflow": false,
+      "brokenImages": [],
+      "links": [
+        {
+          "text": "Đến nội dung chính",
+          "href": "#fw-content",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopFINANCE & OPERATIONS",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Sản phẩm",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Tài liệu",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Đăng nhập",
+          "href": "/login",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm sản phẩm",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Thử vai trò kế toán",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Đọc luồng đối chiếu",
+          "href": "/tai-lieu?bai=doi-chieu-cong-no",
+          "nav": true
+        },
+        {
+          "text": "Mở sổ thu chi",
+          "href": "/login?next=%2Ftransactions",
+          "nav": false
+        },
+        {
+          "text": "Mở báo cáo và kỳ chốt sổ",
+          "href": "/login?next=%2Freports",
+          "nav": false
+        },
+        {
+          "text": "Xem giới hạn và trách nhiệm rà soát",
+          "href": "/tai-lieu?bai=pham-vi-ban-demo",
+          "nav": false
+        },
+        {
+          "text": "Mở bản trải nghiệm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Trao đổi về nhu cầu",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopBY FINTAX AUTOMATION",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Chức năng nền tảng",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm ứng dụng",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Sản xuất & kho",
+          "href": "/giai-phap/san-xuat",
+          "nav": true
+        },
+        {
+          "text": "Tài chính & kế toán",
+          "href": "/giai-phap/ke-toan",
+          "nav": true
+        },
+        {
+          "text": "Hướng dẫn sử dụng",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Liên hệ",
+          "href": "/lien-he",
+          "nav": true
+        },
+        {
+          "text": "Dữ liệu & bảo mật",
+          "href": "/bao-mat",
+          "nav": true
+        },
+        {
+          "text": "Điều khoản sử dụng",
+          "href": "/dieu-khoan",
+          "nav": true
+        }
+      ],
+      "passwordsPersisted": false,
+      "invalidLinks": [],
+      "screenshot": "screenshots/mobile-giai-phap-ke-toan.png"
+    },
+    {
+      "route": "/trien-khai",
+      "size": "mobile",
+      "pathname": "/trien-khai",
+      "title": "Phạm vi và triển khai | FinWorkshop",
+      "h1s": [
+        "Bắt đầu từ quy trình, không phải một lời hứa phần mềm."
+      ],
+      "overflow": false,
+      "brokenImages": [],
+      "links": [
+        {
+          "text": "Đến nội dung chính",
+          "href": "#fw-content",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopFINANCE & OPERATIONS",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Sản phẩm",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Tài liệu",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Đăng nhập",
+          "href": "/login",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm sản phẩm",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Gửi nhu cầu triển khai",
+          "href": "/lien-he?type=IMPLEMENTATION",
+          "nav": true
+        },
+        {
+          "text": "Mở bản trải nghiệm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Mở bản trải nghiệm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Trao đổi về nhu cầu",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopBY FINTAX AUTOMATION",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Chức năng nền tảng",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm ứng dụng",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Sản xuất & kho",
+          "href": "/giai-phap/san-xuat",
+          "nav": true
+        },
+        {
+          "text": "Tài chính & kế toán",
+          "href": "/giai-phap/ke-toan",
+          "nav": true
+        },
+        {
+          "text": "Hướng dẫn sử dụng",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Liên hệ",
+          "href": "/lien-he",
+          "nav": true
+        },
+        {
+          "text": "Dữ liệu & bảo mật",
+          "href": "/bao-mat",
+          "nav": true
+        },
+        {
+          "text": "Điều khoản sử dụng",
+          "href": "/dieu-khoan",
+          "nav": true
+        }
+      ],
+      "passwordsPersisted": false,
+      "invalidLinks": [],
+      "screenshot": "screenshots/mobile-trien-khai.png"
+    },
+    {
+      "route": "/tai-lieu",
+      "size": "mobile",
+      "pathname": "/tai-lieu",
+      "title": "Hướng dẫn sử dụng | FinWorkshop",
+      "h1s": [
+        "Hướng dẫn gắn với công việc hằng ngày."
+      ],
+      "overflow": false,
+      "brokenImages": [],
+      "links": [
+        {
+          "text": "Đến nội dung chính",
+          "href": "#fw-content",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopFINANCE & OPERATIONS",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Sản phẩm",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Tài liệu",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Đăng nhập",
+          "href": "/login",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm sản phẩm",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Chuẩn bị doanh nghiệp và phân vai trò",
+          "href": "/tai-lieu?bai=bat-dau-voi-doanh-nghiep",
+          "nav": false
+        },
+        {
+          "text": "Đọc hướng dẫn",
+          "href": "/tai-lieu?bai=bat-dau-voi-doanh-nghiep",
+          "nav": false
+        },
+        {
+          "text": "Lập báo giá từ định mức sản xuất",
+          "href": "/tai-lieu?bai=bao-gia-va-dinh-muc",
+          "nav": false
+        },
+        {
+          "text": "Đọc hướng dẫn",
+          "href": "/tai-lieu?bai=bao-gia-va-dinh-muc",
+          "nav": false
+        },
+        {
+          "text": "Ghi vật tư và giờ công theo việc làm",
+          "href": "/tai-lieu?bai=ghi-vat-tu-va-gio-cong",
+          "nav": false
+        },
+        {
+          "text": "Đọc hướng dẫn",
+          "href": "/tai-lieu?bai=ghi-vat-tu-va-gio-cong",
+          "nav": false
+        },
+        {
+          "text": "Gán thanh toán và đối chiếu khoản còn nợ",
+          "href": "/tai-lieu?bai=doi-chieu-cong-no",
+          "nav": false
+        },
+        {
+          "text": "Đọc hướng dẫn",
+          "href": "/tai-lieu?bai=doi-chieu-cong-no",
+          "nav": false
+        },
+        {
+          "text": "Đọc và xuất báo cáo quản trị",
+          "href": "/tai-lieu?bai=doc-bao-cao",
+          "nav": false
+        },
+        {
+          "text": "Đọc hướng dẫn",
+          "href": "/tai-lieu?bai=doc-bao-cao",
+          "nav": false
+        },
+        {
+          "text": "Phạm vi và giới hạn bản trải nghiệm",
+          "href": "/tai-lieu?bai=pham-vi-ban-demo",
+          "nav": false
+        },
+        {
+          "text": "Đọc hướng dẫn",
+          "href": "/tai-lieu?bai=pham-vi-ban-demo",
+          "nav": false
+        },
+        {
+          "text": "Mở bản trải nghiệm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Trao đổi về nhu cầu",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopBY FINTAX AUTOMATION",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Chức năng nền tảng",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm ứng dụng",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Sản xuất & kho",
+          "href": "/giai-phap/san-xuat",
+          "nav": true
+        },
+        {
+          "text": "Tài chính & kế toán",
+          "href": "/giai-phap/ke-toan",
+          "nav": true
+        },
+        {
+          "text": "Hướng dẫn sử dụng",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Liên hệ",
+          "href": "/lien-he",
+          "nav": true
+        },
+        {
+          "text": "Dữ liệu & bảo mật",
+          "href": "/bao-mat",
+          "nav": true
+        },
+        {
+          "text": "Điều khoản sử dụng",
+          "href": "/dieu-khoan",
+          "nav": true
+        }
+      ],
+      "passwordsPersisted": false,
+      "invalidLinks": [],
+      "screenshot": "screenshots/mobile-tai-lieu.png"
+    },
+    {
+      "route": "/lien-he",
+      "size": "mobile",
+      "pathname": "/lien-he",
+      "title": "Liên hệ và yêu cầu tư vấn | FinWorkshop",
+      "h1s": [
+        "Trao đổi về bài toán của doanh nghiệp bạn."
+      ],
+      "overflow": false,
+      "brokenImages": [],
+      "links": [
+        {
+          "text": "Đến nội dung chính",
+          "href": "#fw-content",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopFINANCE & OPERATIONS",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Sản phẩm",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Tài liệu",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Đăng nhập",
+          "href": "/login",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm sản phẩm",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Cách xử lý dữ liệu liên hệ",
+          "href": "/bao-mat",
+          "nav": false
+        },
+        {
+          "text": "thông tin bảo mật",
+          "href": "/bao-mat",
+          "nav": false
+        },
+        {
+          "text": "Mở bản trải nghiệm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Trao đổi về nhu cầu",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopBY FINTAX AUTOMATION",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Chức năng nền tảng",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm ứng dụng",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Sản xuất & kho",
+          "href": "/giai-phap/san-xuat",
+          "nav": true
+        },
+        {
+          "text": "Tài chính & kế toán",
+          "href": "/giai-phap/ke-toan",
+          "nav": true
+        },
+        {
+          "text": "Hướng dẫn sử dụng",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Liên hệ",
+          "href": "/lien-he",
+          "nav": true
+        },
+        {
+          "text": "Dữ liệu & bảo mật",
+          "href": "/bao-mat",
+          "nav": true
+        },
+        {
+          "text": "Điều khoản sử dụng",
+          "href": "/dieu-khoan",
+          "nav": true
+        }
+      ],
+      "passwordsPersisted": false,
+      "invalidLinks": [],
+      "screenshot": "screenshots/mobile-lien-he.png"
+    },
+    {
+      "route": "/demo",
+      "size": "mobile",
+      "pathname": "/demo",
+      "title": "Trải nghiệm sản phẩm | FinWorkshop",
+      "h1s": [
+        "Tự kiểm tra sản phẩm bằng một phiên dùng thử."
+      ],
+      "overflow": false,
+      "brokenImages": [],
+      "links": [
+        {
+          "text": "Đến nội dung chính",
+          "href": "#fw-content",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopFINANCE & OPERATIONS",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Sản phẩm",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Tài liệu",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Đăng nhập",
+          "href": "/login",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm sản phẩm",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Đọc phạm vi bản trải nghiệm",
+          "href": "/tai-lieu?bai=pham-vi-ban-demo",
+          "nav": false
+        },
+        {
+          "text": "Trao đổi về buổi giới thiệu",
+          "href": "/lien-he?type=DEMO",
+          "nav": false
+        },
+        {
+          "text": "Mở bản trải nghiệm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Trao đổi về nhu cầu",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopBY FINTAX AUTOMATION",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Chức năng nền tảng",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm ứng dụng",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Sản xuất & kho",
+          "href": "/giai-phap/san-xuat",
+          "nav": true
+        },
+        {
+          "text": "Tài chính & kế toán",
+          "href": "/giai-phap/ke-toan",
+          "nav": true
+        },
+        {
+          "text": "Hướng dẫn sử dụng",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Liên hệ",
+          "href": "/lien-he",
+          "nav": true
+        },
+        {
+          "text": "Dữ liệu & bảo mật",
+          "href": "/bao-mat",
+          "nav": true
+        },
+        {
+          "text": "Điều khoản sử dụng",
+          "href": "/dieu-khoan",
+          "nav": true
+        }
+      ],
+      "passwordsPersisted": false,
+      "invalidLinks": [],
+      "screenshot": "screenshots/mobile-demo.png"
+    },
+    {
+      "route": "/bao-mat",
+      "size": "mobile",
+      "pathname": "/bao-mat",
+      "title": "Dữ liệu và bảo mật | FinWorkshop",
+      "h1s": [
+        "Minh bạch về dữ liệu và giới hạn bảo vệ."
+      ],
+      "overflow": false,
+      "brokenImages": [],
+      "links": [
+        {
+          "text": "Đến nội dung chính",
+          "href": "#fw-content",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopFINANCE & OPERATIONS",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Sản phẩm",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Tài liệu",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Đăng nhập",
+          "href": "/login",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm sản phẩm",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "biểu mẫu liên hệ",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "tài liệu bản trải nghiệm",
+          "href": "/tai-lieu?bai=pham-vi-ban-demo",
+          "nav": false
+        },
+        {
+          "text": "Mở bản trải nghiệm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Trao đổi về nhu cầu",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopBY FINTAX AUTOMATION",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Chức năng nền tảng",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm ứng dụng",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Sản xuất & kho",
+          "href": "/giai-phap/san-xuat",
+          "nav": true
+        },
+        {
+          "text": "Tài chính & kế toán",
+          "href": "/giai-phap/ke-toan",
+          "nav": true
+        },
+        {
+          "text": "Hướng dẫn sử dụng",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Liên hệ",
+          "href": "/lien-he",
+          "nav": true
+        },
+        {
+          "text": "Dữ liệu & bảo mật",
+          "href": "/bao-mat",
+          "nav": true
+        },
+        {
+          "text": "Điều khoản sử dụng",
+          "href": "/dieu-khoan",
+          "nav": true
+        }
+      ],
+      "passwordsPersisted": false,
+      "invalidLinks": [],
+      "screenshot": "screenshots/mobile-bao-mat.png"
+    },
+    {
+      "route": "/dieu-khoan",
+      "size": "mobile",
+      "pathname": "/dieu-khoan",
+      "title": "Điều khoản sử dụng | FinWorkshop",
+      "h1s": [
+        "Điều kiện sử dụng rõ ràng ngay từ đầu."
+      ],
+      "overflow": false,
+      "brokenImages": [],
+      "links": [
+        {
+          "text": "Đến nội dung chính",
+          "href": "#fw-content",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopFINANCE & OPERATIONS",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Sản phẩm",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Tài liệu",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Đăng nhập",
+          "href": "/login",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm sản phẩm",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "thông tin bảo mật",
+          "href": "/bao-mat",
+          "nav": false
+        },
+        {
+          "text": "phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": false
+        },
+        {
+          "text": "gửi yêu cầu trao đổi",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "Mở bản trải nghiệm",
+          "href": "/demo",
+          "nav": false
+        },
+        {
+          "text": "Trao đổi về nhu cầu",
+          "href": "/lien-he",
+          "nav": false
+        },
+        {
+          "text": "FinWorkshopBY FINTAX AUTOMATION",
+          "href": "/",
+          "nav": true
+        },
+        {
+          "text": "Chức năng nền tảng",
+          "href": "/san-pham",
+          "nav": true
+        },
+        {
+          "text": "Trải nghiệm ứng dụng",
+          "href": "/demo",
+          "nav": true
+        },
+        {
+          "text": "Phạm vi triển khai",
+          "href": "/trien-khai",
+          "nav": true
+        },
+        {
+          "text": "Sản xuất & kho",
+          "href": "/giai-phap/san-xuat",
+          "nav": true
+        },
+        {
+          "text": "Tài chính & kế toán",
+          "href": "/giai-phap/ke-toan",
+          "nav": true
+        },
+        {
+          "text": "Hướng dẫn sử dụng",
+          "href": "/tai-lieu",
+          "nav": true
+        },
+        {
+          "text": "Liên hệ",
+          "href": "/lien-he",
+          "nav": true
+        },
+        {
+          "text": "Dữ liệu & bảo mật",
+          "href": "/bao-mat",
+          "nav": true
+        },
+        {
+          "text": "Điều khoản sử dụng",
+          "href": "/dieu-khoan",
+          "nav": true
+        }
+      ],
+      "passwordsPersisted": false,
+      "invalidLinks": [],
+      "screenshot": "screenshots/mobile-dieu-khoan.png"
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "failedAssets": [],
+  "inquiryHttp": [
+    {
+      "method": "POST",
+      "path": "/website/inquiries",
+      "kind": "invalid",
+      "status": 400,
+      "response": {
+        "error": "Vui lòng kiểm tra thông tin gửi yêu cầu.",
+        "fields": {
+          "name": "Vui lòng nhập từ 2 đến 120 ký tự hợp lệ.",
+          "message": "Vui lòng nhập từ 10 đến 3000 ký tự hợp lệ.",
+          "email": "Địa chỉ email chưa hợp lệ.",
+          "consent": "Cần đồng ý để FinWorkshop lưu và xử lý thông tin yêu cầu."
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/website/inquiries",
+      "kind": "valid-ui",
+      "status": 201,
+      "response": {
+        "ok": true,
+        "reference": "FW-B3A2D939-FC2B-4D35-94E2-AADC4E43337B",
+        "receivedAt": "2026-11-11T07:16:37.507Z",
+        "message": "Yêu cầu đã được ghi nhận."
+      }
+    }
+  ],
+  "finishedAt": "2026-11-11T07:16:40.149Z",
+  "summary": {
+    "passed": 33,
+    "failed": 0,
+    "pageErrors": 0,
+    "consoleErrors": 0,
+    "failedAssets": 0
+  }
+}
