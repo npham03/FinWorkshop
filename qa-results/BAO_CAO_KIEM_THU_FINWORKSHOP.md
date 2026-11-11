@@ -2,6 +2,8 @@
 
 Ngày thực hiện: 11/11/2026, múi giờ Việt Nam.
 
+> Đây là mốc **vòng 1, FW-01..20**, không phải tổng mới nhất. Vòng 2 bổ sung25 phát hiện; xem [README](README.md), [báo cáo vòng 2](BAO_CAO_BO_SUNG_VONG_2.md) và [danh mục45 ID](ISSUE_INDEX.json). Không tự sửa các kết quả gốc thành PASS.
+
 ## 1. Phiên bản, môi trường và nguyên tắc
 
 - Repo: https://github.com/npham03/FinWorkshop ; nhánh main.

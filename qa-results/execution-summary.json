@@ -27,6 +27,15 @@
     "testHarnessProblems": 4,
     "requirementsToClarify": 3
   },
+  "round2": {
+    "summary": "BAO_CAO_BO_SUNG_VONG_2.md",
+    "index": "ISSUE_INDEX.json",
+    "newReproducedFindings": 25,
+    "functional": 20,
+    "ux": 5,
+    "combinedTotal": 45,
+    "state": "OPEN - no application fixes applied"
+  },
   "limits": [
     "No real SMTP delivery, bank transfer, tax filing or digital signature",
     "No full load/soak test or all-browser matrix",

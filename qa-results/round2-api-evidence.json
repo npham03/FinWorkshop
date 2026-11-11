@@ -1,0 +1,139 @@
+{
+  "tag": "QA2-API-1794335891407",
+  "api": "http://127.0.0.1:3005/api",
+  "executedAt": "2026-11-10T18:38:11.407Z",
+  "probes": [
+    {
+      "name": "Settings error partial commit",
+      "status": 400,
+      "error": "Chọn chế độ kế toán và phương pháp thuế được hỗ trợ.",
+      "beforeName": "QA2-API-1794335891407 workspace",
+      "afterName": "QA2-API-1794335891407 SHOULD-ROLLBACK",
+      "beforeTaxId": null,
+      "afterTaxId": "0312345678",
+      "afterTaxMethod": "VAT_CREDIT"
+    },
+    {
+      "name": "Opening balance customer dependency",
+      "status": 200,
+      "customerStatus": "CANCELLED",
+      "openingBalanceId": "4ab3e2fc-4bc6-4e85-a819-94d9bbfa3288",
+      "openingStillActive": "CONFIRMED",
+      "receivableBefore": 5000,
+      "receivableAfter": 0
+    },
+    {
+      "name": "Partner rename blocks allocation",
+      "renameStatus": 200,
+      "status": 409,
+      "error": "Thanh toán và hóa đơn phải cùng đối tác.",
+      "paymentPartnerId": "8e3e1faf-cdaa-4142-9e2c-1625ed99a7e7",
+      "invoicePartnerId": "8e3e1faf-cdaa-4142-9e2c-1625ed99a7e7",
+      "paymentStoredName": "QA2-API-1794335891407 original customer",
+      "invoiceStoredName": "QA2-API-1794335891407 renamed customer",
+      "paymentListDisplayName": "QA2-API-1794335891407 renamed customer"
+    },
+    {
+      "name": "Cancelled transaction creates phantom money",
+      "status": 201,
+      "transactionStatus": "CANCELLED",
+      "id": "1da1c149-5fc3-4a59-9611-b2d2311cece4",
+      "balanceBefore": 1001000,
+      "balanceAfter": 1001333,
+      "activeBookIncludesTransaction": false
+    },
+    {
+      "name": "Transfer opposite-leg concurrent cancellation",
+      "attempts": [
+        [
+          {
+            "status": 500,
+            "error": "Đã có lỗi hệ thống. Vui lòng thử lại."
+          },
+          {
+            "status": 200
+          }
+        ],
+        [
+          {
+            "status": 500,
+            "error": "Đã có lỗi hệ thống. Vui lòng thử lại."
+          },
+          {
+            "status": 200
+          }
+        ],
+        [
+          {
+            "status": 500,
+            "error": "Đã có lỗi hệ thống. Vui lòng thử lại."
+          },
+          {
+            "status": 200
+          }
+        ],
+        [
+          {
+            "status": 500,
+            "error": "Đã có lỗi hệ thống. Vui lòng thử lại."
+          },
+          {
+            "status": 200
+          }
+        ]
+      ]
+    },
+    {
+      "name": "Payment duplicate reference",
+      "statuses": [
+        201,
+        201
+      ],
+      "ids": [
+        "1c5d8a6c-3999-4422-99ab-97432023966f",
+        "16226bb8-3c0a-46a8-a359-a925cb6e9af3"
+      ],
+      "balanceBefore": 1001333,
+      "balanceAfter": 1002887
+    },
+    {
+      "name": "Invoice coded then edited",
+      "codingStatus": 200,
+      "originalTotal": 1000,
+      "originalCode": "C26-B0AF-4ECBA720",
+      "editStatus": 200,
+      "editedTotal": 2000,
+      "editedCode": "C26-B0AF-4ECBA720",
+      "editedStatus": "DEMO_CODE_ISSUED"
+    },
+    {
+      "name": "Already coded invoice recode",
+      "status": 200,
+      "beforeCode": "C26-B0AF-4ECBA720",
+      "afterCode": "C26-6C97-53F80318"
+    },
+    {
+      "name": "Quotation pending-approval edit",
+      "submitStatus": 200,
+      "editStatus": 200,
+      "oldTotal": 1000,
+      "newTotal": 2000,
+      "status": "PENDING_APPROVAL",
+      "idSame": true
+    },
+    {
+      "name": "Mock authority lookup corroboration",
+      "checks": [
+        {
+          "code": "C26-B0AF-4ECBA720",
+          "status": 404
+        },
+        {
+          "code": "C26-6C97-53F80318",
+          "status": 404
+        }
+      ]
+    }
+  ],
+  "workshopId": "0d36b81b-9322-487c-892b-6aff1f332864"
+}

@@ -1,0 +1,165 @@
+{
+  "startedAt": "2026-11-10T18:38:22.855Z",
+  "fixturePrefix": "QA2-UI-1794335902855",
+  "checks": [
+    {
+      "name": "auth-return-deep-link",
+      "requestedPath": "/inventory?new=1",
+      "actualPath": "/app",
+      "expected": "Restore intended page including query, after authorized login"
+    },
+    {
+      "name": "invoice-partner-stale-tax-persisted",
+      "fromCustomer": {
+        "id": "b0ec36c7-583d-4cfe-b660-66a63dbf92b4",
+        "name": "QA2-UI-1794335902855 Customer A",
+        "taxCode": "0312345678"
+      },
+      "toCustomer": {
+        "id": "ced93229-c492-451a-b76b-f8316ff16415",
+        "name": "QA2-UI-1794335902855 Customer B",
+        "taxCode": ""
+      },
+      "taxBefore": "0312345678",
+      "taxAfterSelection": "0312345678",
+      "status": 201,
+      "savedInvoice": {
+        "id": "55ea0dce-9b84-4c3a-9449-17db68055c8a",
+        "code": "QA2-UI-1794335902855-STALETAX",
+        "counterpartyId": "ced93229-c492-451a-b76b-f8316ff16415",
+        "counterparty": "QA2-UI-1794335902855 Customer B",
+        "taxCode": "0312345678",
+        "total": 100000
+      },
+      "balances": {
+        "A": 0,
+        "B": 100000
+      },
+      "expected": "Switching to customer B must not reuse customer A tax identifier"
+    },
+    {
+      "name": "invoice-back-navigation-mismatch",
+      "initialSalesButton": 1,
+      "purchaseUrl": "http://127.0.0.1:5184/invoices?type=INPUT",
+      "urlAfterBack": "http://127.0.0.1:5184/invoices",
+      "purchaseCreateVisible": true,
+      "salesCreateVisible": false,
+      "expected": "Back to the original /invoices displays original sales tab"
+    },
+    {
+      "name": "double-revise-pending-real-requests",
+      "originalQuote": "QA2-UI-1794335902855-REV",
+      "responses": [
+        {
+          "status": 201,
+          "id": "401b35bc-1e96-421a-8984-9f4cc11cb56d",
+          "code": "QA2-UI-1794335902855-REV-v2",
+          "version": 2
+        },
+        {
+          "status": 201,
+          "id": "a562f74b-76fc-48d2-a7bd-764a703b59d0",
+          "code": "QA2-UI-1794335902855-REV-v3",
+          "version": 3
+        }
+      ],
+      "related": [
+        {
+          "id": "a562f74b-76fc-48d2-a7bd-764a703b59d0",
+          "code": "QA2-UI-1794335902855-REV-v3",
+          "version": 3,
+          "status": "DRAFT"
+        },
+        {
+          "id": "401b35bc-1e96-421a-8984-9f4cc11cb56d",
+          "code": "QA2-UI-1794335902855-REV-v2",
+          "version": 2,
+          "status": "DRAFT"
+        },
+        {
+          "id": "58bc34b0-3521-436a-9cb9-401a26e7d89d",
+          "code": "QA2-UI-1794335902855-REV",
+          "version": 1,
+          "status": "APPROVED"
+        }
+      ],
+      "networkCondition": "650ms delay before forwarding real API requests, both writes reached API",
+      "expected": "One deliberate revise operation creates one new version; pending action blocked against duplicate click"
+    },
+    {
+      "name": "generic-drawer-focus-escapes-to-background",
+      "focusTrail": [
+        {
+          "tag": "BODY",
+          "label": null,
+          "text": "Xưởng Demo Kiểm thử FinWorkshopTổng quanTiền & ThuếXưởng & KhoKhách & NCCCài đặtSwagger AP",
+          "href": null,
+          "inForm": false
+        },
+        {
+          "tag": "A",
+          "label": null,
+          "text": "",
+          "href": "/app",
+          "inForm": false
+        },
+        {
+          "tag": "A",
+          "label": null,
+          "text": "Tổng quan",
+          "href": "/app",
+          "inForm": false
+        },
+        {
+          "tag": "BUTTON",
+          "label": null,
+          "text": "Tiền & Thuế",
+          "href": null,
+          "inForm": false
+        },
+        {
+          "tag": "BUTTON",
+          "label": null,
+          "text": "Xưởng & Kho",
+          "href": null,
+          "inForm": false
+        }
+      ],
+      "expected": "Keyboard Tab cycles inside modal/drawer, background navigation remains inert"
+    },
+    {
+      "name": "catalog-bom-reload-and-deeplink",
+      "beforeReload": [
+        "Công thức BOM"
+      ],
+      "afterReload": [
+        "Sản phẩm"
+      ],
+      "directBomsLink": [
+        "Sản phẩm"
+      ],
+      "expected": "BOM tab/deep link is retained on reload and tab=boms opens BOM rather than products"
+    },
+    {
+      "name": "settings-tab-url-reload-mismatch",
+      "initial": [
+        "Cài đặt hệ thống",
+        "Mời nhân viên vào doanh nghiệp",
+        "Người dùng & quyền truy cập"
+      ],
+      "afterSelectingAccounts": [
+        "Cài đặt hệ thống",
+        "Tài khoản tiền"
+      ],
+      "urlWhileAccounts": "http://127.0.0.1:5184/settings?tab=users",
+      "afterReload": [
+        "Cài đặt hệ thống",
+        "Mời nhân viên vào doanh nghiệp",
+        "Người dùng & quyền truy cập"
+      ],
+      "expected": "Settings selected tab and URL match, reload does not reopen unrelated Users tab"
+    }
+  ],
+  "errors": [],
+  "finishedAt": "2026-11-10T18:38:36.292Z"
+}

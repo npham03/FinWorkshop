@@ -1,0 +1,5751 @@
+{
+  "base": "http://127.0.0.1:3002/api",
+  "tag": "QA2-DB-1794335962578",
+  "date": "2026-11-11",
+  "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+  "cases": [
+    {
+      "name": "Cancel material issue after finished receipt restores raw material without reversing finished goods",
+      "confirmed": true,
+      "before": {
+        "material": {
+          "id": "6d10420d-23c4-4cfb-9540-08c72bb5a389",
+          "code": "QA2-DB-1794335962578-cancel-M",
+          "name": "QA2-DB-1794335962578-cancel-material",
+          "unit": "kg",
+          "stock": 8,
+          "status": "ACTIVE",
+          "unitCost": 1000,
+          "stockValue": 8000,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "trackInventory": true
+        },
+        "product": {
+          "id": "ca48cdf1-2335-44e1-b4fd-d2e25508a83c",
+          "code": "QA2-DB-1794335962578-cancel-P",
+          "name": "QA2-DB-1794335962578-cancel-product",
+          "unit": "unit",
+          "stock": 1,
+          "status": "ACTIVE",
+          "unitCost": 2000,
+          "stockValue": 2000,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "trackInventory": true
+        },
+        "cost": {
+          "id": "b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555",
+          "code": "QA2-DB-1794335962578-cancel-JOB",
+          "productName": "QA2-DB-1794335962578-cancel-product",
+          "status": "COMPLETED",
+          "quantity": 1,
+          "materialCost": 2000,
+          "laborCost": 0,
+          "machineCost": 0,
+          "totalCost": 2000,
+          "finishedValue": 2000,
+          "wip": 0
+        }
+      },
+      "cancelled": {
+        "status": 200,
+        "data": {
+          "id": "43cb6117-f966-4d8e-b3f0-d9ab957848fa",
+          "date": "2026-11-11",
+          "type": "ISSUE",
+          "unit": "kg",
+          "amount": 2000,
+          "reason": "",
+          "status": "CANCELLED",
+          "quantity": 2,
+          "sequence": 2,
+          "unitCost": 1000,
+          "itemEntity": "materials",
+          "materialId": "6d10420d-23c4-4cfb-9540-08c72bb5a389",
+          "stockAfter": 8,
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "stockBefore": 10,
+          "materialName": "QA2-DB-1794335962578-cancel-material",
+          "stockValueAfter": 8000,
+          "stockValueBefore": 10000,
+          "productionOrderId": "b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555",
+          "syncStatus": "LOCAL_DEMO",
+          "cancellationReason": "QA2-DB-1794335962578"
+        }
+      },
+      "after": {
+        "material": {
+          "id": "6d10420d-23c4-4cfb-9540-08c72bb5a389",
+          "code": "QA2-DB-1794335962578-cancel-M",
+          "name": "QA2-DB-1794335962578-cancel-material",
+          "unit": "kg",
+          "stock": 10,
+          "status": "ACTIVE",
+          "unitCost": 1000,
+          "stockValue": 10000,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "trackInventory": true
+        },
+        "product": {
+          "id": "ca48cdf1-2335-44e1-b4fd-d2e25508a83c",
+          "code": "QA2-DB-1794335962578-cancel-P",
+          "name": "QA2-DB-1794335962578-cancel-product",
+          "unit": "unit",
+          "stock": 1,
+          "status": "ACTIVE",
+          "unitCost": 2000,
+          "stockValue": 2000,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "trackInventory": true
+        },
+        "job": {
+          "id": "b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555",
+          "code": "QA2-DB-1794335962578-cancel-JOB",
+          "date": "2026-11-11",
+          "stage": "Đã nghiệm thu",
+          "status": "COMPLETED",
+          "progress": 100,
+          "quantity": 1,
+          "unitCost": 2000,
+          "productId": "ca48cdf1-2335-44e1-b4fd-d2e25508a83c",
+          "startedAt": "2026-11-10T18:39:24.259Z",
+          "totalCost": 2000,
+          "acceptedAt": "2026-11-10T18:39:24.337Z",
+          "acceptedBy": "QA2-DB-1794335962578",
+          "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+          "laborHours": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "completedAt": "2026-11-10T18:39:24.312Z",
+          "productName": "QA2-DB-1794335962578-cancel-product",
+          "completionNote": "",
+          "actualLaborCost": 0,
+          "actualMachineCost": 0,
+          "finishedReceiptId": "07ed2969-001d-45f8-8ed5-e77337beaa00",
+          "actualMaterialCost": 2000,
+          "plannedMachineCost": 0
+        },
+        "cost": {
+          "id": "b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555",
+          "code": "QA2-DB-1794335962578-cancel-JOB",
+          "productName": "QA2-DB-1794335962578-cancel-product",
+          "status": "COMPLETED",
+          "quantity": 1,
+          "materialCost": 0,
+          "laborCost": 0,
+          "machineCost": 0,
+          "totalCost": 0,
+          "finishedValue": 2000,
+          "wip": 0
+        }
+      },
+      "expected": "Reject cancellation once material issue has been capitalized into completed finished goods, or reverse dependent finished receipt first.",
+      "requests": [
+        6,
+        21
+      ]
+    },
+    {
+      "name": "Ordinary raw-material receipt accepts reserved sourceProductionOrderId and falsely clears WIP",
+      "confirmed": true,
+      "before": {
+        "id": "6e821129-9378-4d2c-a6ac-c7f3cbb19bfa",
+        "code": "QA2-DB-1794335962578-fake-source-JOB",
+        "productName": "QA2-DB-1794335962578-fake-source-product",
+        "status": "IN_PROGRESS",
+        "quantity": 1,
+        "materialCost": 2000,
+        "laborCost": 0,
+        "machineCost": 0,
+        "totalCost": 2000,
+        "finishedValue": 0,
+        "wip": 2000
+      },
+      "receipt": {
+        "id": "2667ed9a-9e4b-4766-b2cb-3fb4e2b6403e",
+        "materialId": "2e91c1e5-f855-427d-a8af-314e8f335acd",
+        "materialName": "QA2-DB-1794335962578-fake-source-material",
+        "quantity": 2,
+        "unit": "kg",
+        "type": "RECEIPT",
+        "date": "2026-11-11",
+        "status": "CONFIRMED",
+        "reason": ""
+      },
+      "after": {
+        "id": "6e821129-9378-4d2c-a6ac-c7f3cbb19bfa",
+        "code": "QA2-DB-1794335962578-fake-source-JOB",
+        "productName": "QA2-DB-1794335962578-fake-source-product",
+        "status": "IN_PROGRESS",
+        "quantity": 1,
+        "materialCost": 2000,
+        "laborCost": 0,
+        "machineCost": 0,
+        "totalCost": 2000,
+        "finishedValue": 2000,
+        "wip": 0
+      },
+      "job": {
+        "id": "6e821129-9378-4d2c-a6ac-c7f3cbb19bfa",
+        "code": "QA2-DB-1794335962578-fake-source-JOB",
+        "date": "2026-11-11",
+        "stage": "Đang sản xuất",
+        "status": "IN_PROGRESS",
+        "progress": 0,
+        "quantity": 1,
+        "productId": "7cc2161f-4607-4e3a-a20a-7f4c4d2c7df2",
+        "startedAt": "2026-11-10T18:39:24.576Z",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-fake-source-product",
+        "plannedMachineCost": 0
+      },
+      "journal": [
+        {
+          "id": "2667ed9a-9e4b-4766-b2cb-3fb4e2b6403e-4",
+          "date": "2026-11-11",
+          "code": "",
+          "sourceId": "2667ed9a-9e4b-4766-b2cb-3fb4e2b6403e",
+          "description": "QA2-DB-1794335962578-fake-source-material",
+          "debitAccount": "152",
+          "creditAccount": "3388",
+          "debit": 2000,
+          "credit": 2000,
+          "status": "CONFIRMED"
+        }
+      ],
+      "expected": "Only internally created FINISHED_RECEIPT may reduce WIP; ordinary material receipt should leave this job WIP 2000.",
+      "requests": [
+        22,
+        31
+      ]
+    },
+    {
+      "name": "Backdated finished receipt posts stock before machine-cost recognition",
+      "confirmed": true,
+      "accepted": {
+        "id": "b3ec8053-521c-451c-bd00-3aa3608f3789",
+        "code": "QA2-DB-1794335962578-backdate-JOB",
+        "date": "2026-11-11",
+        "stage": "Đã nghiệm thu",
+        "status": "COMPLETED",
+        "progress": 100,
+        "quantity": 1,
+        "productId": "4cc934cb-3cff-4c03-bc2a-2d74ce3d4eb4",
+        "startedAt": "2026-11-10T18:39:24.775Z",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "completedAt": "2026-11-10T18:39:24.792Z",
+        "productName": "QA2-DB-1794335962578-backdate-product",
+        "completionNote": "",
+        "plannedMachineCost": 3000,
+        "actualMaterialCost": 0,
+        "actualLaborCost": 0,
+        "actualMachineCost": 3000,
+        "totalCost": 3000,
+        "unitCost": 3000,
+        "acceptedBy": "QA2-DB-1794335962578",
+        "acceptedAt": "2026-11-10T18:39:24.828Z",
+        "finishedReceiptId": "fa1106e6-ccb7-414a-b153-d00b7b039ac4"
+      },
+      "asOf": "2026-10-31",
+      "jobCost": {
+        "id": "b3ec8053-521c-451c-bd00-3aa3608f3789",
+        "code": "QA2-DB-1794335962578-backdate-JOB",
+        "productName": "QA2-DB-1794335962578-backdate-product",
+        "status": "COMPLETED",
+        "quantity": 1,
+        "materialCost": 0,
+        "laborCost": 0,
+        "machineCost": 3000,
+        "totalCost": 3000,
+        "finishedValue": 3000,
+        "wip": 0
+      },
+      "account154": {
+        "id": "154",
+        "account": "154",
+        "debit": 0,
+        "credit": 3000,
+        "net": -3000
+      },
+      "journal": [
+        {
+          "id": "fa1106e6-ccb7-414a-b153-d00b7b039ac4-0",
+          "date": "2026-10-31",
+          "code": "NK-QA2-DB-1794335962578-backdate-JOB",
+          "sourceId": "fa1106e6-ccb7-414a-b153-d00b7b039ac4",
+          "description": "QA2-DB-1794335962578-backdate-product",
+          "debitAccount": "155",
+          "creditAccount": "154",
+          "debit": 3000,
+          "credit": 3000,
+          "status": "CONFIRMED"
+        }
+      ],
+      "expected": "Receipt and the cost it capitalizes must have consistent accounting dates. Historical154 must not become -3000 because machine cost is deferred to actual wall-clock acceptance date.",
+      "requests": [
+        32,
+        39
+      ]
+    },
+    {
+      "name": "Non-stock product production is accepted but cannot be completed into stock or service",
+      "confirmed": false,
+      "observed": true,
+      "reviewRequired": true,
+      "product": {
+        "code": "QA2-DB-1794335962578-nonstock-P",
+        "name": "QA2-DB-1794335962578-nonstock-product",
+        "unit": "unit",
+        "trackInventory": false,
+        "status": "ACTIVE",
+        "id": "d3c1fdaf-418a-4ef3-9256-2fb357c18589",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      },
+      "job": {
+        "code": "QA2-DB-1794335962578-nonstock-JOB",
+        "productId": "d3c1fdaf-418a-4ef3-9256-2fb357c18589",
+        "quantity": 1,
+        "plannedMachineCost": 0,
+        "date": "2026-11-11",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "id": "3eca4a54-4da5-4b98-a1bc-4fc6a37a81b3",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-nonstock-product",
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      },
+      "completed": {
+        "id": "3eca4a54-4da5-4b98-a1bc-4fc6a37a81b3",
+        "code": "QA2-DB-1794335962578-nonstock-JOB",
+        "date": "2026-11-11",
+        "stage": "Chờ nghiệm thu thành phẩm",
+        "status": "READY_FOR_RECEIPT",
+        "progress": 100,
+        "quantity": 1,
+        "productId": "d3c1fdaf-418a-4ef3-9256-2fb357c18589",
+        "startedAt": "2026-11-10T18:39:24.969Z",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-nonstock-product",
+        "plannedMachineCost": 0,
+        "completionNote": "",
+        "completedAt": "2026-11-10T18:39:24.992Z"
+      },
+      "received": {
+        "status": 400,
+        "data": {
+          "error": "Chọn mặt hàng đang quản lý tồn kho."
+        }
+      },
+      "expected": "Confirm whether non-stock catalog products should follow service completion rather than finished-goods receipt; HTTP400 by itself is not counted as a defect.",
+      "requests": [
+        40,
+        46
+      ]
+    },
+    {
+      "name": "Stopped BOM remains selectable for a new production job",
+      "confirmed": true,
+      "stopped": {
+        "id": "799b01b5-dd88-46d0-98c4-711606a60ac5",
+        "code": "QA2-DB-1794335962578-INACTIVE-BOM",
+        "items": [
+          {
+            "materialId": "9dd1b64c-7eb0-4c26-a29f-5a94b47a316a",
+            "name": "QA2-DB-1794335962578-inactivebom-material",
+            "unit": "kg",
+            "quantity": 1,
+            "unitCost": 1000,
+            "amount": 1000
+          }
+        ],
+        "status": "INACTIVE",
+        "version": 1,
+        "laborRate": 0,
+        "productId": "199b22d6-25cc-41a2-84d1-a9b4348a8053",
+        "wasteRate": 0,
+        "laborHours": 0,
+        "marginRate": 0,
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "machineCost": 0,
+        "productName": "QA2-DB-1794335962578-inactivebom-product",
+        "materialCost": 1000,
+        "syncStatus": "LOCAL_DEMO",
+        "laborCost": 0,
+        "estimatedUnitCost": 1000,
+        "suggestedPrice": 1000
+      },
+      "created": {
+        "status": 201,
+        "data": {
+          "code": "QA2-DB-1794335962578-INACTIVE-BOM-JOB",
+          "productId": "199b22d6-25cc-41a2-84d1-a9b4348a8053",
+          "bomId": "799b01b5-dd88-46d0-98c4-711606a60ac5",
+          "quantity": 1,
+          "date": "2026-11-11",
+          "id": "1f29e1b5-f23a-446c-b3d1-41c43f0eac04",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "productName": "QA2-DB-1794335962578-inactivebom-product",
+          "bom": {
+            "id": "799b01b5-dd88-46d0-98c4-711606a60ac5",
+            "code": "QA2-DB-1794335962578-INACTIVE-BOM",
+            "items": [
+              {
+                "name": "QA2-DB-1794335962578-inactivebom-material",
+                "unit": "kg",
+                "amount": 1000,
+                "quantity": 1,
+                "unitCost": 1000,
+                "materialId": "9dd1b64c-7eb0-4c26-a29f-5a94b47a316a"
+              }
+            ],
+            "status": "INACTIVE",
+            "version": 1,
+            "laborCost": 0,
+            "laborRate": 0,
+            "productId": "199b22d6-25cc-41a2-84d1-a9b4348a8053",
+            "wasteRate": 0,
+            "laborHours": 0,
+            "marginRate": 0,
+            "syncStatus": "LOCAL_DEMO",
+            "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+            "machineCost": 0,
+            "productName": "QA2-DB-1794335962578-inactivebom-product",
+            "materialCost": 1000,
+            "suggestedPrice": 1000,
+            "estimatedUnitCost": 1000
+          },
+          "laborRate": 0,
+          "plannedLaborHours": 0,
+          "plannedMachineCost": 0,
+          "status": "DRAFT",
+          "progress": 0,
+          "laborHours": 0,
+          "syncStatus": "LOCAL_DEMO"
+        }
+      },
+      "expected": "A stopped BOM must not be selected for a new job (existing snapshots may remain).",
+      "requests": [
+        47,
+        53
+      ]
+    },
+    {
+      "name": "New production accepts inactive product and cannot receive its finished goods",
+      "confirmed": true,
+      "product": {
+        "code": "QA2-DB-1794335962578-inactiveproduct-P",
+        "name": "QA2-DB-1794335962578-inactiveproduct-product",
+        "unit": "unit",
+        "trackInventory": true,
+        "status": "INACTIVE",
+        "id": "cb22f0a1-c91b-44e8-bf1f-54cd6be41010",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      },
+      "job": {
+        "code": "QA2-DB-1794335962578-inactiveproduct-JOB",
+        "productId": "cb22f0a1-c91b-44e8-bf1f-54cd6be41010",
+        "quantity": 1,
+        "plannedMachineCost": 0,
+        "date": "2026-11-11",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "id": "3c5b58c8-3518-421f-b7eb-65d95d3552a0",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-inactiveproduct-product",
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      },
+      "completed": {
+        "id": "3c5b58c8-3518-421f-b7eb-65d95d3552a0",
+        "code": "QA2-DB-1794335962578-inactiveproduct-JOB",
+        "date": "2026-11-11",
+        "stage": "Chờ nghiệm thu thành phẩm",
+        "status": "READY_FOR_RECEIPT",
+        "progress": 100,
+        "quantity": 1,
+        "productId": "cb22f0a1-c91b-44e8-bf1f-54cd6be41010",
+        "startedAt": "2026-11-10T18:39:25.275Z",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-inactiveproduct-product",
+        "plannedMachineCost": 0,
+        "completionNote": "",
+        "completedAt": "2026-11-10T18:39:25.293Z"
+      },
+      "received": {
+        "status": 400,
+        "data": {
+          "error": "Chọn mặt hàng đang quản lý tồn kho."
+        }
+      },
+      "expected": "Reject inactive product before creating a new production job.",
+      "requests": [
+        54,
+        60
+      ]
+    },
+    {
+      "name": "Concurrent metadata update reverts started production state",
+      "confirmed": true,
+      "attempts": [
+        {
+          "jobId": "a5c4f144-4eac-49c8-8008-85d13a19e3fe",
+          "results": [
+            {
+              "status": 200,
+              "data": {
+                "id": "a5c4f144-4eac-49c8-8008-85d13a19e3fe",
+                "code": "QA2-DB-1794335962578-RACE-0",
+                "date": "2026-11-11",
+                "status": "IN_PROGRESS",
+                "progress": 0,
+                "quantity": 1,
+                "laborHours": 0,
+                "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+                "productName": "QA2-DB-1794335962578-race-service",
+                "syncStatus": "LOCAL_DEMO",
+                "stage": "Đang sản xuất",
+                "startedAt": "2026-11-10T18:39:25.360Z"
+              }
+            },
+            {
+              "status": 200,
+              "data": {
+                "id": "a5c4f144-4eac-49c8-8008-85d13a19e3fe",
+                "code": "QA2-DB-1794335962578-RACE-0",
+                "date": "2026-11-11",
+                "status": "DRAFT",
+                "progress": 0,
+                "quantity": 1,
+                "laborHours": 0,
+                "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+                "productName": "QA2-DB-1794335962578-race-service",
+                "syncStatus": "LOCAL_DEMO",
+                "note": "QA2-DB-1794335962578-race-0",
+                "laborCost": 0,
+                "estimatedUnitCost": 0,
+                "suggestedPrice": 0,
+                "wasteRate": 0,
+                "marginRate": 0
+              }
+            },
+            {
+              "status": 200,
+              "data": {
+                "id": "a5c4f144-4eac-49c8-8008-85d13a19e3fe",
+                "code": "QA2-DB-1794335962578-RACE-0",
+                "date": "2026-11-11",
+                "status": "DRAFT",
+                "progress": 0,
+                "quantity": 1,
+                "laborHours": 0,
+                "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+                "productName": "QA2-DB-1794335962578-race-service",
+                "syncStatus": "LOCAL_DEMO",
+                "note": "QA2-DB-1794335962578-race-1",
+                "laborCost": 0,
+                "estimatedUnitCost": 0,
+                "suggestedPrice": 0,
+                "wasteRate": 0,
+                "marginRate": 0
+              }
+            },
+            {
+              "status": 200,
+              "data": {
+                "id": "a5c4f144-4eac-49c8-8008-85d13a19e3fe",
+                "code": "QA2-DB-1794335962578-RACE-0",
+                "date": "2026-11-11",
+                "status": "DRAFT",
+                "progress": 0,
+                "quantity": 1,
+                "laborHours": 0,
+                "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+                "productName": "QA2-DB-1794335962578-race-service",
+                "syncStatus": "LOCAL_DEMO",
+                "note": "QA2-DB-1794335962578-race-2",
+                "laborCost": 0,
+                "estimatedUnitCost": 0,
+                "suggestedPrice": 0,
+                "wasteRate": 0,
+                "marginRate": 0
+              }
+            },
+            {
+              "status": 200,
+              "data": {
+                "id": "a5c4f144-4eac-49c8-8008-85d13a19e3fe",
+                "code": "QA2-DB-1794335962578-RACE-0",
+                "date": "2026-11-11",
+                "status": "DRAFT",
+                "progress": 0,
+                "quantity": 1,
+                "laborHours": 0,
+                "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+                "productName": "QA2-DB-1794335962578-race-service",
+                "syncStatus": "LOCAL_DEMO",
+                "note": "QA2-DB-1794335962578-race-3",
+                "laborCost": 0,
+                "estimatedUnitCost": 0,
+                "suggestedPrice": 0,
+                "wasteRate": 0,
+                "marginRate": 0
+              }
+            }
+          ],
+          "after": {
+            "id": "a5c4f144-4eac-49c8-8008-85d13a19e3fe",
+            "code": "QA2-DB-1794335962578-RACE-0",
+            "date": "2026-11-11",
+            "note": "QA2-DB-1794335962578-race-0",
+            "status": "DRAFT",
+            "progress": 0,
+            "quantity": 1,
+            "laborCost": 0,
+            "wasteRate": 0,
+            "laborHours": 0,
+            "marginRate": 0,
+            "syncStatus": "LOCAL_DEMO",
+            "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+            "productName": "QA2-DB-1794335962578-race-service",
+            "suggestedPrice": 0,
+            "estimatedUnitCost": 0
+          }
+        }
+      ],
+      "expected": "A successful start must not be reverted by a concurrent metadata-only PUT.",
+      "requests": [
+        61,
+        67
+      ]
+    },
+    {
+      "name": "Reopen completed service using future action date changes COGS of already locked period",
+      "confirmed": true,
+      "period": {
+        "name": "QA2-DB-1794335962578-lock",
+        "startDate": "2026-11-10",
+        "endDate": "2026-11-11",
+        "id": "30f04051-7996-41ec-a5e8-4f85568f22ab",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "status": "OPEN",
+        "syncStatus": "LOCAL_DEMO"
+      },
+      "reopened": {
+        "status": 200,
+        "data": {
+          "id": "cce457ff-9bf7-48d2-99f2-b7c76c101c26",
+          "code": "QA2-DB-1794335962578-lock-service-JOB",
+          "date": "2026-11-11",
+          "stage": "Đã mở lại",
+          "status": "IN_PROGRESS",
+          "progress": 99,
+          "quantity": 1,
+          "startedAt": "2026-11-10T18:39:25.528Z",
+          "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+          "laborHours": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "completedAt": "2026-11-10T18:39:25.589Z",
+          "productName": "QA2-DB-1794335962578-lock-service-service",
+          "completionNote": "",
+          "plannedMachineCost": 0,
+          "reopenReason": "QA2-DB-1794335962578"
+        }
+      },
+      "before": {
+        "summary": {
+          "revenue": 0,
+          "cogs": 2000,
+          "grossProfit": -2000,
+          "operatingExpense": 0,
+          "financeExpense": 0,
+          "financeIncome": 0,
+          "operatingProfit": -2000,
+          "rawMaterials": 68000,
+          "finishedGoods": 5000,
+          "wip": 0,
+          "debit": 86000,
+          "credit": 86000
+        },
+        "jobCost": {
+          "id": "cce457ff-9bf7-48d2-99f2-b7c76c101c26",
+          "code": "QA2-DB-1794335962578-lock-service-JOB",
+          "productName": "QA2-DB-1794335962578-lock-service-service",
+          "status": "COMPLETED",
+          "quantity": 1,
+          "materialCost": 2000,
+          "laborCost": 0,
+          "machineCost": 0,
+          "totalCost": 2000,
+          "finishedValue": 0,
+          "wip": 0
+        },
+        "account632": {
+          "id": "632",
+          "account": "632",
+          "debit": 2000,
+          "credit": 0,
+          "net": 2000
+        }
+      },
+      "after": {
+        "summary": {
+          "revenue": 0,
+          "cogs": 0,
+          "grossProfit": 0,
+          "operatingExpense": 0,
+          "financeExpense": 0,
+          "financeIncome": 0,
+          "operatingProfit": 0,
+          "rawMaterials": 68000,
+          "finishedGoods": 5000,
+          "wip": 2000,
+          "debit": 84000,
+          "credit": 84000
+        },
+        "jobCost": {
+          "id": "cce457ff-9bf7-48d2-99f2-b7c76c101c26",
+          "code": "QA2-DB-1794335962578-lock-service-JOB",
+          "productName": "QA2-DB-1794335962578-lock-service-service",
+          "status": "IN_PROGRESS",
+          "quantity": 1,
+          "materialCost": 2000,
+          "laborCost": 0,
+          "machineCost": 0,
+          "totalCost": 2000,
+          "finishedValue": 0,
+          "wip": 2000
+        }
+      },
+      "expected": "Locked-period COGS must remain unchanged. A future-dated reopening should not delete the historical completion posting.",
+      "requests": [
+        68,
+        78
+      ]
+    }
+  ],
+  "http": [
+    {
+      "method": "POST",
+      "path": "/auth/register",
+      "role": "ANON",
+      "request": {
+        "name": "QA2-DB-1794335962578",
+        "workshopName": "QA2-DB-1794335962578",
+        "mode": "CREATE_WORKSHOP"
+      },
+      "status": 201,
+      "response": {
+        "ok": true,
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "approvalStatus": "APPROVED",
+        "odooSyncStatus": "PENDING_SYNC",
+        "message": "Đã tạo không gian làm việc. Bạn có thể đăng nhập; ERP sẽ đồng bộ nền."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "role": "ANON",
+      "request": {},
+      "status": 200,
+      "response": {
+        "user": {
+          "id": "42470b9e-54cc-4638-ae46-989369d7b7c5",
+          "email": "qa2-db-1794335962578@fintax.invalid",
+          "name": "QA2-DB-1794335962578",
+          "role": "OWNER",
+          "roleLabel": "Chủ doanh nghiệp",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "workshopName": "QA2-DB-1794335962578",
+          "permissions": {
+            "entities": "*",
+            "actions": "*"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users",
+      "role": "OWNER",
+      "request": {
+        "name": "QA2-DB-1794335962578-WORKSHOP",
+        "role": "WORKSHOP"
+      },
+      "status": 201,
+      "response": {
+        "id": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "email": "qa2-db-1794335962578-workshop@fintax.invalid",
+        "name": "QA2-DB-1794335962578-WORKSHOP",
+        "role": "WORKSHOP",
+        "roleLabel": "Thợ xưởng",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "workshopName": "QA2-DB-1794335962578"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "role": "ANON",
+      "request": {},
+      "status": 200,
+      "response": {
+        "user": {
+          "id": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+          "email": "qa2-db-1794335962578-workshop@fintax.invalid",
+          "name": "QA2-DB-1794335962578-WORKSHOP",
+          "role": "WORKSHOP",
+          "roleLabel": "Thợ xưởng",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "workshopName": "QA2-DB-1794335962578",
+          "permissions": {
+            "entities": [
+              "production-orders",
+              "stock-movements",
+              "materials",
+              "labor-logs"
+            ],
+            "actions": [
+              "read",
+              "start",
+              "complete",
+              "progress",
+              "record-movement",
+              "record-labor"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users",
+      "role": "OWNER",
+      "request": {
+        "name": "QA2-DB-1794335962578-WAREHOUSE",
+        "role": "WAREHOUSE"
+      },
+      "status": 201,
+      "response": {
+        "id": "182b4403-cb8c-435e-9647-da8ae51fe3ec",
+        "email": "qa2-db-1794335962578-warehouse@fintax.invalid",
+        "name": "QA2-DB-1794335962578-WAREHOUSE",
+        "role": "WAREHOUSE",
+        "roleLabel": "Thủ kho",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "workshopName": "QA2-DB-1794335962578"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "role": "ANON",
+      "request": {},
+      "status": 200,
+      "response": {
+        "user": {
+          "id": "182b4403-cb8c-435e-9647-da8ae51fe3ec",
+          "email": "qa2-db-1794335962578-warehouse@fintax.invalid",
+          "name": "QA2-DB-1794335962578-WAREHOUSE",
+          "role": "WAREHOUSE",
+          "roleLabel": "Thủ kho",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "workshopName": "QA2-DB-1794335962578",
+          "permissions": {
+            "entities": [
+              "production-orders",
+              "stock-movements",
+              "materials",
+              "products"
+            ],
+            "actions": [
+              "read",
+              "record-movement",
+              "receive-finished"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/materials",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-cancel-M",
+        "name": "QA2-DB-1794335962578-cancel-material",
+        "unit": "kg",
+        "unitCost": 1000
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-cancel-M",
+        "name": "QA2-DB-1794335962578-cancel-material",
+        "unit": "kg",
+        "unitCost": 1000,
+        "id": "6d10420d-23c4-4cfb-9540-08c72bb5a389",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "status": "ACTIVE",
+        "trackInventory": true,
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stock-movements",
+      "role": "OWNER",
+      "request": {
+        "type": "OPENING",
+        "materialId": "6d10420d-23c4-4cfb-9540-08c72bb5a389",
+        "quantity": 10,
+        "unitCost": 1000,
+        "date": "2026-11-11",
+        "reason": "QA2-DB-1794335962578"
+      },
+      "status": 201,
+      "response": {
+        "type": "OPENING",
+        "materialId": "6d10420d-23c4-4cfb-9540-08c72bb5a389",
+        "quantity": 10,
+        "unitCost": 1000,
+        "date": "2026-11-11",
+        "reason": "QA2-DB-1794335962578",
+        "id": "f5d3f1ca-6c7b-4115-ade3-3ea1b744e11f",
+        "sequence": 1,
+        "itemEntity": "materials",
+        "materialName": "QA2-DB-1794335962578-cancel-material",
+        "unit": "kg",
+        "amount": 10000,
+        "status": "CONFIRMED",
+        "stockBefore": 0,
+        "stockAfter": 10,
+        "stockValueBefore": 0,
+        "stockValueAfter": 10000,
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-cancel-P",
+        "name": "QA2-DB-1794335962578-cancel-product",
+        "unit": "unit",
+        "trackInventory": true,
+        "status": "ACTIVE"
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-cancel-P",
+        "name": "QA2-DB-1794335962578-cancel-product",
+        "unit": "unit",
+        "trackInventory": true,
+        "status": "ACTIVE",
+        "id": "ca48cdf1-2335-44e1-b4fd-d2e25508a83c",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-cancel-JOB",
+        "productId": "ca48cdf1-2335-44e1-b4fd-d2e25508a83c",
+        "quantity": 1,
+        "plannedMachineCost": 0,
+        "date": "2026-11-11",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6"
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-cancel-JOB",
+        "productId": "ca48cdf1-2335-44e1-b4fd-d2e25508a83c",
+        "quantity": 1,
+        "plannedMachineCost": 0,
+        "date": "2026-11-11",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "id": "b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-cancel-product",
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders/b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555/actions/start",
+      "role": "OWNER",
+      "request": {},
+      "status": 200,
+      "response": {
+        "id": "b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555",
+        "code": "QA2-DB-1794335962578-cancel-JOB",
+        "date": "2026-11-11",
+        "status": "IN_PROGRESS",
+        "progress": 0,
+        "quantity": 1,
+        "productId": "ca48cdf1-2335-44e1-b4fd-d2e25508a83c",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "laborHours": 0,
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-cancel-product",
+        "plannedMachineCost": 0,
+        "syncStatus": "LOCAL_DEMO",
+        "stage": "Đang sản xuất",
+        "startedAt": "2026-11-10T18:39:24.259Z"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stock-movements",
+      "role": "OWNER",
+      "request": {
+        "type": "ISSUE",
+        "materialId": "6d10420d-23c4-4cfb-9540-08c72bb5a389",
+        "productionOrderId": "b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555",
+        "quantity": 2,
+        "date": "2026-11-11"
+      },
+      "status": 201,
+      "response": {
+        "type": "ISSUE",
+        "materialId": "6d10420d-23c4-4cfb-9540-08c72bb5a389",
+        "productionOrderId": "b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555",
+        "quantity": 2,
+        "date": "2026-11-11",
+        "id": "43cb6117-f966-4d8e-b3f0-d9ab957848fa",
+        "sequence": 2,
+        "itemEntity": "materials",
+        "materialName": "QA2-DB-1794335962578-cancel-material",
+        "unit": "kg",
+        "unitCost": 1000,
+        "amount": 2000,
+        "status": "CONFIRMED",
+        "stockBefore": 10,
+        "stockAfter": 8,
+        "stockValueBefore": 10000,
+        "stockValueAfter": 8000,
+        "reason": "",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders/b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555/actions/complete",
+      "role": "OWNER",
+      "request": {},
+      "status": 200,
+      "response": {
+        "id": "b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555",
+        "code": "QA2-DB-1794335962578-cancel-JOB",
+        "date": "2026-11-11",
+        "stage": "Chờ nghiệm thu thành phẩm",
+        "status": "READY_FOR_RECEIPT",
+        "progress": 100,
+        "quantity": 1,
+        "productId": "ca48cdf1-2335-44e1-b4fd-d2e25508a83c",
+        "startedAt": "2026-11-10T18:39:24.259Z",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-cancel-product",
+        "plannedMachineCost": 0,
+        "completionNote": "",
+        "completedAt": "2026-11-10T18:39:24.312Z"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders/b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555/actions/receive-finished",
+      "role": "OWNER",
+      "request": {
+        "date": "2026-11-11"
+      },
+      "status": 200,
+      "response": {
+        "id": "b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555",
+        "code": "QA2-DB-1794335962578-cancel-JOB",
+        "date": "2026-11-11",
+        "stage": "Đã nghiệm thu",
+        "status": "COMPLETED",
+        "progress": 100,
+        "quantity": 1,
+        "productId": "ca48cdf1-2335-44e1-b4fd-d2e25508a83c",
+        "startedAt": "2026-11-10T18:39:24.259Z",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "completedAt": "2026-11-10T18:39:24.312Z",
+        "productName": "QA2-DB-1794335962578-cancel-product",
+        "completionNote": "",
+        "plannedMachineCost": 0,
+        "actualMaterialCost": 2000,
+        "actualLaborCost": 0,
+        "actualMachineCost": 0,
+        "totalCost": 2000,
+        "unitCost": 2000,
+        "acceptedBy": "QA2-DB-1794335962578",
+        "acceptedAt": "2026-11-10T18:39:24.337Z",
+        "finishedReceiptId": "07ed2969-001d-45f8-8ed5-e77337beaa00"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/materials",
+      "role": "OWNER",
+      "status": 200,
+      "response": [
+        {
+          "id": "6d10420d-23c4-4cfb-9540-08c72bb5a389",
+          "code": "QA2-DB-1794335962578-cancel-M",
+          "name": "QA2-DB-1794335962578-cancel-material",
+          "unit": "kg",
+          "stock": 8,
+          "status": "ACTIVE",
+          "unitCost": 1000,
+          "stockValue": 8000,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "trackInventory": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/products",
+      "role": "OWNER",
+      "status": 200,
+      "response": [
+        {
+          "id": "ca48cdf1-2335-44e1-b4fd-d2e25508a83c",
+          "code": "QA2-DB-1794335962578-cancel-P",
+          "name": "QA2-DB-1794335962578-cancel-product",
+          "unit": "unit",
+          "stock": 1,
+          "status": "ACTIVE",
+          "unitCost": 2000,
+          "stockValue": 2000,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "trackInventory": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/reports/sme?from=2026-01-01&to=2026-11-11",
+      "role": "OWNER",
+      "status": 200,
+      "response": {
+        "from": "2026-01-01",
+        "to": "2026-11-11",
+        "books": [
+          {
+            "code": "SME-NKC",
+            "title": "Nhật ký nghiệp vụ quản trị",
+            "rows": [
+              {
+                "id": "f5d3f1ca-6c7b-4115-ade3-3ea1b744e11f-0",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "f5d3f1ca-6c7b-4115-ade3-3ea1b744e11f",
+                "description": "QA2-DB-1794335962578-cancel-material",
+                "debitAccount": "152",
+                "creditAccount": "411",
+                "debit": 10000,
+                "credit": 10000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "43cb6117-f966-4d8e-b3f0-d9ab957848fa-1",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "43cb6117-f966-4d8e-b3f0-d9ab957848fa",
+                "description": "QA2-DB-1794335962578-cancel-material",
+                "debitAccount": "154",
+                "creditAccount": "152",
+                "debit": 2000,
+                "credit": 2000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "07ed2969-001d-45f8-8ed5-e77337beaa00-2",
+                "date": "2026-11-11",
+                "code": "NK-QA2-DB-1794335962578-cancel-JOB",
+                "sourceId": "07ed2969-001d-45f8-8ed5-e77337beaa00",
+                "description": "QA2-DB-1794335962578-cancel-product",
+                "debitAccount": "155",
+                "creditAccount": "154",
+                "debit": 2000,
+                "credit": 2000,
+                "status": "CONFIRMED"
+              }
+            ],
+            "columns": [
+              {
+                "key": "date",
+                "label": "Ngày",
+                "format": "date"
+              },
+              {
+                "key": "code",
+                "label": "Chứng từ"
+              },
+              {
+                "key": "description",
+                "label": "Nội dung"
+              },
+              {
+                "key": "debitAccount",
+                "label": "TK Nợ"
+              },
+              {
+                "key": "creditAccount",
+                "label": "TK Có"
+              },
+              {
+                "key": "debit",
+                "label": "Số tiền",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-TK",
+            "title": "Phát sinh tài khoản trong kỳ",
+            "rows": [
+              {
+                "id": "152",
+                "account": "152",
+                "debit": 10000,
+                "credit": 2000,
+                "net": 8000
+              },
+              {
+                "id": "154",
+                "account": "154",
+                "debit": 2000,
+                "credit": 2000,
+                "net": 0
+              },
+              {
+                "id": "155",
+                "account": "155",
+                "debit": 2000,
+                "credit": 0,
+                "net": 2000
+              },
+              {
+                "id": "411",
+                "account": "411",
+                "debit": 0,
+                "credit": 10000,
+                "net": -10000
+              }
+            ],
+            "columns": [
+              {
+                "key": "account",
+                "label": "Tài khoản"
+              },
+              {
+                "key": "debit",
+                "label": "Phát sinh Nợ",
+                "format": "money"
+              },
+              {
+                "key": "credit",
+                "label": "Phát sinh Có",
+                "format": "money"
+              },
+              {
+                "key": "net",
+                "label": "Chênh lệch Nợ − Có",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-KHO",
+            "title": "Giá trị tồn nguyên vật liệu và thành phẩm",
+            "rows": [
+              {
+                "id": "6d10420d-23c4-4cfb-9540-08c72bb5a389",
+                "code": "QA2-DB-1794335962578-cancel-M",
+                "name": "QA2-DB-1794335962578-cancel-material",
+                "unit": "kg",
+                "stock": 8,
+                "stockValue": 8000,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "ca48cdf1-2335-44e1-b4fd-d2e25508a83c",
+                "code": "QA2-DB-1794335962578-cancel-P",
+                "name": "QA2-DB-1794335962578-cancel-product",
+                "unit": "unit",
+                "stock": 1,
+                "stockValue": 2000,
+                "itemEntity": "products"
+              }
+            ],
+            "columns": [
+              {
+                "key": "code",
+                "label": "Mã"
+              },
+              {
+                "key": "name",
+                "label": "Mặt hàng"
+              },
+              {
+                "key": "unit",
+                "label": "ĐVT"
+              },
+              {
+                "key": "stock",
+                "label": "Số lượng"
+              },
+              {
+                "key": "stockValue",
+                "label": "Giá trị tồn",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-GT",
+            "title": "Chi phí theo lệnh và sản xuất dở dang",
+            "rows": [
+              {
+                "id": "b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555",
+                "code": "QA2-DB-1794335962578-cancel-JOB",
+                "productName": "QA2-DB-1794335962578-cancel-product",
+                "status": "COMPLETED",
+                "quantity": 1,
+                "materialCost": 2000,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 2000,
+                "finishedValue": 2000,
+                "wip": 0
+              }
+            ],
+            "columns": [
+              {
+                "key": "code",
+                "label": "Lệnh"
+              },
+              {
+                "key": "productName",
+                "label": "Sản phẩm"
+              },
+              {
+                "key": "materialCost",
+                "label": "Vật tư",
+                "format": "money"
+              },
+              {
+                "key": "laborCost",
+                "label": "Nhân công",
+                "format": "money"
+              },
+              {
+                "key": "machineCost",
+                "label": "Máy phân bổ",
+                "format": "money"
+              },
+              {
+                "key": "finishedValue",
+                "label": "Đã nhập thành phẩm",
+                "format": "money"
+              },
+              {
+                "key": "wip",
+                "label": "Dở dang",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-CN",
+            "title": "Công nợ và tiền chưa phân bổ",
+            "rows": [],
+            "columns": [
+              {
+                "key": "name",
+                "label": "Đối tác"
+              },
+              {
+                "key": "type",
+                "label": "Loại"
+              },
+              {
+                "key": "opening",
+                "label": "Đầu kỳ",
+                "format": "money"
+              },
+              {
+                "key": "openBalance",
+                "label": "Còn nợ hóa đơn",
+                "format": "money"
+              },
+              {
+                "key": "unallocatedAdvance",
+                "label": "Tiền chưa phân bổ",
+                "format": "money"
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "revenue": 0,
+          "cogs": 0,
+          "grossProfit": 0,
+          "operatingExpense": 0,
+          "financeExpense": 0,
+          "financeIncome": 0,
+          "operatingProfit": 0,
+          "rawMaterials": 8000,
+          "finishedGoods": 2000,
+          "wip": 0,
+          "debit": 14000,
+          "credit": 14000
+        },
+        "warnings": [],
+        "note": "Sổ quản trị SME từ các chứng từ đã ghi nhận. Chưa gồm khấu hao, trích trước, thuế TNDN và bút toán khóa sổ; không thay thế bộ báo cáo tài chính hoặc tờ khai thuế.",
+        "settings": {
+          "currency": "VND",
+          "taxMethod": "VAT_CREDIT",
+          "fiscalYearStart": "01-01",
+          "accountingRegime": "TT133",
+          "defaultWarehouse": "Kho chính",
+          "inventoryCostMethod": "MOVING_AVERAGE"
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/stock-movements/43cb6117-f966-4d8e-b3f0-d9ab957848fa",
+      "role": "OWNER",
+      "request": {
+        "reason": "QA2-DB-1794335962578"
+      },
+      "status": 200,
+      "response": {
+        "id": "43cb6117-f966-4d8e-b3f0-d9ab957848fa",
+        "date": "2026-11-11",
+        "type": "ISSUE",
+        "unit": "kg",
+        "amount": 2000,
+        "reason": "",
+        "status": "CANCELLED",
+        "quantity": 2,
+        "sequence": 2,
+        "unitCost": 1000,
+        "itemEntity": "materials",
+        "materialId": "6d10420d-23c4-4cfb-9540-08c72bb5a389",
+        "stockAfter": 8,
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "stockBefore": 10,
+        "materialName": "QA2-DB-1794335962578-cancel-material",
+        "stockValueAfter": 8000,
+        "stockValueBefore": 10000,
+        "productionOrderId": "b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555",
+        "syncStatus": "LOCAL_DEMO",
+        "cancellationReason": "QA2-DB-1794335962578"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/materials",
+      "role": "OWNER",
+      "status": 200,
+      "response": [
+        {
+          "id": "6d10420d-23c4-4cfb-9540-08c72bb5a389",
+          "code": "QA2-DB-1794335962578-cancel-M",
+          "name": "QA2-DB-1794335962578-cancel-material",
+          "unit": "kg",
+          "stock": 10,
+          "status": "ACTIVE",
+          "unitCost": 1000,
+          "stockValue": 10000,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "trackInventory": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/products",
+      "role": "OWNER",
+      "status": 200,
+      "response": [
+        {
+          "id": "ca48cdf1-2335-44e1-b4fd-d2e25508a83c",
+          "code": "QA2-DB-1794335962578-cancel-P",
+          "name": "QA2-DB-1794335962578-cancel-product",
+          "unit": "unit",
+          "stock": 1,
+          "status": "ACTIVE",
+          "unitCost": 2000,
+          "stockValue": 2000,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "trackInventory": true
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/production-orders",
+      "role": "OWNER",
+      "status": 200,
+      "response": [
+        {
+          "id": "b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555",
+          "code": "QA2-DB-1794335962578-cancel-JOB",
+          "date": "2026-11-11",
+          "stage": "Đã nghiệm thu",
+          "status": "COMPLETED",
+          "progress": 100,
+          "quantity": 1,
+          "unitCost": 2000,
+          "productId": "ca48cdf1-2335-44e1-b4fd-d2e25508a83c",
+          "startedAt": "2026-11-10T18:39:24.259Z",
+          "totalCost": 2000,
+          "acceptedAt": "2026-11-10T18:39:24.337Z",
+          "acceptedBy": "QA2-DB-1794335962578",
+          "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+          "laborHours": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "completedAt": "2026-11-10T18:39:24.312Z",
+          "productName": "QA2-DB-1794335962578-cancel-product",
+          "completionNote": "",
+          "actualLaborCost": 0,
+          "actualMachineCost": 0,
+          "finishedReceiptId": "07ed2969-001d-45f8-8ed5-e77337beaa00",
+          "actualMaterialCost": 2000,
+          "plannedMachineCost": 0
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/reports/sme?from=2026-01-01&to=2026-11-11",
+      "role": "OWNER",
+      "status": 200,
+      "response": {
+        "from": "2026-01-01",
+        "to": "2026-11-11",
+        "books": [
+          {
+            "code": "SME-NKC",
+            "title": "Nhật ký nghiệp vụ quản trị",
+            "rows": [
+              {
+                "id": "f5d3f1ca-6c7b-4115-ade3-3ea1b744e11f-0",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "f5d3f1ca-6c7b-4115-ade3-3ea1b744e11f",
+                "description": "QA2-DB-1794335962578-cancel-material",
+                "debitAccount": "152",
+                "creditAccount": "411",
+                "debit": 10000,
+                "credit": 10000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "07ed2969-001d-45f8-8ed5-e77337beaa00-1",
+                "date": "2026-11-11",
+                "code": "NK-QA2-DB-1794335962578-cancel-JOB",
+                "sourceId": "07ed2969-001d-45f8-8ed5-e77337beaa00",
+                "description": "QA2-DB-1794335962578-cancel-product",
+                "debitAccount": "155",
+                "creditAccount": "154",
+                "debit": 2000,
+                "credit": 2000,
+                "status": "CONFIRMED"
+              }
+            ],
+            "columns": [
+              {
+                "key": "date",
+                "label": "Ngày",
+                "format": "date"
+              },
+              {
+                "key": "code",
+                "label": "Chứng từ"
+              },
+              {
+                "key": "description",
+                "label": "Nội dung"
+              },
+              {
+                "key": "debitAccount",
+                "label": "TK Nợ"
+              },
+              {
+                "key": "creditAccount",
+                "label": "TK Có"
+              },
+              {
+                "key": "debit",
+                "label": "Số tiền",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-TK",
+            "title": "Phát sinh tài khoản trong kỳ",
+            "rows": [
+              {
+                "id": "152",
+                "account": "152",
+                "debit": 10000,
+                "credit": 0,
+                "net": 10000
+              },
+              {
+                "id": "154",
+                "account": "154",
+                "debit": 0,
+                "credit": 2000,
+                "net": -2000
+              },
+              {
+                "id": "155",
+                "account": "155",
+                "debit": 2000,
+                "credit": 0,
+                "net": 2000
+              },
+              {
+                "id": "411",
+                "account": "411",
+                "debit": 0,
+                "credit": 10000,
+                "net": -10000
+              }
+            ],
+            "columns": [
+              {
+                "key": "account",
+                "label": "Tài khoản"
+              },
+              {
+                "key": "debit",
+                "label": "Phát sinh Nợ",
+                "format": "money"
+              },
+              {
+                "key": "credit",
+                "label": "Phát sinh Có",
+                "format": "money"
+              },
+              {
+                "key": "net",
+                "label": "Chênh lệch Nợ − Có",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-KHO",
+            "title": "Giá trị tồn nguyên vật liệu và thành phẩm",
+            "rows": [
+              {
+                "id": "6d10420d-23c4-4cfb-9540-08c72bb5a389",
+                "code": "QA2-DB-1794335962578-cancel-M",
+                "name": "QA2-DB-1794335962578-cancel-material",
+                "unit": "kg",
+                "stock": 10,
+                "stockValue": 10000,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "ca48cdf1-2335-44e1-b4fd-d2e25508a83c",
+                "code": "QA2-DB-1794335962578-cancel-P",
+                "name": "QA2-DB-1794335962578-cancel-product",
+                "unit": "unit",
+                "stock": 1,
+                "stockValue": 2000,
+                "itemEntity": "products"
+              }
+            ],
+            "columns": [
+              {
+                "key": "code",
+                "label": "Mã"
+              },
+              {
+                "key": "name",
+                "label": "Mặt hàng"
+              },
+              {
+                "key": "unit",
+                "label": "ĐVT"
+              },
+              {
+                "key": "stock",
+                "label": "Số lượng"
+              },
+              {
+                "key": "stockValue",
+                "label": "Giá trị tồn",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-GT",
+            "title": "Chi phí theo lệnh và sản xuất dở dang",
+            "rows": [
+              {
+                "id": "b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555",
+                "code": "QA2-DB-1794335962578-cancel-JOB",
+                "productName": "QA2-DB-1794335962578-cancel-product",
+                "status": "COMPLETED",
+                "quantity": 1,
+                "materialCost": 0,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 0,
+                "finishedValue": 2000,
+                "wip": 0
+              }
+            ],
+            "columns": [
+              {
+                "key": "code",
+                "label": "Lệnh"
+              },
+              {
+                "key": "productName",
+                "label": "Sản phẩm"
+              },
+              {
+                "key": "materialCost",
+                "label": "Vật tư",
+                "format": "money"
+              },
+              {
+                "key": "laborCost",
+                "label": "Nhân công",
+                "format": "money"
+              },
+              {
+                "key": "machineCost",
+                "label": "Máy phân bổ",
+                "format": "money"
+              },
+              {
+                "key": "finishedValue",
+                "label": "Đã nhập thành phẩm",
+                "format": "money"
+              },
+              {
+                "key": "wip",
+                "label": "Dở dang",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-CN",
+            "title": "Công nợ và tiền chưa phân bổ",
+            "rows": [],
+            "columns": [
+              {
+                "key": "name",
+                "label": "Đối tác"
+              },
+              {
+                "key": "type",
+                "label": "Loại"
+              },
+              {
+                "key": "opening",
+                "label": "Đầu kỳ",
+                "format": "money"
+              },
+              {
+                "key": "openBalance",
+                "label": "Còn nợ hóa đơn",
+                "format": "money"
+              },
+              {
+                "key": "unallocatedAdvance",
+                "label": "Tiền chưa phân bổ",
+                "format": "money"
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "revenue": 0,
+          "cogs": 0,
+          "grossProfit": 0,
+          "operatingExpense": 0,
+          "financeExpense": 0,
+          "financeIncome": 0,
+          "operatingProfit": 0,
+          "rawMaterials": 10000,
+          "finishedGoods": 2000,
+          "wip": 0,
+          "debit": 12000,
+          "credit": 12000
+        },
+        "warnings": [],
+        "note": "Sổ quản trị SME từ các chứng từ đã ghi nhận. Chưa gồm khấu hao, trích trước, thuế TNDN và bút toán khóa sổ; không thay thế bộ báo cáo tài chính hoặc tờ khai thuế.",
+        "settings": {
+          "currency": "VND",
+          "taxMethod": "VAT_CREDIT",
+          "fiscalYearStart": "01-01",
+          "accountingRegime": "TT133",
+          "defaultWarehouse": "Kho chính",
+          "inventoryCostMethod": "MOVING_AVERAGE"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/materials",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-fake-source-M",
+        "name": "QA2-DB-1794335962578-fake-source-material",
+        "unit": "kg",
+        "unitCost": 1000
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-fake-source-M",
+        "name": "QA2-DB-1794335962578-fake-source-material",
+        "unit": "kg",
+        "unitCost": 1000,
+        "id": "2e91c1e5-f855-427d-a8af-314e8f335acd",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "status": "ACTIVE",
+        "trackInventory": true,
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stock-movements",
+      "role": "OWNER",
+      "request": {
+        "type": "OPENING",
+        "materialId": "2e91c1e5-f855-427d-a8af-314e8f335acd",
+        "quantity": 10,
+        "unitCost": 1000,
+        "date": "2026-11-11",
+        "reason": "QA2-DB-1794335962578"
+      },
+      "status": 201,
+      "response": {
+        "type": "OPENING",
+        "materialId": "2e91c1e5-f855-427d-a8af-314e8f335acd",
+        "quantity": 10,
+        "unitCost": 1000,
+        "date": "2026-11-11",
+        "reason": "QA2-DB-1794335962578",
+        "id": "6971532c-ccd8-49ed-81d1-bd6a3d0949e3",
+        "sequence": 1,
+        "itemEntity": "materials",
+        "materialName": "QA2-DB-1794335962578-fake-source-material",
+        "unit": "kg",
+        "amount": 10000,
+        "status": "CONFIRMED",
+        "stockBefore": 0,
+        "stockAfter": 10,
+        "stockValueBefore": 0,
+        "stockValueAfter": 10000,
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-fake-source-P",
+        "name": "QA2-DB-1794335962578-fake-source-product",
+        "unit": "unit",
+        "trackInventory": true,
+        "status": "ACTIVE"
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-fake-source-P",
+        "name": "QA2-DB-1794335962578-fake-source-product",
+        "unit": "unit",
+        "trackInventory": true,
+        "status": "ACTIVE",
+        "id": "7cc2161f-4607-4e3a-a20a-7f4c4d2c7df2",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-fake-source-JOB",
+        "productId": "7cc2161f-4607-4e3a-a20a-7f4c4d2c7df2",
+        "quantity": 1,
+        "plannedMachineCost": 0,
+        "date": "2026-11-11",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6"
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-fake-source-JOB",
+        "productId": "7cc2161f-4607-4e3a-a20a-7f4c4d2c7df2",
+        "quantity": 1,
+        "plannedMachineCost": 0,
+        "date": "2026-11-11",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "id": "6e821129-9378-4d2c-a6ac-c7f3cbb19bfa",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-fake-source-product",
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders/6e821129-9378-4d2c-a6ac-c7f3cbb19bfa/actions/start",
+      "role": "OWNER",
+      "request": {},
+      "status": 200,
+      "response": {
+        "id": "6e821129-9378-4d2c-a6ac-c7f3cbb19bfa",
+        "code": "QA2-DB-1794335962578-fake-source-JOB",
+        "date": "2026-11-11",
+        "status": "IN_PROGRESS",
+        "progress": 0,
+        "quantity": 1,
+        "productId": "7cc2161f-4607-4e3a-a20a-7f4c4d2c7df2",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "laborHours": 0,
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-fake-source-product",
+        "plannedMachineCost": 0,
+        "syncStatus": "LOCAL_DEMO",
+        "stage": "Đang sản xuất",
+        "startedAt": "2026-11-10T18:39:24.576Z"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stock-movements",
+      "role": "OWNER",
+      "request": {
+        "type": "ISSUE",
+        "materialId": "2e91c1e5-f855-427d-a8af-314e8f335acd",
+        "productionOrderId": "6e821129-9378-4d2c-a6ac-c7f3cbb19bfa",
+        "quantity": 2,
+        "date": "2026-11-11"
+      },
+      "status": 201,
+      "response": {
+        "type": "ISSUE",
+        "materialId": "2e91c1e5-f855-427d-a8af-314e8f335acd",
+        "productionOrderId": "6e821129-9378-4d2c-a6ac-c7f3cbb19bfa",
+        "quantity": 2,
+        "date": "2026-11-11",
+        "id": "90eb72ae-85d2-4fea-b2ec-b13c5ac38fba",
+        "sequence": 2,
+        "itemEntity": "materials",
+        "materialName": "QA2-DB-1794335962578-fake-source-material",
+        "unit": "kg",
+        "unitCost": 1000,
+        "amount": 2000,
+        "status": "CONFIRMED",
+        "stockBefore": 10,
+        "stockAfter": 8,
+        "stockValueBefore": 10000,
+        "stockValueAfter": 8000,
+        "reason": "",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/sme?from=2026-01-01&to=2026-11-11",
+      "role": "OWNER",
+      "status": 200,
+      "response": {
+        "from": "2026-01-01",
+        "to": "2026-11-11",
+        "books": [
+          {
+            "code": "SME-NKC",
+            "title": "Nhật ký nghiệp vụ quản trị",
+            "rows": [
+              {
+                "id": "f5d3f1ca-6c7b-4115-ade3-3ea1b744e11f-0",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "f5d3f1ca-6c7b-4115-ade3-3ea1b744e11f",
+                "description": "QA2-DB-1794335962578-cancel-material",
+                "debitAccount": "152",
+                "creditAccount": "411",
+                "debit": 10000,
+                "credit": 10000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "6971532c-ccd8-49ed-81d1-bd6a3d0949e3-2",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "6971532c-ccd8-49ed-81d1-bd6a3d0949e3",
+                "description": "QA2-DB-1794335962578-fake-source-material",
+                "debitAccount": "152",
+                "creditAccount": "411",
+                "debit": 10000,
+                "credit": 10000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "90eb72ae-85d2-4fea-b2ec-b13c5ac38fba-3",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "90eb72ae-85d2-4fea-b2ec-b13c5ac38fba",
+                "description": "QA2-DB-1794335962578-fake-source-material",
+                "debitAccount": "154",
+                "creditAccount": "152",
+                "debit": 2000,
+                "credit": 2000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "07ed2969-001d-45f8-8ed5-e77337beaa00-1",
+                "date": "2026-11-11",
+                "code": "NK-QA2-DB-1794335962578-cancel-JOB",
+                "sourceId": "07ed2969-001d-45f8-8ed5-e77337beaa00",
+                "description": "QA2-DB-1794335962578-cancel-product",
+                "debitAccount": "155",
+                "creditAccount": "154",
+                "debit": 2000,
+                "credit": 2000,
+                "status": "CONFIRMED"
+              }
+            ],
+            "columns": [
+              {
+                "key": "date",
+                "label": "Ngày",
+                "format": "date"
+              },
+              {
+                "key": "code",
+                "label": "Chứng từ"
+              },
+              {
+                "key": "description",
+                "label": "Nội dung"
+              },
+              {
+                "key": "debitAccount",
+                "label": "TK Nợ"
+              },
+              {
+                "key": "creditAccount",
+                "label": "TK Có"
+              },
+              {
+                "key": "debit",
+                "label": "Số tiền",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-TK",
+            "title": "Phát sinh tài khoản trong kỳ",
+            "rows": [
+              {
+                "id": "152",
+                "account": "152",
+                "debit": 20000,
+                "credit": 2000,
+                "net": 18000
+              },
+              {
+                "id": "154",
+                "account": "154",
+                "debit": 2000,
+                "credit": 2000,
+                "net": 0
+              },
+              {
+                "id": "155",
+                "account": "155",
+                "debit": 2000,
+                "credit": 0,
+                "net": 2000
+              },
+              {
+                "id": "411",
+                "account": "411",
+                "debit": 0,
+                "credit": 20000,
+                "net": -20000
+              }
+            ],
+            "columns": [
+              {
+                "key": "account",
+                "label": "Tài khoản"
+              },
+              {
+                "key": "debit",
+                "label": "Phát sinh Nợ",
+                "format": "money"
+              },
+              {
+                "key": "credit",
+                "label": "Phát sinh Có",
+                "format": "money"
+              },
+              {
+                "key": "net",
+                "label": "Chênh lệch Nợ − Có",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-KHO",
+            "title": "Giá trị tồn nguyên vật liệu và thành phẩm",
+            "rows": [
+              {
+                "id": "6d10420d-23c4-4cfb-9540-08c72bb5a389",
+                "code": "QA2-DB-1794335962578-cancel-M",
+                "name": "QA2-DB-1794335962578-cancel-material",
+                "unit": "kg",
+                "stock": 10,
+                "stockValue": 10000,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "2e91c1e5-f855-427d-a8af-314e8f335acd",
+                "code": "QA2-DB-1794335962578-fake-source-M",
+                "name": "QA2-DB-1794335962578-fake-source-material",
+                "unit": "kg",
+                "stock": 8,
+                "stockValue": 8000,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "ca48cdf1-2335-44e1-b4fd-d2e25508a83c",
+                "code": "QA2-DB-1794335962578-cancel-P",
+                "name": "QA2-DB-1794335962578-cancel-product",
+                "unit": "unit",
+                "stock": 1,
+                "stockValue": 2000,
+                "itemEntity": "products"
+              },
+              {
+                "id": "7cc2161f-4607-4e3a-a20a-7f4c4d2c7df2",
+                "code": "QA2-DB-1794335962578-fake-source-P",
+                "name": "QA2-DB-1794335962578-fake-source-product",
+                "unit": "unit",
+                "stock": 0,
+                "stockValue": 0,
+                "itemEntity": "products"
+              }
+            ],
+            "columns": [
+              {
+                "key": "code",
+                "label": "Mã"
+              },
+              {
+                "key": "name",
+                "label": "Mặt hàng"
+              },
+              {
+                "key": "unit",
+                "label": "ĐVT"
+              },
+              {
+                "key": "stock",
+                "label": "Số lượng"
+              },
+              {
+                "key": "stockValue",
+                "label": "Giá trị tồn",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-GT",
+            "title": "Chi phí theo lệnh và sản xuất dở dang",
+            "rows": [
+              {
+                "id": "b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555",
+                "code": "QA2-DB-1794335962578-cancel-JOB",
+                "productName": "QA2-DB-1794335962578-cancel-product",
+                "status": "COMPLETED",
+                "quantity": 1,
+                "materialCost": 0,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 0,
+                "finishedValue": 2000,
+                "wip": 0
+              },
+              {
+                "id": "6e821129-9378-4d2c-a6ac-c7f3cbb19bfa",
+                "code": "QA2-DB-1794335962578-fake-source-JOB",
+                "productName": "QA2-DB-1794335962578-fake-source-product",
+                "status": "IN_PROGRESS",
+                "quantity": 1,
+                "materialCost": 2000,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 2000,
+                "finishedValue": 0,
+                "wip": 2000
+              }
+            ],
+            "columns": [
+              {
+                "key": "code",
+                "label": "Lệnh"
+              },
+              {
+                "key": "productName",
+                "label": "Sản phẩm"
+              },
+              {
+                "key": "materialCost",
+                "label": "Vật tư",
+                "format": "money"
+              },
+              {
+                "key": "laborCost",
+                "label": "Nhân công",
+                "format": "money"
+              },
+              {
+                "key": "machineCost",
+                "label": "Máy phân bổ",
+                "format": "money"
+              },
+              {
+                "key": "finishedValue",
+                "label": "Đã nhập thành phẩm",
+                "format": "money"
+              },
+              {
+                "key": "wip",
+                "label": "Dở dang",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-CN",
+            "title": "Công nợ và tiền chưa phân bổ",
+            "rows": [],
+            "columns": [
+              {
+                "key": "name",
+                "label": "Đối tác"
+              },
+              {
+                "key": "type",
+                "label": "Loại"
+              },
+              {
+                "key": "opening",
+                "label": "Đầu kỳ",
+                "format": "money"
+              },
+              {
+                "key": "openBalance",
+                "label": "Còn nợ hóa đơn",
+                "format": "money"
+              },
+              {
+                "key": "unallocatedAdvance",
+                "label": "Tiền chưa phân bổ",
+                "format": "money"
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "revenue": 0,
+          "cogs": 0,
+          "grossProfit": 0,
+          "operatingExpense": 0,
+          "financeExpense": 0,
+          "financeIncome": 0,
+          "operatingProfit": 0,
+          "rawMaterials": 18000,
+          "finishedGoods": 2000,
+          "wip": 2000,
+          "debit": 24000,
+          "credit": 24000
+        },
+        "warnings": [],
+        "note": "Sổ quản trị SME từ các chứng từ đã ghi nhận. Chưa gồm khấu hao, trích trước, thuế TNDN và bút toán khóa sổ; không thay thế bộ báo cáo tài chính hoặc tờ khai thuế.",
+        "settings": {
+          "currency": "VND",
+          "taxMethod": "VAT_CREDIT",
+          "fiscalYearStart": "01-01",
+          "accountingRegime": "TT133",
+          "defaultWarehouse": "Kho chính",
+          "inventoryCostMethod": "MOVING_AVERAGE"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stock-movements",
+      "role": "WAREHOUSE",
+      "request": {
+        "type": "RECEIPT",
+        "materialId": "2e91c1e5-f855-427d-a8af-314e8f335acd",
+        "sourceProductionOrderId": "6e821129-9378-4d2c-a6ac-c7f3cbb19bfa",
+        "quantity": 2,
+        "unitCost": 1000,
+        "date": "2026-11-11"
+      },
+      "status": 201,
+      "response": {
+        "id": "2667ed9a-9e4b-4766-b2cb-3fb4e2b6403e",
+        "materialId": "2e91c1e5-f855-427d-a8af-314e8f335acd",
+        "materialName": "QA2-DB-1794335962578-fake-source-material",
+        "quantity": 2,
+        "unit": "kg",
+        "type": "RECEIPT",
+        "date": "2026-11-11",
+        "status": "CONFIRMED",
+        "reason": ""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/sme?from=2026-01-01&to=2026-11-11",
+      "role": "OWNER",
+      "status": 200,
+      "response": {
+        "from": "2026-01-01",
+        "to": "2026-11-11",
+        "books": [
+          {
+            "code": "SME-NKC",
+            "title": "Nhật ký nghiệp vụ quản trị",
+            "rows": [
+              {
+                "id": "f5d3f1ca-6c7b-4115-ade3-3ea1b744e11f-0",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "f5d3f1ca-6c7b-4115-ade3-3ea1b744e11f",
+                "description": "QA2-DB-1794335962578-cancel-material",
+                "debitAccount": "152",
+                "creditAccount": "411",
+                "debit": 10000,
+                "credit": 10000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "6971532c-ccd8-49ed-81d1-bd6a3d0949e3-2",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "6971532c-ccd8-49ed-81d1-bd6a3d0949e3",
+                "description": "QA2-DB-1794335962578-fake-source-material",
+                "debitAccount": "152",
+                "creditAccount": "411",
+                "debit": 10000,
+                "credit": 10000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "90eb72ae-85d2-4fea-b2ec-b13c5ac38fba-3",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "90eb72ae-85d2-4fea-b2ec-b13c5ac38fba",
+                "description": "QA2-DB-1794335962578-fake-source-material",
+                "debitAccount": "154",
+                "creditAccount": "152",
+                "debit": 2000,
+                "credit": 2000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "2667ed9a-9e4b-4766-b2cb-3fb4e2b6403e-4",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "2667ed9a-9e4b-4766-b2cb-3fb4e2b6403e",
+                "description": "QA2-DB-1794335962578-fake-source-material",
+                "debitAccount": "152",
+                "creditAccount": "3388",
+                "debit": 2000,
+                "credit": 2000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "07ed2969-001d-45f8-8ed5-e77337beaa00-1",
+                "date": "2026-11-11",
+                "code": "NK-QA2-DB-1794335962578-cancel-JOB",
+                "sourceId": "07ed2969-001d-45f8-8ed5-e77337beaa00",
+                "description": "QA2-DB-1794335962578-cancel-product",
+                "debitAccount": "155",
+                "creditAccount": "154",
+                "debit": 2000,
+                "credit": 2000,
+                "status": "CONFIRMED"
+              }
+            ],
+            "columns": [
+              {
+                "key": "date",
+                "label": "Ngày",
+                "format": "date"
+              },
+              {
+                "key": "code",
+                "label": "Chứng từ"
+              },
+              {
+                "key": "description",
+                "label": "Nội dung"
+              },
+              {
+                "key": "debitAccount",
+                "label": "TK Nợ"
+              },
+              {
+                "key": "creditAccount",
+                "label": "TK Có"
+              },
+              {
+                "key": "debit",
+                "label": "Số tiền",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-TK",
+            "title": "Phát sinh tài khoản trong kỳ",
+            "rows": [
+              {
+                "id": "152",
+                "account": "152",
+                "debit": 22000,
+                "credit": 2000,
+                "net": 20000
+              },
+              {
+                "id": "154",
+                "account": "154",
+                "debit": 2000,
+                "credit": 2000,
+                "net": 0
+              },
+              {
+                "id": "155",
+                "account": "155",
+                "debit": 2000,
+                "credit": 0,
+                "net": 2000
+              },
+              {
+                "id": "3388",
+                "account": "3388",
+                "debit": 0,
+                "credit": 2000,
+                "net": -2000
+              },
+              {
+                "id": "411",
+                "account": "411",
+                "debit": 0,
+                "credit": 20000,
+                "net": -20000
+              }
+            ],
+            "columns": [
+              {
+                "key": "account",
+                "label": "Tài khoản"
+              },
+              {
+                "key": "debit",
+                "label": "Phát sinh Nợ",
+                "format": "money"
+              },
+              {
+                "key": "credit",
+                "label": "Phát sinh Có",
+                "format": "money"
+              },
+              {
+                "key": "net",
+                "label": "Chênh lệch Nợ − Có",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-KHO",
+            "title": "Giá trị tồn nguyên vật liệu và thành phẩm",
+            "rows": [
+              {
+                "id": "6d10420d-23c4-4cfb-9540-08c72bb5a389",
+                "code": "QA2-DB-1794335962578-cancel-M",
+                "name": "QA2-DB-1794335962578-cancel-material",
+                "unit": "kg",
+                "stock": 10,
+                "stockValue": 10000,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "2e91c1e5-f855-427d-a8af-314e8f335acd",
+                "code": "QA2-DB-1794335962578-fake-source-M",
+                "name": "QA2-DB-1794335962578-fake-source-material",
+                "unit": "kg",
+                "stock": 10,
+                "stockValue": 10000,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "ca48cdf1-2335-44e1-b4fd-d2e25508a83c",
+                "code": "QA2-DB-1794335962578-cancel-P",
+                "name": "QA2-DB-1794335962578-cancel-product",
+                "unit": "unit",
+                "stock": 1,
+                "stockValue": 2000,
+                "itemEntity": "products"
+              },
+              {
+                "id": "7cc2161f-4607-4e3a-a20a-7f4c4d2c7df2",
+                "code": "QA2-DB-1794335962578-fake-source-P",
+                "name": "QA2-DB-1794335962578-fake-source-product",
+                "unit": "unit",
+                "stock": 0,
+                "stockValue": 0,
+                "itemEntity": "products"
+              }
+            ],
+            "columns": [
+              {
+                "key": "code",
+                "label": "Mã"
+              },
+              {
+                "key": "name",
+                "label": "Mặt hàng"
+              },
+              {
+                "key": "unit",
+                "label": "ĐVT"
+              },
+              {
+                "key": "stock",
+                "label": "Số lượng"
+              },
+              {
+                "key": "stockValue",
+                "label": "Giá trị tồn",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-GT",
+            "title": "Chi phí theo lệnh và sản xuất dở dang",
+            "rows": [
+              {
+                "id": "b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555",
+                "code": "QA2-DB-1794335962578-cancel-JOB",
+                "productName": "QA2-DB-1794335962578-cancel-product",
+                "status": "COMPLETED",
+                "quantity": 1,
+                "materialCost": 0,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 0,
+                "finishedValue": 2000,
+                "wip": 0
+              },
+              {
+                "id": "6e821129-9378-4d2c-a6ac-c7f3cbb19bfa",
+                "code": "QA2-DB-1794335962578-fake-source-JOB",
+                "productName": "QA2-DB-1794335962578-fake-source-product",
+                "status": "IN_PROGRESS",
+                "quantity": 1,
+                "materialCost": 2000,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 2000,
+                "finishedValue": 2000,
+                "wip": 0
+              }
+            ],
+            "columns": [
+              {
+                "key": "code",
+                "label": "Lệnh"
+              },
+              {
+                "key": "productName",
+                "label": "Sản phẩm"
+              },
+              {
+                "key": "materialCost",
+                "label": "Vật tư",
+                "format": "money"
+              },
+              {
+                "key": "laborCost",
+                "label": "Nhân công",
+                "format": "money"
+              },
+              {
+                "key": "machineCost",
+                "label": "Máy phân bổ",
+                "format": "money"
+              },
+              {
+                "key": "finishedValue",
+                "label": "Đã nhập thành phẩm",
+                "format": "money"
+              },
+              {
+                "key": "wip",
+                "label": "Dở dang",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-CN",
+            "title": "Công nợ và tiền chưa phân bổ",
+            "rows": [],
+            "columns": [
+              {
+                "key": "name",
+                "label": "Đối tác"
+              },
+              {
+                "key": "type",
+                "label": "Loại"
+              },
+              {
+                "key": "opening",
+                "label": "Đầu kỳ",
+                "format": "money"
+              },
+              {
+                "key": "openBalance",
+                "label": "Còn nợ hóa đơn",
+                "format": "money"
+              },
+              {
+                "key": "unallocatedAdvance",
+                "label": "Tiền chưa phân bổ",
+                "format": "money"
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "revenue": 0,
+          "cogs": 0,
+          "grossProfit": 0,
+          "operatingExpense": 0,
+          "financeExpense": 0,
+          "financeIncome": 0,
+          "operatingProfit": 0,
+          "rawMaterials": 20000,
+          "finishedGoods": 2000,
+          "wip": 0,
+          "debit": 26000,
+          "credit": 26000
+        },
+        "warnings": [],
+        "note": "Sổ quản trị SME từ các chứng từ đã ghi nhận. Chưa gồm khấu hao, trích trước, thuế TNDN và bút toán khóa sổ; không thay thế bộ báo cáo tài chính hoặc tờ khai thuế.",
+        "settings": {
+          "currency": "VND",
+          "taxMethod": "VAT_CREDIT",
+          "fiscalYearStart": "01-01",
+          "accountingRegime": "TT133",
+          "defaultWarehouse": "Kho chính",
+          "inventoryCostMethod": "MOVING_AVERAGE"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/production-orders",
+      "role": "OWNER",
+      "status": 200,
+      "response": [
+        {
+          "id": "6e821129-9378-4d2c-a6ac-c7f3cbb19bfa",
+          "code": "QA2-DB-1794335962578-fake-source-JOB",
+          "date": "2026-11-11",
+          "stage": "Đang sản xuất",
+          "status": "IN_PROGRESS",
+          "progress": 0,
+          "quantity": 1,
+          "productId": "7cc2161f-4607-4e3a-a20a-7f4c4d2c7df2",
+          "startedAt": "2026-11-10T18:39:24.576Z",
+          "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+          "laborHours": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "productName": "QA2-DB-1794335962578-fake-source-product",
+          "plannedMachineCost": 0
+        },
+        {
+          "id": "b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555",
+          "code": "QA2-DB-1794335962578-cancel-JOB",
+          "date": "2026-11-11",
+          "stage": "Đã nghiệm thu",
+          "status": "COMPLETED",
+          "progress": 100,
+          "quantity": 1,
+          "unitCost": 2000,
+          "productId": "ca48cdf1-2335-44e1-b4fd-d2e25508a83c",
+          "startedAt": "2026-11-10T18:39:24.259Z",
+          "totalCost": 2000,
+          "acceptedAt": "2026-11-10T18:39:24.337Z",
+          "acceptedBy": "QA2-DB-1794335962578",
+          "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+          "laborHours": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "completedAt": "2026-11-10T18:39:24.312Z",
+          "productName": "QA2-DB-1794335962578-cancel-product",
+          "completionNote": "",
+          "actualLaborCost": 0,
+          "actualMachineCost": 0,
+          "finishedReceiptId": "07ed2969-001d-45f8-8ed5-e77337beaa00",
+          "actualMaterialCost": 2000,
+          "plannedMachineCost": 0
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/materials",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-backdate-M",
+        "name": "QA2-DB-1794335962578-backdate-material",
+        "unit": "kg",
+        "unitCost": 1000
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-backdate-M",
+        "name": "QA2-DB-1794335962578-backdate-material",
+        "unit": "kg",
+        "unitCost": 1000,
+        "id": "2abd0f18-1967-4d3f-80c0-c242127007fa",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "status": "ACTIVE",
+        "trackInventory": true,
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stock-movements",
+      "role": "OWNER",
+      "request": {
+        "type": "OPENING",
+        "materialId": "2abd0f18-1967-4d3f-80c0-c242127007fa",
+        "quantity": 10,
+        "unitCost": 1000,
+        "date": "2026-11-11",
+        "reason": "QA2-DB-1794335962578"
+      },
+      "status": 201,
+      "response": {
+        "type": "OPENING",
+        "materialId": "2abd0f18-1967-4d3f-80c0-c242127007fa",
+        "quantity": 10,
+        "unitCost": 1000,
+        "date": "2026-11-11",
+        "reason": "QA2-DB-1794335962578",
+        "id": "4f2abcb4-b52f-43fb-940f-5e6a6f0338f6",
+        "sequence": 1,
+        "itemEntity": "materials",
+        "materialName": "QA2-DB-1794335962578-backdate-material",
+        "unit": "kg",
+        "amount": 10000,
+        "status": "CONFIRMED",
+        "stockBefore": 0,
+        "stockAfter": 10,
+        "stockValueBefore": 0,
+        "stockValueAfter": 10000,
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-backdate-P",
+        "name": "QA2-DB-1794335962578-backdate-product",
+        "unit": "unit",
+        "trackInventory": true,
+        "status": "ACTIVE"
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-backdate-P",
+        "name": "QA2-DB-1794335962578-backdate-product",
+        "unit": "unit",
+        "trackInventory": true,
+        "status": "ACTIVE",
+        "id": "4cc934cb-3cff-4c03-bc2a-2d74ce3d4eb4",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-backdate-JOB",
+        "productId": "4cc934cb-3cff-4c03-bc2a-2d74ce3d4eb4",
+        "quantity": 1,
+        "plannedMachineCost": 3000,
+        "date": "2026-11-11",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6"
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-backdate-JOB",
+        "productId": "4cc934cb-3cff-4c03-bc2a-2d74ce3d4eb4",
+        "quantity": 1,
+        "plannedMachineCost": 3000,
+        "date": "2026-11-11",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "id": "b3ec8053-521c-451c-bd00-3aa3608f3789",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-backdate-product",
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders/b3ec8053-521c-451c-bd00-3aa3608f3789/actions/start",
+      "role": "OWNER",
+      "request": {},
+      "status": 200,
+      "response": {
+        "id": "b3ec8053-521c-451c-bd00-3aa3608f3789",
+        "code": "QA2-DB-1794335962578-backdate-JOB",
+        "date": "2026-11-11",
+        "status": "IN_PROGRESS",
+        "progress": 0,
+        "quantity": 1,
+        "productId": "4cc934cb-3cff-4c03-bc2a-2d74ce3d4eb4",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "laborHours": 0,
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-backdate-product",
+        "plannedMachineCost": 3000,
+        "syncStatus": "LOCAL_DEMO",
+        "stage": "Đang sản xuất",
+        "startedAt": "2026-11-10T18:39:24.775Z"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders/b3ec8053-521c-451c-bd00-3aa3608f3789/actions/complete",
+      "role": "OWNER",
+      "request": {},
+      "status": 200,
+      "response": {
+        "id": "b3ec8053-521c-451c-bd00-3aa3608f3789",
+        "code": "QA2-DB-1794335962578-backdate-JOB",
+        "date": "2026-11-11",
+        "stage": "Chờ nghiệm thu thành phẩm",
+        "status": "READY_FOR_RECEIPT",
+        "progress": 100,
+        "quantity": 1,
+        "productId": "4cc934cb-3cff-4c03-bc2a-2d74ce3d4eb4",
+        "startedAt": "2026-11-10T18:39:24.775Z",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-backdate-product",
+        "plannedMachineCost": 3000,
+        "completionNote": "",
+        "completedAt": "2026-11-10T18:39:24.792Z"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders/b3ec8053-521c-451c-bd00-3aa3608f3789/actions/receive-finished",
+      "role": "OWNER",
+      "request": {
+        "date": "2026-10-31"
+      },
+      "status": 200,
+      "response": {
+        "id": "b3ec8053-521c-451c-bd00-3aa3608f3789",
+        "code": "QA2-DB-1794335962578-backdate-JOB",
+        "date": "2026-11-11",
+        "stage": "Đã nghiệm thu",
+        "status": "COMPLETED",
+        "progress": 100,
+        "quantity": 1,
+        "productId": "4cc934cb-3cff-4c03-bc2a-2d74ce3d4eb4",
+        "startedAt": "2026-11-10T18:39:24.775Z",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "completedAt": "2026-11-10T18:39:24.792Z",
+        "productName": "QA2-DB-1794335962578-backdate-product",
+        "completionNote": "",
+        "plannedMachineCost": 3000,
+        "actualMaterialCost": 0,
+        "actualLaborCost": 0,
+        "actualMachineCost": 3000,
+        "totalCost": 3000,
+        "unitCost": 3000,
+        "acceptedBy": "QA2-DB-1794335962578",
+        "acceptedAt": "2026-11-10T18:39:24.828Z",
+        "finishedReceiptId": "fa1106e6-ccb7-414a-b153-d00b7b039ac4"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/sme?from=2026-01-01&to=2026-10-31",
+      "role": "OWNER",
+      "status": 200,
+      "response": {
+        "from": "2026-01-01",
+        "to": "2026-10-31",
+        "books": [
+          {
+            "code": "SME-NKC",
+            "title": "Nhật ký nghiệp vụ quản trị",
+            "rows": [
+              {
+                "id": "fa1106e6-ccb7-414a-b153-d00b7b039ac4-0",
+                "date": "2026-10-31",
+                "code": "NK-QA2-DB-1794335962578-backdate-JOB",
+                "sourceId": "fa1106e6-ccb7-414a-b153-d00b7b039ac4",
+                "description": "QA2-DB-1794335962578-backdate-product",
+                "debitAccount": "155",
+                "creditAccount": "154",
+                "debit": 3000,
+                "credit": 3000,
+                "status": "CONFIRMED"
+              }
+            ],
+            "columns": [
+              {
+                "key": "date",
+                "label": "Ngày",
+                "format": "date"
+              },
+              {
+                "key": "code",
+                "label": "Chứng từ"
+              },
+              {
+                "key": "description",
+                "label": "Nội dung"
+              },
+              {
+                "key": "debitAccount",
+                "label": "TK Nợ"
+              },
+              {
+                "key": "creditAccount",
+                "label": "TK Có"
+              },
+              {
+                "key": "debit",
+                "label": "Số tiền",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-TK",
+            "title": "Phát sinh tài khoản trong kỳ",
+            "rows": [
+              {
+                "id": "154",
+                "account": "154",
+                "debit": 0,
+                "credit": 3000,
+                "net": -3000
+              },
+              {
+                "id": "155",
+                "account": "155",
+                "debit": 3000,
+                "credit": 0,
+                "net": 3000
+              }
+            ],
+            "columns": [
+              {
+                "key": "account",
+                "label": "Tài khoản"
+              },
+              {
+                "key": "debit",
+                "label": "Phát sinh Nợ",
+                "format": "money"
+              },
+              {
+                "key": "credit",
+                "label": "Phát sinh Có",
+                "format": "money"
+              },
+              {
+                "key": "net",
+                "label": "Chênh lệch Nợ − Có",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-KHO",
+            "title": "Giá trị tồn nguyên vật liệu và thành phẩm",
+            "rows": [
+              {
+                "id": "6d10420d-23c4-4cfb-9540-08c72bb5a389",
+                "code": "QA2-DB-1794335962578-cancel-M",
+                "name": "QA2-DB-1794335962578-cancel-material",
+                "unit": "kg",
+                "stock": 0,
+                "stockValue": 0,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "2e91c1e5-f855-427d-a8af-314e8f335acd",
+                "code": "QA2-DB-1794335962578-fake-source-M",
+                "name": "QA2-DB-1794335962578-fake-source-material",
+                "unit": "kg",
+                "stock": 0,
+                "stockValue": 0,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "2abd0f18-1967-4d3f-80c0-c242127007fa",
+                "code": "QA2-DB-1794335962578-backdate-M",
+                "name": "QA2-DB-1794335962578-backdate-material",
+                "unit": "kg",
+                "stock": 0,
+                "stockValue": 0,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "ca48cdf1-2335-44e1-b4fd-d2e25508a83c",
+                "code": "QA2-DB-1794335962578-cancel-P",
+                "name": "QA2-DB-1794335962578-cancel-product",
+                "unit": "unit",
+                "stock": 0,
+                "stockValue": 0,
+                "itemEntity": "products"
+              },
+              {
+                "id": "7cc2161f-4607-4e3a-a20a-7f4c4d2c7df2",
+                "code": "QA2-DB-1794335962578-fake-source-P",
+                "name": "QA2-DB-1794335962578-fake-source-product",
+                "unit": "unit",
+                "stock": 0,
+                "stockValue": 0,
+                "itemEntity": "products"
+              },
+              {
+                "id": "4cc934cb-3cff-4c03-bc2a-2d74ce3d4eb4",
+                "code": "QA2-DB-1794335962578-backdate-P",
+                "name": "QA2-DB-1794335962578-backdate-product",
+                "unit": "unit",
+                "stock": 1,
+                "stockValue": 3000,
+                "itemEntity": "products"
+              }
+            ],
+            "columns": [
+              {
+                "key": "code",
+                "label": "Mã"
+              },
+              {
+                "key": "name",
+                "label": "Mặt hàng"
+              },
+              {
+                "key": "unit",
+                "label": "ĐVT"
+              },
+              {
+                "key": "stock",
+                "label": "Số lượng"
+              },
+              {
+                "key": "stockValue",
+                "label": "Giá trị tồn",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-GT",
+            "title": "Chi phí theo lệnh và sản xuất dở dang",
+            "rows": [
+              {
+                "id": "b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555",
+                "code": "QA2-DB-1794335962578-cancel-JOB",
+                "productName": "QA2-DB-1794335962578-cancel-product",
+                "status": "COMPLETED",
+                "quantity": 1,
+                "materialCost": 0,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 0,
+                "finishedValue": 0,
+                "wip": 0
+              },
+              {
+                "id": "6e821129-9378-4d2c-a6ac-c7f3cbb19bfa",
+                "code": "QA2-DB-1794335962578-fake-source-JOB",
+                "productName": "QA2-DB-1794335962578-fake-source-product",
+                "status": "IN_PROGRESS",
+                "quantity": 1,
+                "materialCost": 0,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 0,
+                "finishedValue": 0,
+                "wip": 0
+              },
+              {
+                "id": "b3ec8053-521c-451c-bd00-3aa3608f3789",
+                "code": "QA2-DB-1794335962578-backdate-JOB",
+                "productName": "QA2-DB-1794335962578-backdate-product",
+                "status": "COMPLETED",
+                "quantity": 1,
+                "materialCost": 0,
+                "laborCost": 0,
+                "machineCost": 3000,
+                "totalCost": 3000,
+                "finishedValue": 3000,
+                "wip": 0
+              }
+            ],
+            "columns": [
+              {
+                "key": "code",
+                "label": "Lệnh"
+              },
+              {
+                "key": "productName",
+                "label": "Sản phẩm"
+              },
+              {
+                "key": "materialCost",
+                "label": "Vật tư",
+                "format": "money"
+              },
+              {
+                "key": "laborCost",
+                "label": "Nhân công",
+                "format": "money"
+              },
+              {
+                "key": "machineCost",
+                "label": "Máy phân bổ",
+                "format": "money"
+              },
+              {
+                "key": "finishedValue",
+                "label": "Đã nhập thành phẩm",
+                "format": "money"
+              },
+              {
+                "key": "wip",
+                "label": "Dở dang",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-CN",
+            "title": "Công nợ và tiền chưa phân bổ",
+            "rows": [],
+            "columns": [
+              {
+                "key": "name",
+                "label": "Đối tác"
+              },
+              {
+                "key": "type",
+                "label": "Loại"
+              },
+              {
+                "key": "opening",
+                "label": "Đầu kỳ",
+                "format": "money"
+              },
+              {
+                "key": "openBalance",
+                "label": "Còn nợ hóa đơn",
+                "format": "money"
+              },
+              {
+                "key": "unallocatedAdvance",
+                "label": "Tiền chưa phân bổ",
+                "format": "money"
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "revenue": 0,
+          "cogs": 0,
+          "grossProfit": 0,
+          "operatingExpense": 0,
+          "financeExpense": 0,
+          "financeIncome": 0,
+          "operatingProfit": 0,
+          "rawMaterials": 0,
+          "finishedGoods": 3000,
+          "wip": 0,
+          "debit": 3000,
+          "credit": 3000
+        },
+        "warnings": [
+          "Chi phí máy được ghi nhận theo nghiệm thu; đối chiếu chứng từ chi phí và phân bổ trước khi khóa sổ."
+        ],
+        "note": "Sổ quản trị SME từ các chứng từ đã ghi nhận. Chưa gồm khấu hao, trích trước, thuế TNDN và bút toán khóa sổ; không thay thế bộ báo cáo tài chính hoặc tờ khai thuế.",
+        "settings": {
+          "currency": "VND",
+          "taxMethod": "VAT_CREDIT",
+          "fiscalYearStart": "01-01",
+          "accountingRegime": "TT133",
+          "defaultWarehouse": "Kho chính",
+          "inventoryCostMethod": "MOVING_AVERAGE"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/materials",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-nonstock-M",
+        "name": "QA2-DB-1794335962578-nonstock-material",
+        "unit": "kg",
+        "unitCost": 1000
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-nonstock-M",
+        "name": "QA2-DB-1794335962578-nonstock-material",
+        "unit": "kg",
+        "unitCost": 1000,
+        "id": "a7ccf448-13c5-41bf-96b7-08730466cc80",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "status": "ACTIVE",
+        "trackInventory": true,
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stock-movements",
+      "role": "OWNER",
+      "request": {
+        "type": "OPENING",
+        "materialId": "a7ccf448-13c5-41bf-96b7-08730466cc80",
+        "quantity": 10,
+        "unitCost": 1000,
+        "date": "2026-11-11",
+        "reason": "QA2-DB-1794335962578"
+      },
+      "status": 201,
+      "response": {
+        "type": "OPENING",
+        "materialId": "a7ccf448-13c5-41bf-96b7-08730466cc80",
+        "quantity": 10,
+        "unitCost": 1000,
+        "date": "2026-11-11",
+        "reason": "QA2-DB-1794335962578",
+        "id": "a10d77e8-20ed-4316-9246-9afa04faebf0",
+        "sequence": 1,
+        "itemEntity": "materials",
+        "materialName": "QA2-DB-1794335962578-nonstock-material",
+        "unit": "kg",
+        "amount": 10000,
+        "status": "CONFIRMED",
+        "stockBefore": 0,
+        "stockAfter": 10,
+        "stockValueBefore": 0,
+        "stockValueAfter": 10000,
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-nonstock-P",
+        "name": "QA2-DB-1794335962578-nonstock-product",
+        "unit": "unit",
+        "trackInventory": false,
+        "status": "ACTIVE"
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-nonstock-P",
+        "name": "QA2-DB-1794335962578-nonstock-product",
+        "unit": "unit",
+        "trackInventory": false,
+        "status": "ACTIVE",
+        "id": "d3c1fdaf-418a-4ef3-9256-2fb357c18589",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-nonstock-JOB",
+        "productId": "d3c1fdaf-418a-4ef3-9256-2fb357c18589",
+        "quantity": 1,
+        "plannedMachineCost": 0,
+        "date": "2026-11-11",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6"
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-nonstock-JOB",
+        "productId": "d3c1fdaf-418a-4ef3-9256-2fb357c18589",
+        "quantity": 1,
+        "plannedMachineCost": 0,
+        "date": "2026-11-11",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "id": "3eca4a54-4da5-4b98-a1bc-4fc6a37a81b3",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-nonstock-product",
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders/3eca4a54-4da5-4b98-a1bc-4fc6a37a81b3/actions/start",
+      "role": "OWNER",
+      "request": {},
+      "status": 200,
+      "response": {
+        "id": "3eca4a54-4da5-4b98-a1bc-4fc6a37a81b3",
+        "code": "QA2-DB-1794335962578-nonstock-JOB",
+        "date": "2026-11-11",
+        "status": "IN_PROGRESS",
+        "progress": 0,
+        "quantity": 1,
+        "productId": "d3c1fdaf-418a-4ef3-9256-2fb357c18589",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "laborHours": 0,
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-nonstock-product",
+        "plannedMachineCost": 0,
+        "syncStatus": "LOCAL_DEMO",
+        "stage": "Đang sản xuất",
+        "startedAt": "2026-11-10T18:39:24.969Z"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders/3eca4a54-4da5-4b98-a1bc-4fc6a37a81b3/actions/complete",
+      "role": "OWNER",
+      "request": {},
+      "status": 200,
+      "response": {
+        "id": "3eca4a54-4da5-4b98-a1bc-4fc6a37a81b3",
+        "code": "QA2-DB-1794335962578-nonstock-JOB",
+        "date": "2026-11-11",
+        "stage": "Chờ nghiệm thu thành phẩm",
+        "status": "READY_FOR_RECEIPT",
+        "progress": 100,
+        "quantity": 1,
+        "productId": "d3c1fdaf-418a-4ef3-9256-2fb357c18589",
+        "startedAt": "2026-11-10T18:39:24.969Z",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-nonstock-product",
+        "plannedMachineCost": 0,
+        "completionNote": "",
+        "completedAt": "2026-11-10T18:39:24.992Z"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders/3eca4a54-4da5-4b98-a1bc-4fc6a37a81b3/actions/receive-finished",
+      "role": "OWNER",
+      "request": {
+        "date": "2026-11-11"
+      },
+      "status": 400,
+      "response": {
+        "error": "Chọn mặt hàng đang quản lý tồn kho."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/materials",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-inactivebom-M",
+        "name": "QA2-DB-1794335962578-inactivebom-material",
+        "unit": "kg",
+        "unitCost": 1000
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-inactivebom-M",
+        "name": "QA2-DB-1794335962578-inactivebom-material",
+        "unit": "kg",
+        "unitCost": 1000,
+        "id": "9dd1b64c-7eb0-4c26-a29f-5a94b47a316a",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "status": "ACTIVE",
+        "trackInventory": true,
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stock-movements",
+      "role": "OWNER",
+      "request": {
+        "type": "OPENING",
+        "materialId": "9dd1b64c-7eb0-4c26-a29f-5a94b47a316a",
+        "quantity": 10,
+        "unitCost": 1000,
+        "date": "2026-11-11",
+        "reason": "QA2-DB-1794335962578"
+      },
+      "status": 201,
+      "response": {
+        "type": "OPENING",
+        "materialId": "9dd1b64c-7eb0-4c26-a29f-5a94b47a316a",
+        "quantity": 10,
+        "unitCost": 1000,
+        "date": "2026-11-11",
+        "reason": "QA2-DB-1794335962578",
+        "id": "48bbb824-f207-4fb3-b5c0-dafd4c9b1a03",
+        "sequence": 1,
+        "itemEntity": "materials",
+        "materialName": "QA2-DB-1794335962578-inactivebom-material",
+        "unit": "kg",
+        "amount": 10000,
+        "status": "CONFIRMED",
+        "stockBefore": 0,
+        "stockAfter": 10,
+        "stockValueBefore": 0,
+        "stockValueAfter": 10000,
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-inactivebom-P",
+        "name": "QA2-DB-1794335962578-inactivebom-product",
+        "unit": "unit",
+        "trackInventory": true,
+        "status": "ACTIVE"
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-inactivebom-P",
+        "name": "QA2-DB-1794335962578-inactivebom-product",
+        "unit": "unit",
+        "trackInventory": true,
+        "status": "ACTIVE",
+        "id": "199b22d6-25cc-41a2-84d1-a9b4348a8053",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-inactivebom-JOB",
+        "productId": "199b22d6-25cc-41a2-84d1-a9b4348a8053",
+        "quantity": 1,
+        "plannedMachineCost": 0,
+        "date": "2026-11-11",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6"
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-inactivebom-JOB",
+        "productId": "199b22d6-25cc-41a2-84d1-a9b4348a8053",
+        "quantity": 1,
+        "plannedMachineCost": 0,
+        "date": "2026-11-11",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "id": "3450068a-d1cd-4b08-826e-77137e7e9ca2",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-inactivebom-product",
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/boms",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-INACTIVE-BOM",
+        "productId": "199b22d6-25cc-41a2-84d1-a9b4348a8053",
+        "productName": "QA2-DB-1794335962578-inactivebom-product",
+        "items": [
+          {
+            "materialId": "9dd1b64c-7eb0-4c26-a29f-5a94b47a316a",
+            "quantity": 1
+          }
+        ]
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-INACTIVE-BOM",
+        "productId": "199b22d6-25cc-41a2-84d1-a9b4348a8053",
+        "productName": "QA2-DB-1794335962578-inactivebom-product",
+        "items": [
+          {
+            "materialId": "9dd1b64c-7eb0-4c26-a29f-5a94b47a316a",
+            "name": "QA2-DB-1794335962578-inactivebom-material",
+            "unit": "kg",
+            "quantity": 1,
+            "unitCost": 1000,
+            "amount": 1000
+          }
+        ],
+        "id": "799b01b5-dd88-46d0-98c4-711606a60ac5",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "materialCost": 1000,
+        "laborHours": 0,
+        "laborRate": 0,
+        "machineCost": 0,
+        "wasteRate": 0,
+        "marginRate": 0,
+        "version": 1,
+        "status": "ACTIVE",
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/boms/799b01b5-dd88-46d0-98c4-711606a60ac5",
+      "role": "OWNER",
+      "request": {
+        "status": "INACTIVE"
+      },
+      "status": 200,
+      "response": {
+        "id": "799b01b5-dd88-46d0-98c4-711606a60ac5",
+        "code": "QA2-DB-1794335962578-INACTIVE-BOM",
+        "items": [
+          {
+            "materialId": "9dd1b64c-7eb0-4c26-a29f-5a94b47a316a",
+            "name": "QA2-DB-1794335962578-inactivebom-material",
+            "unit": "kg",
+            "quantity": 1,
+            "unitCost": 1000,
+            "amount": 1000
+          }
+        ],
+        "status": "INACTIVE",
+        "version": 1,
+        "laborRate": 0,
+        "productId": "199b22d6-25cc-41a2-84d1-a9b4348a8053",
+        "wasteRate": 0,
+        "laborHours": 0,
+        "marginRate": 0,
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "machineCost": 0,
+        "productName": "QA2-DB-1794335962578-inactivebom-product",
+        "materialCost": 1000,
+        "syncStatus": "LOCAL_DEMO",
+        "laborCost": 0,
+        "estimatedUnitCost": 1000,
+        "suggestedPrice": 1000
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-INACTIVE-BOM-JOB",
+        "productId": "199b22d6-25cc-41a2-84d1-a9b4348a8053",
+        "bomId": "799b01b5-dd88-46d0-98c4-711606a60ac5",
+        "quantity": 1,
+        "date": "2026-11-11"
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-INACTIVE-BOM-JOB",
+        "productId": "199b22d6-25cc-41a2-84d1-a9b4348a8053",
+        "bomId": "799b01b5-dd88-46d0-98c4-711606a60ac5",
+        "quantity": 1,
+        "date": "2026-11-11",
+        "id": "1f29e1b5-f23a-446c-b3d1-41c43f0eac04",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-inactivebom-product",
+        "bom": {
+          "id": "799b01b5-dd88-46d0-98c4-711606a60ac5",
+          "code": "QA2-DB-1794335962578-INACTIVE-BOM",
+          "items": [
+            {
+              "name": "QA2-DB-1794335962578-inactivebom-material",
+              "unit": "kg",
+              "amount": 1000,
+              "quantity": 1,
+              "unitCost": 1000,
+              "materialId": "9dd1b64c-7eb0-4c26-a29f-5a94b47a316a"
+            }
+          ],
+          "status": "INACTIVE",
+          "version": 1,
+          "laborCost": 0,
+          "laborRate": 0,
+          "productId": "199b22d6-25cc-41a2-84d1-a9b4348a8053",
+          "wasteRate": 0,
+          "laborHours": 0,
+          "marginRate": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "machineCost": 0,
+          "productName": "QA2-DB-1794335962578-inactivebom-product",
+          "materialCost": 1000,
+          "suggestedPrice": 1000,
+          "estimatedUnitCost": 1000
+        },
+        "laborRate": 0,
+        "plannedLaborHours": 0,
+        "plannedMachineCost": 0,
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/materials",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-inactiveproduct-M",
+        "name": "QA2-DB-1794335962578-inactiveproduct-material",
+        "unit": "kg",
+        "unitCost": 1000
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-inactiveproduct-M",
+        "name": "QA2-DB-1794335962578-inactiveproduct-material",
+        "unit": "kg",
+        "unitCost": 1000,
+        "id": "c8272d9d-2d90-4e1e-8ac3-0f6fbecd6ed3",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "status": "ACTIVE",
+        "trackInventory": true,
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stock-movements",
+      "role": "OWNER",
+      "request": {
+        "type": "OPENING",
+        "materialId": "c8272d9d-2d90-4e1e-8ac3-0f6fbecd6ed3",
+        "quantity": 10,
+        "unitCost": 1000,
+        "date": "2026-11-11",
+        "reason": "QA2-DB-1794335962578"
+      },
+      "status": 201,
+      "response": {
+        "type": "OPENING",
+        "materialId": "c8272d9d-2d90-4e1e-8ac3-0f6fbecd6ed3",
+        "quantity": 10,
+        "unitCost": 1000,
+        "date": "2026-11-11",
+        "reason": "QA2-DB-1794335962578",
+        "id": "2773ce98-9a70-48f3-9fe7-23c84c74d4d0",
+        "sequence": 1,
+        "itemEntity": "materials",
+        "materialName": "QA2-DB-1794335962578-inactiveproduct-material",
+        "unit": "kg",
+        "amount": 10000,
+        "status": "CONFIRMED",
+        "stockBefore": 0,
+        "stockAfter": 10,
+        "stockValueBefore": 0,
+        "stockValueAfter": 10000,
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/products",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-inactiveproduct-P",
+        "name": "QA2-DB-1794335962578-inactiveproduct-product",
+        "unit": "unit",
+        "trackInventory": true,
+        "status": "INACTIVE"
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-inactiveproduct-P",
+        "name": "QA2-DB-1794335962578-inactiveproduct-product",
+        "unit": "unit",
+        "trackInventory": true,
+        "status": "INACTIVE",
+        "id": "cb22f0a1-c91b-44e8-bf1f-54cd6be41010",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-inactiveproduct-JOB",
+        "productId": "cb22f0a1-c91b-44e8-bf1f-54cd6be41010",
+        "quantity": 1,
+        "plannedMachineCost": 0,
+        "date": "2026-11-11",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6"
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-inactiveproduct-JOB",
+        "productId": "cb22f0a1-c91b-44e8-bf1f-54cd6be41010",
+        "quantity": 1,
+        "plannedMachineCost": 0,
+        "date": "2026-11-11",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "id": "3c5b58c8-3518-421f-b7eb-65d95d3552a0",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-inactiveproduct-product",
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders/3c5b58c8-3518-421f-b7eb-65d95d3552a0/actions/start",
+      "role": "OWNER",
+      "request": {},
+      "status": 200,
+      "response": {
+        "id": "3c5b58c8-3518-421f-b7eb-65d95d3552a0",
+        "code": "QA2-DB-1794335962578-inactiveproduct-JOB",
+        "date": "2026-11-11",
+        "status": "IN_PROGRESS",
+        "progress": 0,
+        "quantity": 1,
+        "productId": "cb22f0a1-c91b-44e8-bf1f-54cd6be41010",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "laborHours": 0,
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-inactiveproduct-product",
+        "plannedMachineCost": 0,
+        "syncStatus": "LOCAL_DEMO",
+        "stage": "Đang sản xuất",
+        "startedAt": "2026-11-10T18:39:25.275Z"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders/3c5b58c8-3518-421f-b7eb-65d95d3552a0/actions/complete",
+      "role": "OWNER",
+      "request": {},
+      "status": 200,
+      "response": {
+        "id": "3c5b58c8-3518-421f-b7eb-65d95d3552a0",
+        "code": "QA2-DB-1794335962578-inactiveproduct-JOB",
+        "date": "2026-11-11",
+        "stage": "Chờ nghiệm thu thành phẩm",
+        "status": "READY_FOR_RECEIPT",
+        "progress": 100,
+        "quantity": 1,
+        "productId": "cb22f0a1-c91b-44e8-bf1f-54cd6be41010",
+        "startedAt": "2026-11-10T18:39:25.275Z",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-inactiveproduct-product",
+        "plannedMachineCost": 0,
+        "completionNote": "",
+        "completedAt": "2026-11-10T18:39:25.293Z"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders/3c5b58c8-3518-421f-b7eb-65d95d3552a0/actions/receive-finished",
+      "role": "OWNER",
+      "request": {
+        "date": "2026-11-11"
+      },
+      "status": 400,
+      "response": {
+        "error": "Chọn mặt hàng đang quản lý tồn kho."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-RACE-0",
+        "productName": "QA2-DB-1794335962578-race-service",
+        "quantity": 1,
+        "date": "2026-11-11"
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-RACE-0",
+        "productName": "QA2-DB-1794335962578-race-service",
+        "quantity": 1,
+        "date": "2026-11-11",
+        "id": "a5c4f144-4eac-49c8-8008-85d13a19e3fe",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders/a5c4f144-4eac-49c8-8008-85d13a19e3fe/actions/start",
+      "role": "OWNER",
+      "request": {},
+      "status": 200,
+      "response": {
+        "id": "a5c4f144-4eac-49c8-8008-85d13a19e3fe",
+        "code": "QA2-DB-1794335962578-RACE-0",
+        "date": "2026-11-11",
+        "status": "IN_PROGRESS",
+        "progress": 0,
+        "quantity": 1,
+        "laborHours": 0,
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-race-service",
+        "syncStatus": "LOCAL_DEMO",
+        "stage": "Đang sản xuất",
+        "startedAt": "2026-11-10T18:39:25.360Z"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/production-orders/a5c4f144-4eac-49c8-8008-85d13a19e3fe",
+      "role": "OWNER",
+      "request": {
+        "note": "QA2-DB-1794335962578-race-1"
+      },
+      "status": 200,
+      "response": {
+        "id": "a5c4f144-4eac-49c8-8008-85d13a19e3fe",
+        "code": "QA2-DB-1794335962578-RACE-0",
+        "date": "2026-11-11",
+        "status": "DRAFT",
+        "progress": 0,
+        "quantity": 1,
+        "laborHours": 0,
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-race-service",
+        "syncStatus": "LOCAL_DEMO",
+        "note": "QA2-DB-1794335962578-race-1",
+        "laborCost": 0,
+        "estimatedUnitCost": 0,
+        "suggestedPrice": 0,
+        "wasteRate": 0,
+        "marginRate": 0
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/production-orders/a5c4f144-4eac-49c8-8008-85d13a19e3fe",
+      "role": "OWNER",
+      "request": {
+        "note": "QA2-DB-1794335962578-race-3"
+      },
+      "status": 200,
+      "response": {
+        "id": "a5c4f144-4eac-49c8-8008-85d13a19e3fe",
+        "code": "QA2-DB-1794335962578-RACE-0",
+        "date": "2026-11-11",
+        "status": "DRAFT",
+        "progress": 0,
+        "quantity": 1,
+        "laborHours": 0,
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-race-service",
+        "syncStatus": "LOCAL_DEMO",
+        "note": "QA2-DB-1794335962578-race-3",
+        "laborCost": 0,
+        "estimatedUnitCost": 0,
+        "suggestedPrice": 0,
+        "wasteRate": 0,
+        "marginRate": 0
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/production-orders/a5c4f144-4eac-49c8-8008-85d13a19e3fe",
+      "role": "OWNER",
+      "request": {
+        "note": "QA2-DB-1794335962578-race-2"
+      },
+      "status": 200,
+      "response": {
+        "id": "a5c4f144-4eac-49c8-8008-85d13a19e3fe",
+        "code": "QA2-DB-1794335962578-RACE-0",
+        "date": "2026-11-11",
+        "status": "DRAFT",
+        "progress": 0,
+        "quantity": 1,
+        "laborHours": 0,
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-race-service",
+        "syncStatus": "LOCAL_DEMO",
+        "note": "QA2-DB-1794335962578-race-2",
+        "laborCost": 0,
+        "estimatedUnitCost": 0,
+        "suggestedPrice": 0,
+        "wasteRate": 0,
+        "marginRate": 0
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/production-orders/a5c4f144-4eac-49c8-8008-85d13a19e3fe",
+      "role": "OWNER",
+      "request": {
+        "note": "QA2-DB-1794335962578-race-0"
+      },
+      "status": 200,
+      "response": {
+        "id": "a5c4f144-4eac-49c8-8008-85d13a19e3fe",
+        "code": "QA2-DB-1794335962578-RACE-0",
+        "date": "2026-11-11",
+        "status": "DRAFT",
+        "progress": 0,
+        "quantity": 1,
+        "laborHours": 0,
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-race-service",
+        "syncStatus": "LOCAL_DEMO",
+        "note": "QA2-DB-1794335962578-race-0",
+        "laborCost": 0,
+        "estimatedUnitCost": 0,
+        "suggestedPrice": 0,
+        "wasteRate": 0,
+        "marginRate": 0
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/production-orders",
+      "role": "OWNER",
+      "status": 200,
+      "response": [
+        {
+          "id": "a5c4f144-4eac-49c8-8008-85d13a19e3fe",
+          "code": "QA2-DB-1794335962578-RACE-0",
+          "date": "2026-11-11",
+          "note": "QA2-DB-1794335962578-race-0",
+          "status": "DRAFT",
+          "progress": 0,
+          "quantity": 1,
+          "laborCost": 0,
+          "wasteRate": 0,
+          "laborHours": 0,
+          "marginRate": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "productName": "QA2-DB-1794335962578-race-service",
+          "suggestedPrice": 0,
+          "estimatedUnitCost": 0
+        },
+        {
+          "id": "3c5b58c8-3518-421f-b7eb-65d95d3552a0",
+          "code": "QA2-DB-1794335962578-inactiveproduct-JOB",
+          "date": "2026-11-11",
+          "stage": "Chờ nghiệm thu thành phẩm",
+          "status": "READY_FOR_RECEIPT",
+          "progress": 100,
+          "quantity": 1,
+          "productId": "cb22f0a1-c91b-44e8-bf1f-54cd6be41010",
+          "startedAt": "2026-11-10T18:39:25.275Z",
+          "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+          "laborHours": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "completedAt": "2026-11-10T18:39:25.293Z",
+          "productName": "QA2-DB-1794335962578-inactiveproduct-product",
+          "completionNote": "",
+          "plannedMachineCost": 0
+        },
+        {
+          "id": "1f29e1b5-f23a-446c-b3d1-41c43f0eac04",
+          "bom": {
+            "id": "799b01b5-dd88-46d0-98c4-711606a60ac5",
+            "code": "QA2-DB-1794335962578-INACTIVE-BOM",
+            "items": [
+              {
+                "name": "QA2-DB-1794335962578-inactivebom-material",
+                "unit": "kg",
+                "amount": 1000,
+                "quantity": 1,
+                "unitCost": 1000,
+                "materialId": "9dd1b64c-7eb0-4c26-a29f-5a94b47a316a"
+              }
+            ],
+            "status": "INACTIVE",
+            "version": 1,
+            "laborCost": 0,
+            "laborRate": 0,
+            "productId": "199b22d6-25cc-41a2-84d1-a9b4348a8053",
+            "wasteRate": 0,
+            "laborHours": 0,
+            "marginRate": 0,
+            "syncStatus": "LOCAL_DEMO",
+            "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+            "machineCost": 0,
+            "productName": "QA2-DB-1794335962578-inactivebom-product",
+            "materialCost": 1000,
+            "suggestedPrice": 1000,
+            "estimatedUnitCost": 1000
+          },
+          "code": "QA2-DB-1794335962578-INACTIVE-BOM-JOB",
+          "date": "2026-11-11",
+          "bomId": "799b01b5-dd88-46d0-98c4-711606a60ac5",
+          "status": "DRAFT",
+          "progress": 0,
+          "quantity": 1,
+          "laborRate": 0,
+          "productId": "199b22d6-25cc-41a2-84d1-a9b4348a8053",
+          "laborHours": 0,
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "productName": "QA2-DB-1794335962578-inactivebom-product",
+          "plannedLaborHours": 0,
+          "plannedMachineCost": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "bomCode": "QA2-DB-1794335962578-INACTIVE-BOM"
+        },
+        {
+          "id": "3450068a-d1cd-4b08-826e-77137e7e9ca2",
+          "code": "QA2-DB-1794335962578-inactivebom-JOB",
+          "date": "2026-11-11",
+          "status": "DRAFT",
+          "progress": 0,
+          "quantity": 1,
+          "productId": "199b22d6-25cc-41a2-84d1-a9b4348a8053",
+          "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+          "laborHours": 0,
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "productName": "QA2-DB-1794335962578-inactivebom-product",
+          "plannedMachineCost": 0,
+          "syncStatus": "LOCAL_DEMO"
+        },
+        {
+          "id": "3eca4a54-4da5-4b98-a1bc-4fc6a37a81b3",
+          "code": "QA2-DB-1794335962578-nonstock-JOB",
+          "date": "2026-11-11",
+          "stage": "Chờ nghiệm thu thành phẩm",
+          "status": "READY_FOR_RECEIPT",
+          "progress": 100,
+          "quantity": 1,
+          "productId": "d3c1fdaf-418a-4ef3-9256-2fb357c18589",
+          "startedAt": "2026-11-10T18:39:24.969Z",
+          "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+          "laborHours": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "completedAt": "2026-11-10T18:39:24.992Z",
+          "productName": "QA2-DB-1794335962578-nonstock-product",
+          "completionNote": "",
+          "plannedMachineCost": 0
+        },
+        {
+          "id": "b3ec8053-521c-451c-bd00-3aa3608f3789",
+          "code": "QA2-DB-1794335962578-backdate-JOB",
+          "date": "2026-11-11",
+          "stage": "Đã nghiệm thu",
+          "status": "COMPLETED",
+          "progress": 100,
+          "quantity": 1,
+          "unitCost": 3000,
+          "productId": "4cc934cb-3cff-4c03-bc2a-2d74ce3d4eb4",
+          "startedAt": "2026-11-10T18:39:24.775Z",
+          "totalCost": 3000,
+          "acceptedAt": "2026-11-10T18:39:24.828Z",
+          "acceptedBy": "QA2-DB-1794335962578",
+          "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+          "laborHours": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "completedAt": "2026-11-10T18:39:24.792Z",
+          "productName": "QA2-DB-1794335962578-backdate-product",
+          "completionNote": "",
+          "actualLaborCost": 0,
+          "actualMachineCost": 3000,
+          "finishedReceiptId": "fa1106e6-ccb7-414a-b153-d00b7b039ac4",
+          "actualMaterialCost": 0,
+          "plannedMachineCost": 3000
+        },
+        {
+          "id": "6e821129-9378-4d2c-a6ac-c7f3cbb19bfa",
+          "code": "QA2-DB-1794335962578-fake-source-JOB",
+          "date": "2026-11-11",
+          "stage": "Đang sản xuất",
+          "status": "IN_PROGRESS",
+          "progress": 0,
+          "quantity": 1,
+          "productId": "7cc2161f-4607-4e3a-a20a-7f4c4d2c7df2",
+          "startedAt": "2026-11-10T18:39:24.576Z",
+          "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+          "laborHours": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "productName": "QA2-DB-1794335962578-fake-source-product",
+          "plannedMachineCost": 0
+        },
+        {
+          "id": "b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555",
+          "code": "QA2-DB-1794335962578-cancel-JOB",
+          "date": "2026-11-11",
+          "stage": "Đã nghiệm thu",
+          "status": "COMPLETED",
+          "progress": 100,
+          "quantity": 1,
+          "unitCost": 2000,
+          "productId": "ca48cdf1-2335-44e1-b4fd-d2e25508a83c",
+          "startedAt": "2026-11-10T18:39:24.259Z",
+          "totalCost": 2000,
+          "acceptedAt": "2026-11-10T18:39:24.337Z",
+          "acceptedBy": "QA2-DB-1794335962578",
+          "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+          "laborHours": 0,
+          "syncStatus": "LOCAL_DEMO",
+          "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+          "completedAt": "2026-11-10T18:39:24.312Z",
+          "productName": "QA2-DB-1794335962578-cancel-product",
+          "completionNote": "",
+          "actualLaborCost": 0,
+          "actualMachineCost": 0,
+          "finishedReceiptId": "07ed2969-001d-45f8-8ed5-e77337beaa00",
+          "actualMaterialCost": 2000,
+          "plannedMachineCost": 0
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/materials",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-lock-service-M",
+        "name": "QA2-DB-1794335962578-lock-service-material",
+        "unit": "kg",
+        "unitCost": 1000
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-lock-service-M",
+        "name": "QA2-DB-1794335962578-lock-service-material",
+        "unit": "kg",
+        "unitCost": 1000,
+        "id": "32f7f643-87c4-459f-bc75-fcfed7d85be4",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "status": "ACTIVE",
+        "trackInventory": true,
+        "stock": 0,
+        "stockValue": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stock-movements",
+      "role": "OWNER",
+      "request": {
+        "type": "OPENING",
+        "materialId": "32f7f643-87c4-459f-bc75-fcfed7d85be4",
+        "quantity": 10,
+        "unitCost": 1000,
+        "date": "2026-11-11",
+        "reason": "QA2-DB-1794335962578"
+      },
+      "status": 201,
+      "response": {
+        "type": "OPENING",
+        "materialId": "32f7f643-87c4-459f-bc75-fcfed7d85be4",
+        "quantity": 10,
+        "unitCost": 1000,
+        "date": "2026-11-11",
+        "reason": "QA2-DB-1794335962578",
+        "id": "1c93a96b-1f74-49f4-9f50-5670842ebf64",
+        "sequence": 1,
+        "itemEntity": "materials",
+        "materialName": "QA2-DB-1794335962578-lock-service-material",
+        "unit": "kg",
+        "amount": 10000,
+        "status": "CONFIRMED",
+        "stockBefore": 0,
+        "stockAfter": 10,
+        "stockValueBefore": 0,
+        "stockValueAfter": 10000,
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders",
+      "role": "OWNER",
+      "request": {
+        "code": "QA2-DB-1794335962578-lock-service-JOB",
+        "productName": "QA2-DB-1794335962578-lock-service-service",
+        "quantity": 1,
+        "plannedMachineCost": 0,
+        "date": "2026-11-11",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6"
+      },
+      "status": 201,
+      "response": {
+        "code": "QA2-DB-1794335962578-lock-service-JOB",
+        "productName": "QA2-DB-1794335962578-lock-service-service",
+        "quantity": 1,
+        "plannedMachineCost": 0,
+        "date": "2026-11-11",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "id": "cce457ff-9bf7-48d2-99f2-b7c76c101c26",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "status": "DRAFT",
+        "progress": 0,
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders/cce457ff-9bf7-48d2-99f2-b7c76c101c26/actions/start",
+      "role": "OWNER",
+      "request": {},
+      "status": 200,
+      "response": {
+        "id": "cce457ff-9bf7-48d2-99f2-b7c76c101c26",
+        "code": "QA2-DB-1794335962578-lock-service-JOB",
+        "date": "2026-11-11",
+        "status": "IN_PROGRESS",
+        "progress": 0,
+        "quantity": 1,
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "laborHours": 0,
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-lock-service-service",
+        "plannedMachineCost": 0,
+        "syncStatus": "LOCAL_DEMO",
+        "stage": "Đang sản xuất",
+        "startedAt": "2026-11-10T18:39:25.528Z"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stock-movements",
+      "role": "OWNER",
+      "request": {
+        "type": "ISSUE",
+        "materialId": "32f7f643-87c4-459f-bc75-fcfed7d85be4",
+        "productionOrderId": "cce457ff-9bf7-48d2-99f2-b7c76c101c26",
+        "quantity": 2,
+        "date": "2026-11-11"
+      },
+      "status": 201,
+      "response": {
+        "type": "ISSUE",
+        "materialId": "32f7f643-87c4-459f-bc75-fcfed7d85be4",
+        "productionOrderId": "cce457ff-9bf7-48d2-99f2-b7c76c101c26",
+        "quantity": 2,
+        "date": "2026-11-11",
+        "id": "d5366b49-e1f3-4bd8-a667-a3afaba9e269",
+        "sequence": 2,
+        "itemEntity": "materials",
+        "materialName": "QA2-DB-1794335962578-lock-service-material",
+        "unit": "kg",
+        "unitCost": 1000,
+        "amount": 2000,
+        "status": "CONFIRMED",
+        "stockBefore": 10,
+        "stockAfter": 8,
+        "stockValueBefore": 10000,
+        "stockValueAfter": 8000,
+        "reason": "",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders/cce457ff-9bf7-48d2-99f2-b7c76c101c26/actions/complete",
+      "role": "OWNER",
+      "request": {},
+      "status": 200,
+      "response": {
+        "id": "cce457ff-9bf7-48d2-99f2-b7c76c101c26",
+        "code": "QA2-DB-1794335962578-lock-service-JOB",
+        "date": "2026-11-11",
+        "stage": "Hoàn thành dịch vụ",
+        "status": "COMPLETED",
+        "progress": 100,
+        "quantity": 1,
+        "startedAt": "2026-11-10T18:39:25.528Z",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "productName": "QA2-DB-1794335962578-lock-service-service",
+        "plannedMachineCost": 0,
+        "completionNote": "",
+        "completedAt": "2026-11-10T18:39:25.589Z"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/sme?from=2026-01-01&to=2026-11-11",
+      "role": "OWNER",
+      "status": 200,
+      "response": {
+        "from": "2026-01-01",
+        "to": "2026-11-11",
+        "books": [
+          {
+            "code": "SME-NKC",
+            "title": "Nhật ký nghiệp vụ quản trị",
+            "rows": [
+              {
+                "id": "fa1106e6-ccb7-414a-b153-d00b7b039ac4-6",
+                "date": "2026-10-31",
+                "code": "NK-QA2-DB-1794335962578-backdate-JOB",
+                "sourceId": "fa1106e6-ccb7-414a-b153-d00b7b039ac4",
+                "description": "QA2-DB-1794335962578-backdate-product",
+                "debitAccount": "155",
+                "creditAccount": "154",
+                "debit": 3000,
+                "credit": 3000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "machine-b3ec8053-521c-451c-bd00-3aa3608f3789-12",
+                "date": "2026-11-10",
+                "code": "QA2-DB-1794335962578-backdate-JOB",
+                "sourceId": "machine-b3ec8053-521c-451c-bd00-3aa3608f3789",
+                "description": "Chi phí máy phân bổ · cần đối chiếu nguồn",
+                "debitAccount": "154",
+                "creditAccount": "3388",
+                "debit": 3000,
+                "credit": 3000
+              },
+              {
+                "id": "service-cce457ff-9bf7-48d2-99f2-b7c76c101c26-13",
+                "date": "2026-11-10",
+                "code": "QA2-DB-1794335962578-lock-service-JOB",
+                "sourceId": "service-cce457ff-9bf7-48d2-99f2-b7c76c101c26",
+                "description": "Kết chuyển chi phí dịch vụ hoàn thành",
+                "debitAccount": "632",
+                "creditAccount": "154",
+                "debit": 2000,
+                "credit": 2000
+              },
+              {
+                "id": "f5d3f1ca-6c7b-4115-ade3-3ea1b744e11f-0",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "f5d3f1ca-6c7b-4115-ade3-3ea1b744e11f",
+                "description": "QA2-DB-1794335962578-cancel-material",
+                "debitAccount": "152",
+                "creditAccount": "411",
+                "debit": 10000,
+                "credit": 10000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "6971532c-ccd8-49ed-81d1-bd6a3d0949e3-2",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "6971532c-ccd8-49ed-81d1-bd6a3d0949e3",
+                "description": "QA2-DB-1794335962578-fake-source-material",
+                "debitAccount": "152",
+                "creditAccount": "411",
+                "debit": 10000,
+                "credit": 10000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "90eb72ae-85d2-4fea-b2ec-b13c5ac38fba-3",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "90eb72ae-85d2-4fea-b2ec-b13c5ac38fba",
+                "description": "QA2-DB-1794335962578-fake-source-material",
+                "debitAccount": "154",
+                "creditAccount": "152",
+                "debit": 2000,
+                "credit": 2000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "2667ed9a-9e4b-4766-b2cb-3fb4e2b6403e-4",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "2667ed9a-9e4b-4766-b2cb-3fb4e2b6403e",
+                "description": "QA2-DB-1794335962578-fake-source-material",
+                "debitAccount": "152",
+                "creditAccount": "3388",
+                "debit": 2000,
+                "credit": 2000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "4f2abcb4-b52f-43fb-940f-5e6a6f0338f6-5",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "4f2abcb4-b52f-43fb-940f-5e6a6f0338f6",
+                "description": "QA2-DB-1794335962578-backdate-material",
+                "debitAccount": "152",
+                "creditAccount": "411",
+                "debit": 10000,
+                "credit": 10000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "2773ce98-9a70-48f3-9fe7-23c84c74d4d0-7",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "2773ce98-9a70-48f3-9fe7-23c84c74d4d0",
+                "description": "QA2-DB-1794335962578-inactiveproduct-material",
+                "debitAccount": "152",
+                "creditAccount": "411",
+                "debit": 10000,
+                "credit": 10000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "a10d77e8-20ed-4316-9246-9afa04faebf0-8",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "a10d77e8-20ed-4316-9246-9afa04faebf0",
+                "description": "QA2-DB-1794335962578-nonstock-material",
+                "debitAccount": "152",
+                "creditAccount": "411",
+                "debit": 10000,
+                "credit": 10000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "48bbb824-f207-4fb3-b5c0-dafd4c9b1a03-9",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "48bbb824-f207-4fb3-b5c0-dafd4c9b1a03",
+                "description": "QA2-DB-1794335962578-inactivebom-material",
+                "debitAccount": "152",
+                "creditAccount": "411",
+                "debit": 10000,
+                "credit": 10000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "1c93a96b-1f74-49f4-9f50-5670842ebf64-10",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "1c93a96b-1f74-49f4-9f50-5670842ebf64",
+                "description": "QA2-DB-1794335962578-lock-service-material",
+                "debitAccount": "152",
+                "creditAccount": "411",
+                "debit": 10000,
+                "credit": 10000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "d5366b49-e1f3-4bd8-a667-a3afaba9e269-11",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "d5366b49-e1f3-4bd8-a667-a3afaba9e269",
+                "description": "QA2-DB-1794335962578-lock-service-material",
+                "debitAccount": "154",
+                "creditAccount": "152",
+                "debit": 2000,
+                "credit": 2000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "07ed2969-001d-45f8-8ed5-e77337beaa00-1",
+                "date": "2026-11-11",
+                "code": "NK-QA2-DB-1794335962578-cancel-JOB",
+                "sourceId": "07ed2969-001d-45f8-8ed5-e77337beaa00",
+                "description": "QA2-DB-1794335962578-cancel-product",
+                "debitAccount": "155",
+                "creditAccount": "154",
+                "debit": 2000,
+                "credit": 2000,
+                "status": "CONFIRMED"
+              }
+            ],
+            "columns": [
+              {
+                "key": "date",
+                "label": "Ngày",
+                "format": "date"
+              },
+              {
+                "key": "code",
+                "label": "Chứng từ"
+              },
+              {
+                "key": "description",
+                "label": "Nội dung"
+              },
+              {
+                "key": "debitAccount",
+                "label": "TK Nợ"
+              },
+              {
+                "key": "creditAccount",
+                "label": "TK Có"
+              },
+              {
+                "key": "debit",
+                "label": "Số tiền",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-TK",
+            "title": "Phát sinh tài khoản trong kỳ",
+            "rows": [
+              {
+                "id": "152",
+                "account": "152",
+                "debit": 72000,
+                "credit": 4000,
+                "net": 68000
+              },
+              {
+                "id": "154",
+                "account": "154",
+                "debit": 7000,
+                "credit": 7000,
+                "net": 0
+              },
+              {
+                "id": "155",
+                "account": "155",
+                "debit": 5000,
+                "credit": 0,
+                "net": 5000
+              },
+              {
+                "id": "3388",
+                "account": "3388",
+                "debit": 0,
+                "credit": 5000,
+                "net": -5000
+              },
+              {
+                "id": "411",
+                "account": "411",
+                "debit": 0,
+                "credit": 70000,
+                "net": -70000
+              },
+              {
+                "id": "632",
+                "account": "632",
+                "debit": 2000,
+                "credit": 0,
+                "net": 2000
+              }
+            ],
+            "columns": [
+              {
+                "key": "account",
+                "label": "Tài khoản"
+              },
+              {
+                "key": "debit",
+                "label": "Phát sinh Nợ",
+                "format": "money"
+              },
+              {
+                "key": "credit",
+                "label": "Phát sinh Có",
+                "format": "money"
+              },
+              {
+                "key": "net",
+                "label": "Chênh lệch Nợ − Có",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-KHO",
+            "title": "Giá trị tồn nguyên vật liệu và thành phẩm",
+            "rows": [
+              {
+                "id": "6d10420d-23c4-4cfb-9540-08c72bb5a389",
+                "code": "QA2-DB-1794335962578-cancel-M",
+                "name": "QA2-DB-1794335962578-cancel-material",
+                "unit": "kg",
+                "stock": 10,
+                "stockValue": 10000,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "2e91c1e5-f855-427d-a8af-314e8f335acd",
+                "code": "QA2-DB-1794335962578-fake-source-M",
+                "name": "QA2-DB-1794335962578-fake-source-material",
+                "unit": "kg",
+                "stock": 10,
+                "stockValue": 10000,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "2abd0f18-1967-4d3f-80c0-c242127007fa",
+                "code": "QA2-DB-1794335962578-backdate-M",
+                "name": "QA2-DB-1794335962578-backdate-material",
+                "unit": "kg",
+                "stock": 10,
+                "stockValue": 10000,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "a7ccf448-13c5-41bf-96b7-08730466cc80",
+                "code": "QA2-DB-1794335962578-nonstock-M",
+                "name": "QA2-DB-1794335962578-nonstock-material",
+                "unit": "kg",
+                "stock": 10,
+                "stockValue": 10000,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "9dd1b64c-7eb0-4c26-a29f-5a94b47a316a",
+                "code": "QA2-DB-1794335962578-inactivebom-M",
+                "name": "QA2-DB-1794335962578-inactivebom-material",
+                "unit": "kg",
+                "stock": 10,
+                "stockValue": 10000,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "c8272d9d-2d90-4e1e-8ac3-0f6fbecd6ed3",
+                "code": "QA2-DB-1794335962578-inactiveproduct-M",
+                "name": "QA2-DB-1794335962578-inactiveproduct-material",
+                "unit": "kg",
+                "stock": 10,
+                "stockValue": 10000,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "32f7f643-87c4-459f-bc75-fcfed7d85be4",
+                "code": "QA2-DB-1794335962578-lock-service-M",
+                "name": "QA2-DB-1794335962578-lock-service-material",
+                "unit": "kg",
+                "stock": 8,
+                "stockValue": 8000,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "ca48cdf1-2335-44e1-b4fd-d2e25508a83c",
+                "code": "QA2-DB-1794335962578-cancel-P",
+                "name": "QA2-DB-1794335962578-cancel-product",
+                "unit": "unit",
+                "stock": 1,
+                "stockValue": 2000,
+                "itemEntity": "products"
+              },
+              {
+                "id": "7cc2161f-4607-4e3a-a20a-7f4c4d2c7df2",
+                "code": "QA2-DB-1794335962578-fake-source-P",
+                "name": "QA2-DB-1794335962578-fake-source-product",
+                "unit": "unit",
+                "stock": 0,
+                "stockValue": 0,
+                "itemEntity": "products"
+              },
+              {
+                "id": "4cc934cb-3cff-4c03-bc2a-2d74ce3d4eb4",
+                "code": "QA2-DB-1794335962578-backdate-P",
+                "name": "QA2-DB-1794335962578-backdate-product",
+                "unit": "unit",
+                "stock": 1,
+                "stockValue": 3000,
+                "itemEntity": "products"
+              },
+              {
+                "id": "199b22d6-25cc-41a2-84d1-a9b4348a8053",
+                "code": "QA2-DB-1794335962578-inactivebom-P",
+                "name": "QA2-DB-1794335962578-inactivebom-product",
+                "unit": "unit",
+                "stock": 0,
+                "stockValue": 0,
+                "itemEntity": "products"
+              },
+              {
+                "id": "cb22f0a1-c91b-44e8-bf1f-54cd6be41010",
+                "code": "QA2-DB-1794335962578-inactiveproduct-P",
+                "name": "QA2-DB-1794335962578-inactiveproduct-product",
+                "unit": "unit",
+                "stock": 0,
+                "stockValue": 0,
+                "itemEntity": "products"
+              }
+            ],
+            "columns": [
+              {
+                "key": "code",
+                "label": "Mã"
+              },
+              {
+                "key": "name",
+                "label": "Mặt hàng"
+              },
+              {
+                "key": "unit",
+                "label": "ĐVT"
+              },
+              {
+                "key": "stock",
+                "label": "Số lượng"
+              },
+              {
+                "key": "stockValue",
+                "label": "Giá trị tồn",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-GT",
+            "title": "Chi phí theo lệnh và sản xuất dở dang",
+            "rows": [
+              {
+                "id": "b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555",
+                "code": "QA2-DB-1794335962578-cancel-JOB",
+                "productName": "QA2-DB-1794335962578-cancel-product",
+                "status": "COMPLETED",
+                "quantity": 1,
+                "materialCost": 0,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 0,
+                "finishedValue": 2000,
+                "wip": 0
+              },
+              {
+                "id": "6e821129-9378-4d2c-a6ac-c7f3cbb19bfa",
+                "code": "QA2-DB-1794335962578-fake-source-JOB",
+                "productName": "QA2-DB-1794335962578-fake-source-product",
+                "status": "IN_PROGRESS",
+                "quantity": 1,
+                "materialCost": 2000,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 2000,
+                "finishedValue": 2000,
+                "wip": 0
+              },
+              {
+                "id": "1f29e1b5-f23a-446c-b3d1-41c43f0eac04",
+                "code": "QA2-DB-1794335962578-INACTIVE-BOM-JOB",
+                "productName": "QA2-DB-1794335962578-inactivebom-product",
+                "status": "DRAFT",
+                "quantity": 1,
+                "materialCost": 0,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 0,
+                "finishedValue": 0,
+                "wip": 0
+              },
+              {
+                "id": "b3ec8053-521c-451c-bd00-3aa3608f3789",
+                "code": "QA2-DB-1794335962578-backdate-JOB",
+                "productName": "QA2-DB-1794335962578-backdate-product",
+                "status": "COMPLETED",
+                "quantity": 1,
+                "materialCost": 0,
+                "laborCost": 0,
+                "machineCost": 3000,
+                "totalCost": 3000,
+                "finishedValue": 3000,
+                "wip": 0
+              },
+              {
+                "id": "3eca4a54-4da5-4b98-a1bc-4fc6a37a81b3",
+                "code": "QA2-DB-1794335962578-nonstock-JOB",
+                "productName": "QA2-DB-1794335962578-nonstock-product",
+                "status": "READY_FOR_RECEIPT",
+                "quantity": 1,
+                "materialCost": 0,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 0,
+                "finishedValue": 0,
+                "wip": 0
+              },
+              {
+                "id": "3450068a-d1cd-4b08-826e-77137e7e9ca2",
+                "code": "QA2-DB-1794335962578-inactivebom-JOB",
+                "productName": "QA2-DB-1794335962578-inactivebom-product",
+                "status": "DRAFT",
+                "quantity": 1,
+                "materialCost": 0,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 0,
+                "finishedValue": 0,
+                "wip": 0
+              },
+              {
+                "id": "3c5b58c8-3518-421f-b7eb-65d95d3552a0",
+                "code": "QA2-DB-1794335962578-inactiveproduct-JOB",
+                "productName": "QA2-DB-1794335962578-inactiveproduct-product",
+                "status": "READY_FOR_RECEIPT",
+                "quantity": 1,
+                "materialCost": 0,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 0,
+                "finishedValue": 0,
+                "wip": 0
+              },
+              {
+                "id": "a5c4f144-4eac-49c8-8008-85d13a19e3fe",
+                "code": "QA2-DB-1794335962578-RACE-0",
+                "productName": "QA2-DB-1794335962578-race-service",
+                "status": "DRAFT",
+                "quantity": 1,
+                "materialCost": 0,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 0,
+                "finishedValue": 0,
+                "wip": 0
+              },
+              {
+                "id": "cce457ff-9bf7-48d2-99f2-b7c76c101c26",
+                "code": "QA2-DB-1794335962578-lock-service-JOB",
+                "productName": "QA2-DB-1794335962578-lock-service-service",
+                "status": "COMPLETED",
+                "quantity": 1,
+                "materialCost": 2000,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 2000,
+                "finishedValue": 0,
+                "wip": 0
+              }
+            ],
+            "columns": [
+              {
+                "key": "code",
+                "label": "Lệnh"
+              },
+              {
+                "key": "productName",
+                "label": "Sản phẩm"
+              },
+              {
+                "key": "materialCost",
+                "label": "Vật tư",
+                "format": "money"
+              },
+              {
+                "key": "laborCost",
+                "label": "Nhân công",
+                "format": "money"
+              },
+              {
+                "key": "machineCost",
+                "label": "Máy phân bổ",
+                "format": "money"
+              },
+              {
+                "key": "finishedValue",
+                "label": "Đã nhập thành phẩm",
+                "format": "money"
+              },
+              {
+                "key": "wip",
+                "label": "Dở dang",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-CN",
+            "title": "Công nợ và tiền chưa phân bổ",
+            "rows": [],
+            "columns": [
+              {
+                "key": "name",
+                "label": "Đối tác"
+              },
+              {
+                "key": "type",
+                "label": "Loại"
+              },
+              {
+                "key": "opening",
+                "label": "Đầu kỳ",
+                "format": "money"
+              },
+              {
+                "key": "openBalance",
+                "label": "Còn nợ hóa đơn",
+                "format": "money"
+              },
+              {
+                "key": "unallocatedAdvance",
+                "label": "Tiền chưa phân bổ",
+                "format": "money"
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "revenue": 0,
+          "cogs": 2000,
+          "grossProfit": -2000,
+          "operatingExpense": 0,
+          "financeExpense": 0,
+          "financeIncome": 0,
+          "operatingProfit": -2000,
+          "rawMaterials": 68000,
+          "finishedGoods": 5000,
+          "wip": 0,
+          "debit": 86000,
+          "credit": 86000
+        },
+        "warnings": [
+          "Chi phí máy được ghi nhận theo nghiệm thu; đối chiếu chứng từ chi phí và phân bổ trước khi khóa sổ."
+        ],
+        "note": "Sổ quản trị SME từ các chứng từ đã ghi nhận. Chưa gồm khấu hao, trích trước, thuế TNDN và bút toán khóa sổ; không thay thế bộ báo cáo tài chính hoặc tờ khai thuế.",
+        "settings": {
+          "currency": "VND",
+          "taxMethod": "VAT_CREDIT",
+          "fiscalYearStart": "01-01",
+          "accountingRegime": "TT133",
+          "defaultWarehouse": "Kho chính",
+          "inventoryCostMethod": "MOVING_AVERAGE"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tax-periods",
+      "role": "OWNER",
+      "request": {
+        "name": "QA2-DB-1794335962578-lock",
+        "startDate": "2026-11-10",
+        "endDate": "2026-11-11"
+      },
+      "status": 201,
+      "response": {
+        "name": "QA2-DB-1794335962578-lock",
+        "startDate": "2026-11-10",
+        "endDate": "2026-11-11",
+        "id": "30f04051-7996-41ec-a5e8-4f85568f22ab",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "status": "OPEN",
+        "syncStatus": "LOCAL_DEMO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tax-periods/30f04051-7996-41ec-a5e8-4f85568f22ab/actions/lock",
+      "role": "OWNER",
+      "request": {},
+      "status": 200,
+      "response": {
+        "id": "30f04051-7996-41ec-a5e8-4f85568f22ab",
+        "name": "QA2-DB-1794335962578-lock",
+        "status": "LOCKED",
+        "endDate": "2026-11-11",
+        "startDate": "2026-11-10",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "syncStatus": "LOCAL_DEMO",
+        "lockedBy": "QA2-DB-1794335962578",
+        "lockedAt": "2026-11-10T18:39:25.634Z"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/production-orders/cce457ff-9bf7-48d2-99f2-b7c76c101c26/actions/reopen",
+      "role": "OWNER",
+      "request": {
+        "date": "2026-11-12",
+        "note": "QA2-DB-1794335962578"
+      },
+      "status": 200,
+      "response": {
+        "id": "cce457ff-9bf7-48d2-99f2-b7c76c101c26",
+        "code": "QA2-DB-1794335962578-lock-service-JOB",
+        "date": "2026-11-11",
+        "stage": "Đã mở lại",
+        "status": "IN_PROGRESS",
+        "progress": 99,
+        "quantity": 1,
+        "startedAt": "2026-11-10T18:39:25.528Z",
+        "assignedTo": "87b780f1-b3da-4cdb-a1ae-a0184abd78b6",
+        "laborHours": 0,
+        "syncStatus": "LOCAL_DEMO",
+        "workshopId": "daf5e654-552f-4f71-bdd2-bb9fe05b8d5e",
+        "completedAt": "2026-11-10T18:39:25.589Z",
+        "productName": "QA2-DB-1794335962578-lock-service-service",
+        "completionNote": "",
+        "plannedMachineCost": 0,
+        "reopenReason": "QA2-DB-1794335962578"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/sme?from=2026-01-01&to=2026-11-11",
+      "role": "OWNER",
+      "status": 200,
+      "response": {
+        "from": "2026-01-01",
+        "to": "2026-11-11",
+        "books": [
+          {
+            "code": "SME-NKC",
+            "title": "Nhật ký nghiệp vụ quản trị",
+            "rows": [
+              {
+                "id": "fa1106e6-ccb7-414a-b153-d00b7b039ac4-6",
+                "date": "2026-10-31",
+                "code": "NK-QA2-DB-1794335962578-backdate-JOB",
+                "sourceId": "fa1106e6-ccb7-414a-b153-d00b7b039ac4",
+                "description": "QA2-DB-1794335962578-backdate-product",
+                "debitAccount": "155",
+                "creditAccount": "154",
+                "debit": 3000,
+                "credit": 3000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "machine-b3ec8053-521c-451c-bd00-3aa3608f3789-12",
+                "date": "2026-11-10",
+                "code": "QA2-DB-1794335962578-backdate-JOB",
+                "sourceId": "machine-b3ec8053-521c-451c-bd00-3aa3608f3789",
+                "description": "Chi phí máy phân bổ · cần đối chiếu nguồn",
+                "debitAccount": "154",
+                "creditAccount": "3388",
+                "debit": 3000,
+                "credit": 3000
+              },
+              {
+                "id": "f5d3f1ca-6c7b-4115-ade3-3ea1b744e11f-0",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "f5d3f1ca-6c7b-4115-ade3-3ea1b744e11f",
+                "description": "QA2-DB-1794335962578-cancel-material",
+                "debitAccount": "152",
+                "creditAccount": "411",
+                "debit": 10000,
+                "credit": 10000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "6971532c-ccd8-49ed-81d1-bd6a3d0949e3-2",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "6971532c-ccd8-49ed-81d1-bd6a3d0949e3",
+                "description": "QA2-DB-1794335962578-fake-source-material",
+                "debitAccount": "152",
+                "creditAccount": "411",
+                "debit": 10000,
+                "credit": 10000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "90eb72ae-85d2-4fea-b2ec-b13c5ac38fba-3",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "90eb72ae-85d2-4fea-b2ec-b13c5ac38fba",
+                "description": "QA2-DB-1794335962578-fake-source-material",
+                "debitAccount": "154",
+                "creditAccount": "152",
+                "debit": 2000,
+                "credit": 2000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "2667ed9a-9e4b-4766-b2cb-3fb4e2b6403e-4",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "2667ed9a-9e4b-4766-b2cb-3fb4e2b6403e",
+                "description": "QA2-DB-1794335962578-fake-source-material",
+                "debitAccount": "152",
+                "creditAccount": "3388",
+                "debit": 2000,
+                "credit": 2000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "4f2abcb4-b52f-43fb-940f-5e6a6f0338f6-5",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "4f2abcb4-b52f-43fb-940f-5e6a6f0338f6",
+                "description": "QA2-DB-1794335962578-backdate-material",
+                "debitAccount": "152",
+                "creditAccount": "411",
+                "debit": 10000,
+                "credit": 10000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "2773ce98-9a70-48f3-9fe7-23c84c74d4d0-7",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "2773ce98-9a70-48f3-9fe7-23c84c74d4d0",
+                "description": "QA2-DB-1794335962578-inactiveproduct-material",
+                "debitAccount": "152",
+                "creditAccount": "411",
+                "debit": 10000,
+                "credit": 10000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "a10d77e8-20ed-4316-9246-9afa04faebf0-8",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "a10d77e8-20ed-4316-9246-9afa04faebf0",
+                "description": "QA2-DB-1794335962578-nonstock-material",
+                "debitAccount": "152",
+                "creditAccount": "411",
+                "debit": 10000,
+                "credit": 10000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "48bbb824-f207-4fb3-b5c0-dafd4c9b1a03-9",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "48bbb824-f207-4fb3-b5c0-dafd4c9b1a03",
+                "description": "QA2-DB-1794335962578-inactivebom-material",
+                "debitAccount": "152",
+                "creditAccount": "411",
+                "debit": 10000,
+                "credit": 10000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "1c93a96b-1f74-49f4-9f50-5670842ebf64-10",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "1c93a96b-1f74-49f4-9f50-5670842ebf64",
+                "description": "QA2-DB-1794335962578-lock-service-material",
+                "debitAccount": "152",
+                "creditAccount": "411",
+                "debit": 10000,
+                "credit": 10000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "d5366b49-e1f3-4bd8-a667-a3afaba9e269-11",
+                "date": "2026-11-11",
+                "code": "",
+                "sourceId": "d5366b49-e1f3-4bd8-a667-a3afaba9e269",
+                "description": "QA2-DB-1794335962578-lock-service-material",
+                "debitAccount": "154",
+                "creditAccount": "152",
+                "debit": 2000,
+                "credit": 2000,
+                "status": "CONFIRMED"
+              },
+              {
+                "id": "07ed2969-001d-45f8-8ed5-e77337beaa00-1",
+                "date": "2026-11-11",
+                "code": "NK-QA2-DB-1794335962578-cancel-JOB",
+                "sourceId": "07ed2969-001d-45f8-8ed5-e77337beaa00",
+                "description": "QA2-DB-1794335962578-cancel-product",
+                "debitAccount": "155",
+                "creditAccount": "154",
+                "debit": 2000,
+                "credit": 2000,
+                "status": "CONFIRMED"
+              }
+            ],
+            "columns": [
+              {
+                "key": "date",
+                "label": "Ngày",
+                "format": "date"
+              },
+              {
+                "key": "code",
+                "label": "Chứng từ"
+              },
+              {
+                "key": "description",
+                "label": "Nội dung"
+              },
+              {
+                "key": "debitAccount",
+                "label": "TK Nợ"
+              },
+              {
+                "key": "creditAccount",
+                "label": "TK Có"
+              },
+              {
+                "key": "debit",
+                "label": "Số tiền",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-TK",
+            "title": "Phát sinh tài khoản trong kỳ",
+            "rows": [
+              {
+                "id": "152",
+                "account": "152",
+                "debit": 72000,
+                "credit": 4000,
+                "net": 68000
+              },
+              {
+                "id": "154",
+                "account": "154",
+                "debit": 7000,
+                "credit": 5000,
+                "net": 2000
+              },
+              {
+                "id": "155",
+                "account": "155",
+                "debit": 5000,
+                "credit": 0,
+                "net": 5000
+              },
+              {
+                "id": "3388",
+                "account": "3388",
+                "debit": 0,
+                "credit": 5000,
+                "net": -5000
+              },
+              {
+                "id": "411",
+                "account": "411",
+                "debit": 0,
+                "credit": 70000,
+                "net": -70000
+              }
+            ],
+            "columns": [
+              {
+                "key": "account",
+                "label": "Tài khoản"
+              },
+              {
+                "key": "debit",
+                "label": "Phát sinh Nợ",
+                "format": "money"
+              },
+              {
+                "key": "credit",
+                "label": "Phát sinh Có",
+                "format": "money"
+              },
+              {
+                "key": "net",
+                "label": "Chênh lệch Nợ − Có",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-KHO",
+            "title": "Giá trị tồn nguyên vật liệu và thành phẩm",
+            "rows": [
+              {
+                "id": "6d10420d-23c4-4cfb-9540-08c72bb5a389",
+                "code": "QA2-DB-1794335962578-cancel-M",
+                "name": "QA2-DB-1794335962578-cancel-material",
+                "unit": "kg",
+                "stock": 10,
+                "stockValue": 10000,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "2e91c1e5-f855-427d-a8af-314e8f335acd",
+                "code": "QA2-DB-1794335962578-fake-source-M",
+                "name": "QA2-DB-1794335962578-fake-source-material",
+                "unit": "kg",
+                "stock": 10,
+                "stockValue": 10000,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "2abd0f18-1967-4d3f-80c0-c242127007fa",
+                "code": "QA2-DB-1794335962578-backdate-M",
+                "name": "QA2-DB-1794335962578-backdate-material",
+                "unit": "kg",
+                "stock": 10,
+                "stockValue": 10000,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "a7ccf448-13c5-41bf-96b7-08730466cc80",
+                "code": "QA2-DB-1794335962578-nonstock-M",
+                "name": "QA2-DB-1794335962578-nonstock-material",
+                "unit": "kg",
+                "stock": 10,
+                "stockValue": 10000,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "9dd1b64c-7eb0-4c26-a29f-5a94b47a316a",
+                "code": "QA2-DB-1794335962578-inactivebom-M",
+                "name": "QA2-DB-1794335962578-inactivebom-material",
+                "unit": "kg",
+                "stock": 10,
+                "stockValue": 10000,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "c8272d9d-2d90-4e1e-8ac3-0f6fbecd6ed3",
+                "code": "QA2-DB-1794335962578-inactiveproduct-M",
+                "name": "QA2-DB-1794335962578-inactiveproduct-material",
+                "unit": "kg",
+                "stock": 10,
+                "stockValue": 10000,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "32f7f643-87c4-459f-bc75-fcfed7d85be4",
+                "code": "QA2-DB-1794335962578-lock-service-M",
+                "name": "QA2-DB-1794335962578-lock-service-material",
+                "unit": "kg",
+                "stock": 8,
+                "stockValue": 8000,
+                "itemEntity": "materials"
+              },
+              {
+                "id": "ca48cdf1-2335-44e1-b4fd-d2e25508a83c",
+                "code": "QA2-DB-1794335962578-cancel-P",
+                "name": "QA2-DB-1794335962578-cancel-product",
+                "unit": "unit",
+                "stock": 1,
+                "stockValue": 2000,
+                "itemEntity": "products"
+              },
+              {
+                "id": "7cc2161f-4607-4e3a-a20a-7f4c4d2c7df2",
+                "code": "QA2-DB-1794335962578-fake-source-P",
+                "name": "QA2-DB-1794335962578-fake-source-product",
+                "unit": "unit",
+                "stock": 0,
+                "stockValue": 0,
+                "itemEntity": "products"
+              },
+              {
+                "id": "4cc934cb-3cff-4c03-bc2a-2d74ce3d4eb4",
+                "code": "QA2-DB-1794335962578-backdate-P",
+                "name": "QA2-DB-1794335962578-backdate-product",
+                "unit": "unit",
+                "stock": 1,
+                "stockValue": 3000,
+                "itemEntity": "products"
+              },
+              {
+                "id": "199b22d6-25cc-41a2-84d1-a9b4348a8053",
+                "code": "QA2-DB-1794335962578-inactivebom-P",
+                "name": "QA2-DB-1794335962578-inactivebom-product",
+                "unit": "unit",
+                "stock": 0,
+                "stockValue": 0,
+                "itemEntity": "products"
+              },
+              {
+                "id": "cb22f0a1-c91b-44e8-bf1f-54cd6be41010",
+                "code": "QA2-DB-1794335962578-inactiveproduct-P",
+                "name": "QA2-DB-1794335962578-inactiveproduct-product",
+                "unit": "unit",
+                "stock": 0,
+                "stockValue": 0,
+                "itemEntity": "products"
+              }
+            ],
+            "columns": [
+              {
+                "key": "code",
+                "label": "Mã"
+              },
+              {
+                "key": "name",
+                "label": "Mặt hàng"
+              },
+              {
+                "key": "unit",
+                "label": "ĐVT"
+              },
+              {
+                "key": "stock",
+                "label": "Số lượng"
+              },
+              {
+                "key": "stockValue",
+                "label": "Giá trị tồn",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-GT",
+            "title": "Chi phí theo lệnh và sản xuất dở dang",
+            "rows": [
+              {
+                "id": "b67ddd8d-1bf8-48c8-8d7a-3a94f8c6c555",
+                "code": "QA2-DB-1794335962578-cancel-JOB",
+                "productName": "QA2-DB-1794335962578-cancel-product",
+                "status": "COMPLETED",
+                "quantity": 1,
+                "materialCost": 0,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 0,
+                "finishedValue": 2000,
+                "wip": 0
+              },
+              {
+                "id": "6e821129-9378-4d2c-a6ac-c7f3cbb19bfa",
+                "code": "QA2-DB-1794335962578-fake-source-JOB",
+                "productName": "QA2-DB-1794335962578-fake-source-product",
+                "status": "IN_PROGRESS",
+                "quantity": 1,
+                "materialCost": 2000,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 2000,
+                "finishedValue": 2000,
+                "wip": 0
+              },
+              {
+                "id": "1f29e1b5-f23a-446c-b3d1-41c43f0eac04",
+                "code": "QA2-DB-1794335962578-INACTIVE-BOM-JOB",
+                "productName": "QA2-DB-1794335962578-inactivebom-product",
+                "status": "DRAFT",
+                "quantity": 1,
+                "materialCost": 0,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 0,
+                "finishedValue": 0,
+                "wip": 0
+              },
+              {
+                "id": "b3ec8053-521c-451c-bd00-3aa3608f3789",
+                "code": "QA2-DB-1794335962578-backdate-JOB",
+                "productName": "QA2-DB-1794335962578-backdate-product",
+                "status": "COMPLETED",
+                "quantity": 1,
+                "materialCost": 0,
+                "laborCost": 0,
+                "machineCost": 3000,
+                "totalCost": 3000,
+                "finishedValue": 3000,
+                "wip": 0
+              },
+              {
+                "id": "3eca4a54-4da5-4b98-a1bc-4fc6a37a81b3",
+                "code": "QA2-DB-1794335962578-nonstock-JOB",
+                "productName": "QA2-DB-1794335962578-nonstock-product",
+                "status": "READY_FOR_RECEIPT",
+                "quantity": 1,
+                "materialCost": 0,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 0,
+                "finishedValue": 0,
+                "wip": 0
+              },
+              {
+                "id": "3450068a-d1cd-4b08-826e-77137e7e9ca2",
+                "code": "QA2-DB-1794335962578-inactivebom-JOB",
+                "productName": "QA2-DB-1794335962578-inactivebom-product",
+                "status": "DRAFT",
+                "quantity": 1,
+                "materialCost": 0,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 0,
+                "finishedValue": 0,
+                "wip": 0
+              },
+              {
+                "id": "3c5b58c8-3518-421f-b7eb-65d95d3552a0",
+                "code": "QA2-DB-1794335962578-inactiveproduct-JOB",
+                "productName": "QA2-DB-1794335962578-inactiveproduct-product",
+                "status": "READY_FOR_RECEIPT",
+                "quantity": 1,
+                "materialCost": 0,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 0,
+                "finishedValue": 0,
+                "wip": 0
+              },
+              {
+                "id": "a5c4f144-4eac-49c8-8008-85d13a19e3fe",
+                "code": "QA2-DB-1794335962578-RACE-0",
+                "productName": "QA2-DB-1794335962578-race-service",
+                "status": "DRAFT",
+                "quantity": 1,
+                "materialCost": 0,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 0,
+                "finishedValue": 0,
+                "wip": 0
+              },
+              {
+                "id": "cce457ff-9bf7-48d2-99f2-b7c76c101c26",
+                "code": "QA2-DB-1794335962578-lock-service-JOB",
+                "productName": "QA2-DB-1794335962578-lock-service-service",
+                "status": "IN_PROGRESS",
+                "quantity": 1,
+                "materialCost": 2000,
+                "laborCost": 0,
+                "machineCost": 0,
+                "totalCost": 2000,
+                "finishedValue": 0,
+                "wip": 2000
+              }
+            ],
+            "columns": [
+              {
+                "key": "code",
+                "label": "Lệnh"
+              },
+              {
+                "key": "productName",
+                "label": "Sản phẩm"
+              },
+              {
+                "key": "materialCost",
+                "label": "Vật tư",
+                "format": "money"
+              },
+              {
+                "key": "laborCost",
+                "label": "Nhân công",
+                "format": "money"
+              },
+              {
+                "key": "machineCost",
+                "label": "Máy phân bổ",
+                "format": "money"
+              },
+              {
+                "key": "finishedValue",
+                "label": "Đã nhập thành phẩm",
+                "format": "money"
+              },
+              {
+                "key": "wip",
+                "label": "Dở dang",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-CN",
+            "title": "Công nợ và tiền chưa phân bổ",
+            "rows": [],
+            "columns": [
+              {
+                "key": "name",
+                "label": "Đối tác"
+              },
+              {
+                "key": "type",
+                "label": "Loại"
+              },
+              {
+                "key": "opening",
+                "label": "Đầu kỳ",
+                "format": "money"
+              },
+              {
+                "key": "openBalance",
+                "label": "Còn nợ hóa đơn",
+                "format": "money"
+              },
+              {
+                "key": "unallocatedAdvance",
+                "label": "Tiền chưa phân bổ",
+                "format": "money"
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "revenue": 0,
+          "cogs": 0,
+          "grossProfit": 0,
+          "operatingExpense": 0,
+          "financeExpense": 0,
+          "financeIncome": 0,
+          "operatingProfit": 0,
+          "rawMaterials": 68000,
+          "finishedGoods": 5000,
+          "wip": 2000,
+          "debit": 84000,
+          "credit": 84000
+        },
+        "warnings": [
+          "Chi phí máy được ghi nhận theo nghiệm thu; đối chiếu chứng từ chi phí và phân bổ trước khi khóa sổ."
+        ],
+        "note": "Sổ quản trị SME từ các chứng từ đã ghi nhận. Chưa gồm khấu hao, trích trước, thuế TNDN và bút toán khóa sổ; không thay thế bộ báo cáo tài chính hoặc tờ khai thuế.",
+        "settings": {
+          "currency": "VND",
+          "taxMethod": "VAT_CREDIT",
+          "fiscalYearStart": "01-01",
+          "accountingRegime": "TT133",
+          "defaultWarehouse": "Kho chính",
+          "inventoryCostMethod": "MOVING_AVERAGE"
+        }
+      }
+    }
+  ]
+}

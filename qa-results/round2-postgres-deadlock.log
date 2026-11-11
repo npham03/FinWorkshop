@@ -1,0 +1,10 @@
+Sanitized excerpt from docker logs of the isolated finworkshop-qa-db-20261111.
+Captured 11/11/2026 Asia/Ho_Chi_Minh. These timestamps are UTC.
+Confirmed during four concurrent cancellations of opposite transfer legs; no production database was queried.
+
+2026-11-10 18:38:13.590 UTC [475] DETAIL: Process 475 waits for ShareLock on transaction 2810; blocked by process 476.
+Process 476 waits for ShareLock on transaction 2811; blocked by process 475.
+Both processes: SELECT record_id, data, sync_status FROM records WHERE entity = $1 AND record_id = $2 AND workshop_id = $3 LIMIT 1 FOR UPDATE
+2026-11-10 18:38:14.669 UTC [475] ERROR: deadlock detected
+2026-11-10 18:38:15.749 UTC [476] ERROR: deadlock detected
+2026-11-10 18:38:16.827 UTC [475] ERROR: deadlock detected

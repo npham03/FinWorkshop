@@ -1,0 +1,2630 @@
+{
+  "commit": "399cbddfa0be540a80a3facc1c6ef0569e695068",
+  "tag": "QA2-IMPORT-1794335876907",
+  "base": "http://127.0.0.1:3006/api",
+  "date": "2026-11-11",
+  "results": [
+    {
+      "name": "Opposite directions wrongly deduplicated",
+      "confirmed": true,
+      "expectedCount": 2,
+      "sourceRows": [
+        {
+          "date": "2026-11-11",
+          "description": "QA2-IMPORT-1794335876907-same-label",
+          "credit": 1000,
+          "debit": 0,
+          "reference": "QA2-IMPORT-1794335876907-IN"
+        },
+        {
+          "date": "2026-11-11",
+          "description": "QA2-IMPORT-1794335876907-same-label",
+          "credit": 0,
+          "debit": 1000,
+          "reference": "QA2-IMPORT-1794335876907-OUT"
+        }
+      ],
+      "preview": {
+        "importId": "fe8109d1-c11f-432e-8dae-b5e2184523f7",
+        "fileName": "QA2-IMPORT-1794335876907.xlsx",
+        "total": 2,
+        "duplicateCount": 1,
+        "errorCount": 0,
+        "rows": [
+          {
+            "rowNumber": 2,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-same-label",
+            "amount": 1000,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-IN",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": false,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          },
+          {
+            "rowNumber": 3,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-same-label",
+            "amount": 1000,
+            "direction": "EXPENSE",
+            "externalReference": "QA2-IMPORT-1794335876907-OUT",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": true,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          }
+        ]
+      },
+      "committed": {
+        "createdCount": 1,
+        "skippedDuplicates": 1,
+        "skippedInvalid": 0,
+        "records": [
+          {
+            "date": "2026-11-11",
+            "amount": 1000,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 2,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-same-label",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-IN",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "876ad4ad-b694-4fb0-b930-178c2fd1144e",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.324Z",
+            "syncStatus": "PENDING_ODOO"
+          }
+        ]
+      },
+      "trace": [
+        4,
+        5
+      ]
+    },
+    {
+      "name": "Same legitimate transaction details on another bank skipped",
+      "confirmed": true,
+      "expectedCount": 1,
+      "preview": {
+        "importId": "51df743c-d043-4e3c-8d5d-23a4777acb8d",
+        "fileName": "QA2-IMPORT-1794335876907.xlsx",
+        "total": 1,
+        "duplicateCount": 1,
+        "errorCount": 0,
+        "rows": [
+          {
+            "rowNumber": 2,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-two-banks",
+            "amount": 700,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-BANK2",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": true,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          }
+        ]
+      },
+      "committed": {
+        "createdCount": 0,
+        "skippedDuplicates": 1,
+        "skippedInvalid": 0,
+        "records": []
+      },
+      "trace": [
+        6,
+        9
+      ]
+    },
+    {
+      "name": "Both debit and credit populated not rejected",
+      "confirmed": true,
+      "expected": "Row should be flagged ambiguous before commit",
+      "sourceRows": [
+        {
+          "date": "2026-11-11",
+          "description": "QA2-IMPORT-1794335876907-ambiguous",
+          "credit": 2000,
+          "debit": 3000,
+          "reference": "QA2-IMPORT-1794335876907-BOTH"
+        }
+      ],
+      "preview": {
+        "importId": "7cafdd97-7fb4-408a-8614-0690c2d3a5f7",
+        "fileName": "QA2-IMPORT-1794335876907.xlsx",
+        "total": 1,
+        "duplicateCount": 0,
+        "errorCount": 0,
+        "rows": [
+          {
+            "rowNumber": 2,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-ambiguous",
+            "amount": 2000,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-BOTH",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": false,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          }
+        ]
+      },
+      "committed": {
+        "createdCount": 1,
+        "skippedDuplicates": 0,
+        "skippedInvalid": 0,
+        "records": [
+          {
+            "date": "2026-11-11",
+            "amount": 2000,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 2,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-ambiguous",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-BOTH",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "eb125821-5bc2-47b8-89b4-99082fdc82b6",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.481Z",
+            "syncStatus": "PENDING_ODOO"
+          }
+        ]
+      },
+      "trace": [
+        10,
+        11
+      ]
+    },
+    {
+      "name": "Decimal-formatted VND strings imported at 100 times amount",
+      "confirmed": true,
+      "expectedAmounts": [
+        1000,
+        1000
+      ],
+      "sourceRows": [
+        {
+          "date": "2026-11-11",
+          "description": "QA2-IMPORT-1794335876907-format-us",
+          "credit": "1,000.00",
+          "reference": "QA2-IMPORT-1794335876907-DEC-US"
+        },
+        {
+          "date": "2026-11-11",
+          "description": "QA2-IMPORT-1794335876907-format-vn",
+          "credit": "1.000,00",
+          "reference": "QA2-IMPORT-1794335876907-DEC-VN"
+        }
+      ],
+      "actualAmounts": [
+        100000,
+        100000
+      ],
+      "preview": {
+        "importId": "6ac4cf40-d69e-4dca-a42c-30b3568a1934",
+        "fileName": "QA2-IMPORT-1794335876907.xlsx",
+        "total": 2,
+        "duplicateCount": 0,
+        "errorCount": 0,
+        "rows": [
+          {
+            "rowNumber": 2,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-format-us",
+            "amount": 100000,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-DEC-US",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": false,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          },
+          {
+            "rowNumber": 3,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-format-vn",
+            "amount": 100000,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-DEC-VN",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": false,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          }
+        ]
+      },
+      "trace": [
+        12,
+        13
+      ]
+    },
+    {
+      "name": "Concurrent commit imports same statement twice",
+      "confirmed": true,
+      "expectedStored": 12,
+      "actualStored": 24,
+      "statuses": [
+        200,
+        200
+      ],
+      "commitCounts": [
+        12,
+        12
+      ],
+      "trace": [
+        14,
+        17
+      ]
+    },
+    {
+      "name": "Malformed report date range silently accepted",
+      "confirmed": true,
+      "expected": "400/422 with invalid period message, consistent with dashboard",
+      "probes": [
+        {
+          "path": "/reports/books?from=2026-12-31&to=2026-01-01",
+          "status": 200,
+          "hasBooks": true
+        },
+        {
+          "path": "/reports/sme?from=banana&to=potato",
+          "status": 200,
+          "hasBooks": true
+        }
+      ],
+      "trace": [
+        18,
+        19
+      ]
+    }
+  ],
+  "traces": [
+    {
+      "method": "POST",
+      "path": "/auth/register",
+      "status": 201,
+      "request": {
+        "name": "QA2-IMPORT-1794335876907",
+        "email": "qa2-import-1794335876907@fintax.invalid",
+        "workshopName": "QA2-IMPORT-1794335876907",
+        "mode": "CREATE_WORKSHOP"
+      },
+      "response": {
+        "ok": true,
+        "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+        "approvalStatus": "APPROVED",
+        "odooSyncStatus": "SYNCED",
+        "message": "Đã tạo không gian làm việc. Bạn có thể đăng nhập; ERP sẽ đồng bộ nền."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "request": {
+        "email": "qa2-import-1794335876907@fintax.invalid"
+      },
+      "response": {
+        "user": {
+          "id": "49d631ec-a0f8-4f2f-aa9e-d870ec1a51e7",
+          "email": "qa2-import-1794335876907@fintax.invalid",
+          "name": "QA2-IMPORT-1794335876907",
+          "role": "OWNER",
+          "roleLabel": "Chủ doanh nghiệp",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "workshopName": "QA2-IMPORT-1794335876907",
+          "permissions": {
+            "entities": "*",
+            "actions": "*"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cash-accounts",
+      "status": 201,
+      "request": {
+        "name": "QA2-IMPORT-1794335876907-BANK-A",
+        "type": "BANK",
+        "openingBalance": 1000000
+      },
+      "response": {
+        "name": "QA2-IMPORT-1794335876907-BANK-A",
+        "type": "BANK",
+        "openingBalance": 1000000,
+        "id": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+        "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+        "status": "ACTIVE",
+        "code": "",
+        "balance": 1000000,
+        "syncStatus": "PENDING_ODOO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cash-accounts",
+      "status": 201,
+      "request": {
+        "name": "QA2-IMPORT-1794335876907-BANK-B",
+        "type": "BANK",
+        "openingBalance": 1000000
+      },
+      "response": {
+        "name": "QA2-IMPORT-1794335876907-BANK-B",
+        "type": "BANK",
+        "openingBalance": 1000000,
+        "id": "823f1a22-55cc-4761-87ef-b75fb268c3ab",
+        "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+        "status": "ACTIVE",
+        "code": "",
+        "balance": 1000000,
+        "syncStatus": "PENDING_ODOO"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/import/transactions/preview",
+      "status": 200,
+      "request": "XLSX rows retained in case evidence",
+      "response": {
+        "importId": "fe8109d1-c11f-432e-8dae-b5e2184523f7",
+        "fileName": "QA2-IMPORT-1794335876907.xlsx",
+        "total": 2,
+        "duplicateCount": 1,
+        "errorCount": 0,
+        "rows": [
+          {
+            "rowNumber": 2,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-same-label",
+            "amount": 1000,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-IN",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": false,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          },
+          {
+            "rowNumber": 3,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-same-label",
+            "amount": 1000,
+            "direction": "EXPENSE",
+            "externalReference": "QA2-IMPORT-1794335876907-OUT",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": true,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          }
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/import/transactions/fe8109d1-c11f-432e-8dae-b5e2184523f7/commit",
+      "status": 200,
+      "request": {
+        "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb"
+      },
+      "response": {
+        "createdCount": 1,
+        "skippedDuplicates": 1,
+        "skippedInvalid": 0,
+        "records": [
+          {
+            "date": "2026-11-11",
+            "amount": 1000,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 2,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-same-label",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-IN",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "876ad4ad-b694-4fb0-b930-178c2fd1144e",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.324Z",
+            "syncStatus": "PENDING_ODOO"
+          }
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/import/transactions/preview",
+      "status": 200,
+      "request": "XLSX rows retained in case evidence",
+      "response": {
+        "importId": "983bc8cb-bc4c-41d0-94eb-77953637aa0e",
+        "fileName": "QA2-IMPORT-1794335876907.xlsx",
+        "total": 1,
+        "duplicateCount": 0,
+        "errorCount": 0,
+        "rows": [
+          {
+            "rowNumber": 2,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-two-banks",
+            "amount": 700,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-BANK1",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": false,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          }
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/import/transactions/983bc8cb-bc4c-41d0-94eb-77953637aa0e/commit",
+      "status": 200,
+      "request": {
+        "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb"
+      },
+      "response": {
+        "createdCount": 1,
+        "skippedDuplicates": 0,
+        "skippedInvalid": 0,
+        "records": [
+          {
+            "date": "2026-11-11",
+            "amount": 700,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 2,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-two-banks",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-BANK1",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "bbda1c41-bf86-446c-afa3-1f5af063ffdd",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.381Z",
+            "syncStatus": "PENDING_ODOO"
+          }
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/import/transactions/preview",
+      "status": 200,
+      "request": "XLSX rows retained in case evidence",
+      "response": {
+        "importId": "51df743c-d043-4e3c-8d5d-23a4777acb8d",
+        "fileName": "QA2-IMPORT-1794335876907.xlsx",
+        "total": 1,
+        "duplicateCount": 1,
+        "errorCount": 0,
+        "rows": [
+          {
+            "rowNumber": 2,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-two-banks",
+            "amount": 700,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-BANK2",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": true,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          }
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/import/transactions/51df743c-d043-4e3c-8d5d-23a4777acb8d/commit",
+      "status": 200,
+      "request": {
+        "accountId": "823f1a22-55cc-4761-87ef-b75fb268c3ab"
+      },
+      "response": {
+        "createdCount": 0,
+        "skippedDuplicates": 1,
+        "skippedInvalid": 0,
+        "records": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/import/transactions/preview",
+      "status": 200,
+      "request": "XLSX rows retained in case evidence",
+      "response": {
+        "importId": "7cafdd97-7fb4-408a-8614-0690c2d3a5f7",
+        "fileName": "QA2-IMPORT-1794335876907.xlsx",
+        "total": 1,
+        "duplicateCount": 0,
+        "errorCount": 0,
+        "rows": [
+          {
+            "rowNumber": 2,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-ambiguous",
+            "amount": 2000,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-BOTH",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": false,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          }
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/import/transactions/7cafdd97-7fb4-408a-8614-0690c2d3a5f7/commit",
+      "status": 200,
+      "request": {
+        "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb"
+      },
+      "response": {
+        "createdCount": 1,
+        "skippedDuplicates": 0,
+        "skippedInvalid": 0,
+        "records": [
+          {
+            "date": "2026-11-11",
+            "amount": 2000,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 2,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-ambiguous",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-BOTH",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "eb125821-5bc2-47b8-89b4-99082fdc82b6",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.481Z",
+            "syncStatus": "PENDING_ODOO"
+          }
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/import/transactions/preview",
+      "status": 200,
+      "request": "XLSX rows retained in case evidence",
+      "response": {
+        "importId": "6ac4cf40-d69e-4dca-a42c-30b3568a1934",
+        "fileName": "QA2-IMPORT-1794335876907.xlsx",
+        "total": 2,
+        "duplicateCount": 0,
+        "errorCount": 0,
+        "rows": [
+          {
+            "rowNumber": 2,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-format-us",
+            "amount": 100000,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-DEC-US",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": false,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          },
+          {
+            "rowNumber": 3,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-format-vn",
+            "amount": 100000,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-DEC-VN",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": false,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          }
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/import/transactions/6ac4cf40-d69e-4dca-a42c-30b3568a1934/commit",
+      "status": 200,
+      "request": {
+        "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb"
+      },
+      "response": {
+        "createdCount": 2,
+        "skippedDuplicates": 0,
+        "skippedInvalid": 0,
+        "records": [
+          {
+            "date": "2026-11-11",
+            "amount": 100000,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 2,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-format-us",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-DEC-US",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "e8b5bd12-e547-4d67-838d-39c1af8552ec",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.544Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 100000,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 3,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-format-vn",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-DEC-VN",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "52f14dce-eec6-4240-ad60-138dd512f172",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.557Z",
+            "syncStatus": "PENDING_ODOO"
+          }
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/import/transactions/preview",
+      "status": 200,
+      "request": "XLSX rows retained in case evidence",
+      "response": {
+        "importId": "c513d13e-4b34-4b65-af6e-51405a015223",
+        "fileName": "QA2-IMPORT-1794335876907.xlsx",
+        "total": 12,
+        "duplicateCount": 0,
+        "errorCount": 0,
+        "rows": [
+          {
+            "rowNumber": 2,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-race-0",
+            "amount": 123,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-0",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": false,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          },
+          {
+            "rowNumber": 3,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-race-1",
+            "amount": 123,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-1",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": false,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          },
+          {
+            "rowNumber": 4,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-race-2",
+            "amount": 123,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-2",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": false,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          },
+          {
+            "rowNumber": 5,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-race-3",
+            "amount": 123,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-3",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": false,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          },
+          {
+            "rowNumber": 6,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-race-4",
+            "amount": 123,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-4",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": false,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          },
+          {
+            "rowNumber": 7,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-race-5",
+            "amount": 123,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-5",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": false,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          },
+          {
+            "rowNumber": 8,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-race-6",
+            "amount": 123,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-6",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": false,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          },
+          {
+            "rowNumber": 9,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-race-7",
+            "amount": 123,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-7",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": false,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          },
+          {
+            "rowNumber": 10,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-race-8",
+            "amount": 123,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-8",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": false,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          },
+          {
+            "rowNumber": 11,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-race-9",
+            "amount": 123,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-9",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": false,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          },
+          {
+            "rowNumber": 12,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-race-10",
+            "amount": 123,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-10",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": false,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          },
+          {
+            "rowNumber": 13,
+            "date": "2026-11-11",
+            "description": "QA2-IMPORT-1794335876907-race-11",
+            "amount": 123,
+            "direction": "INCOME",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-11",
+            "classification": "UNCLASSIFIED",
+            "status": "NEEDS_REVIEW",
+            "duplicate": false,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "errors": [],
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0
+          }
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/import/transactions/c513d13e-4b34-4b65-af6e-51405a015223/commit",
+      "status": 200,
+      "request": {
+        "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb"
+      },
+      "response": {
+        "createdCount": 12,
+        "skippedDuplicates": 0,
+        "skippedInvalid": 0,
+        "records": [
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 2,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-0",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-0",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "67d61060-4ce8-43af-8794-f8056c160337",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.624Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 3,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-1",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-1",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "c74fb028-9f48-4f61-be90-92cfd3c5ca0b",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.638Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 4,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-2",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-2",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "184b21b0-7ea8-44c6-8506-7522116ac63f",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.652Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 5,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-3",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-3",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "7d047494-0ce4-4bda-859a-00cdff6863a4",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.666Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 6,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-4",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-4",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "e920e761-b83b-4c21-bbeb-a2796735adcc",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.679Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 7,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-5",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-5",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "2f6cbf7e-1c08-4074-8617-eed3ade22c62",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.693Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 8,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-6",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-6",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "fb85f79c-82c9-456d-aca6-10bffdd8ec60",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.707Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 9,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-7",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-7",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "ce1a174e-0ff9-4095-a695-73e72e5ac6bc",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.722Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 10,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-8",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-8",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "3abfd305-c743-4677-b6f8-cbbc805bcd2e",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.735Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 11,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-9",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-9",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "7fa95696-63a1-4555-b851-a93d166e5063",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.752Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 12,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-10",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-10",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "9f449870-dac0-4ea2-ad0a-ba8186a16417",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.765Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 13,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-11",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-11",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "f3abe9f1-81e0-43b3-aabc-78f6197262fa",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.778Z",
+            "syncStatus": "PENDING_ODOO"
+          }
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/import/transactions/c513d13e-4b34-4b65-af6e-51405a015223/commit",
+      "status": 200,
+      "request": {
+        "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb"
+      },
+      "response": {
+        "createdCount": 12,
+        "skippedDuplicates": 0,
+        "skippedInvalid": 0,
+        "records": [
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 2,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-0",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-0",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "f701628e-e88b-46cc-aff8-f1930991cd54",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.634Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 3,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-1",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-1",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "25b5c909-833e-41af-845e-2d4957b499ff",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.815Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 4,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-2",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-2",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "1b0b4dec-8bd0-49c8-b14e-22a1f10a69bc",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.828Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 5,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-3",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-3",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "5d77f05a-267e-4cd6-9de5-89edb2a464ac",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.842Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 6,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-4",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-4",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "4846f3d4-e06e-4b1b-930e-fea7d6cf2448",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.855Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 7,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-5",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-5",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "f9f46537-5b6e-4d41-9b5d-d6e1964bb9ea",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.868Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 8,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-6",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-6",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "ef3b9f8a-9ffc-4dcb-8520-5370088f7e76",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.882Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 9,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-7",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-7",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "c9270343-bd72-467f-bdc1-5a5a7baefdc8",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.896Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 10,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-8",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-8",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "5ede8fa0-2d41-4750-84a8-6d944cb01cca",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.909Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 11,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-9",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-9",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "490bdaf1-0bbd-4c7a-9b48-aa15e7de9717",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.924Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 12,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-10",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-10",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "66d31e2d-efd1-472e-ac4d-f77a265cf53e",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.938Z",
+            "syncStatus": "PENDING_ODOO"
+          },
+          {
+            "date": "2026-11-11",
+            "amount": 123,
+            "errors": [],
+            "status": "NEEDS_REVIEW",
+            "direction": "INCOME",
+            "duplicate": false,
+            "rowNumber": 13,
+            "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+            "description": "QA2-IMPORT-1794335876907-race-11",
+            "classification": "UNCLASSIFIED",
+            "externalReference": "QA2-IMPORT-1794335876907-RACE-11",
+            "classificationSource": "NEEDS_REVIEW",
+            "classificationConfidence": 0,
+            "id": "0e846372-cde6-4bc8-8ac8-8c687d3a2400",
+            "source": "IMPORT",
+            "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+            "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+            "importedAt": "2026-11-10T18:37:58.954Z",
+            "syncStatus": "PENDING_ODOO"
+          }
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transactions",
+      "status": 200,
+      "response": [
+        {
+          "id": "0e846372-cde6-4bc8-8ac8-8c687d3a2400",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 13,
+          "importedAt": "2026-11-10T18:37:58.954Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-11",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-11",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "66d31e2d-efd1-472e-ac4d-f77a265cf53e",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 12,
+          "importedAt": "2026-11-10T18:37:58.938Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-10",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-10",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "490bdaf1-0bbd-4c7a-9b48-aa15e7de9717",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 11,
+          "importedAt": "2026-11-10T18:37:58.924Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-9",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-9",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "5ede8fa0-2d41-4750-84a8-6d944cb01cca",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 10,
+          "importedAt": "2026-11-10T18:37:58.909Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-8",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-8",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "f701628e-e88b-46cc-aff8-f1930991cd54",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 2,
+          "importedAt": "2026-11-10T18:37:58.634Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-0",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-0",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "25b5c909-833e-41af-845e-2d4957b499ff",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 3,
+          "importedAt": "2026-11-10T18:37:58.815Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-1",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-1",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "1b0b4dec-8bd0-49c8-b14e-22a1f10a69bc",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 4,
+          "importedAt": "2026-11-10T18:37:58.828Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-2",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-2",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "5d77f05a-267e-4cd6-9de5-89edb2a464ac",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 5,
+          "importedAt": "2026-11-10T18:37:58.842Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-3",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-3",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "4846f3d4-e06e-4b1b-930e-fea7d6cf2448",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 6,
+          "importedAt": "2026-11-10T18:37:58.855Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-4",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-4",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "f9f46537-5b6e-4d41-9b5d-d6e1964bb9ea",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 7,
+          "importedAt": "2026-11-10T18:37:58.868Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-5",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-5",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "ef3b9f8a-9ffc-4dcb-8520-5370088f7e76",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 8,
+          "importedAt": "2026-11-10T18:37:58.882Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-6",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-6",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "c9270343-bd72-467f-bdc1-5a5a7baefdc8",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 9,
+          "importedAt": "2026-11-10T18:37:58.896Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-7",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-7",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "67d61060-4ce8-43af-8794-f8056c160337",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 2,
+          "importedAt": "2026-11-10T18:37:58.624Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-0",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-0",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "c74fb028-9f48-4f61-be90-92cfd3c5ca0b",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 3,
+          "importedAt": "2026-11-10T18:37:58.638Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-1",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-1",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "184b21b0-7ea8-44c6-8506-7522116ac63f",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 4,
+          "importedAt": "2026-11-10T18:37:58.652Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-2",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-2",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "7d047494-0ce4-4bda-859a-00cdff6863a4",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 5,
+          "importedAt": "2026-11-10T18:37:58.666Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-3",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-3",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "e920e761-b83b-4c21-bbeb-a2796735adcc",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 6,
+          "importedAt": "2026-11-10T18:37:58.679Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-4",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-4",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "2f6cbf7e-1c08-4074-8617-eed3ade22c62",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 7,
+          "importedAt": "2026-11-10T18:37:58.693Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-5",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-5",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "fb85f79c-82c9-456d-aca6-10bffdd8ec60",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 8,
+          "importedAt": "2026-11-10T18:37:58.707Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-6",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-6",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "ce1a174e-0ff9-4095-a695-73e72e5ac6bc",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 9,
+          "importedAt": "2026-11-10T18:37:58.722Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-7",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-7",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "3abfd305-c743-4677-b6f8-cbbc805bcd2e",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 10,
+          "importedAt": "2026-11-10T18:37:58.735Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-8",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-8",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "7fa95696-63a1-4555-b851-a93d166e5063",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 11,
+          "importedAt": "2026-11-10T18:37:58.752Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-9",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-9",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "9f449870-dac0-4ea2-ad0a-ba8186a16417",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 12,
+          "importedAt": "2026-11-10T18:37:58.765Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-10",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-10",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "f3abe9f1-81e0-43b3-aabc-78f6197262fa",
+          "date": "2026-11-11",
+          "amount": 123,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 13,
+          "importedAt": "2026-11-10T18:37:58.778Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-race-11",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-RACE-11",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "e8b5bd12-e547-4d67-838d-39c1af8552ec",
+          "date": "2026-11-11",
+          "amount": 100000,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 2,
+          "importedAt": "2026-11-10T18:37:58.544Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-format-us",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-DEC-US",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "52f14dce-eec6-4240-ad60-138dd512f172",
+          "date": "2026-11-11",
+          "amount": 100000,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 3,
+          "importedAt": "2026-11-10T18:37:58.557Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-format-vn",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-DEC-VN",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "eb125821-5bc2-47b8-89b4-99082fdc82b6",
+          "date": "2026-11-11",
+          "amount": 2000,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 2,
+          "importedAt": "2026-11-10T18:37:58.481Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-ambiguous",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-BOTH",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "bbda1c41-bf86-446c-afa3-1f5af063ffdd",
+          "date": "2026-11-11",
+          "amount": 700,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 2,
+          "importedAt": "2026-11-10T18:37:58.381Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-two-banks",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-BANK1",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        },
+        {
+          "id": "876ad4ad-b694-4fb0-b930-178c2fd1144e",
+          "date": "2026-11-11",
+          "amount": 1000,
+          "errors": [],
+          "source": "IMPORT",
+          "status": "NEEDS_REVIEW",
+          "accountId": "0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+          "direction": "INCOME",
+          "duplicate": false,
+          "rowNumber": 2,
+          "importedAt": "2026-11-10T18:37:58.324Z",
+          "workshopId": "f4e159bc-c83b-428b-8d3d-6343dec15121",
+          "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+          "description": "QA2-IMPORT-1794335876907-same-label",
+          "classification": "UNCLASSIFIED",
+          "externalReference": "QA2-IMPORT-1794335876907-IN",
+          "classificationSource": "NEEDS_REVIEW",
+          "classificationConfidence": 0,
+          "syncStatus": "PENDING_ODOO"
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/reports/books?from=2026-12-31&to=2026-01-01",
+      "status": 200,
+      "response": {
+        "books": [
+          {
+            "code": "S1-HKD",
+            "title": "Sổ chi tiết doanh thu bán hàng hóa, dịch vụ",
+            "rows": [],
+            "columns": [
+              {
+                "key": "date",
+                "label": "Ngày",
+                "format": "date"
+              },
+              {
+                "key": "code",
+                "label": "Chứng từ"
+              },
+              {
+                "key": "description",
+                "label": "Nội dung"
+              },
+              {
+                "key": "taxMode",
+                "label": "Phương pháp"
+              },
+              {
+                "key": "vatRate",
+                "label": "GTGT (%)"
+              },
+              {
+                "key": "pitRate",
+                "label": "TNCN (%)"
+              },
+              {
+                "key": "revenue",
+                "label": "Doanh thu",
+                "format": "money"
+              },
+              {
+                "key": "taxAmount",
+                "label": "Thuế theo hồ sơ",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "S2-HKD",
+            "title": "Sổ chi tiết vật liệu, dụng cụ, sản phẩm, hàng hóa",
+            "rows": [],
+            "columns": [
+              {
+                "key": "date",
+                "label": "Ngày",
+                "format": "date"
+              },
+              {
+                "key": "code",
+                "label": "Chứng từ"
+              },
+              {
+                "key": "description",
+                "label": "Nội dung"
+              },
+              {
+                "key": "type",
+                "label": "Loại"
+              },
+              {
+                "key": "opening",
+                "label": "Tồn đầu"
+              },
+              {
+                "key": "incoming",
+                "label": "Nhập / Trả"
+              },
+              {
+                "key": "outgoing",
+                "label": "Xuất / Hao hụt"
+              },
+              {
+                "key": "closing",
+                "label": "Tồn cuối"
+              },
+              {
+                "key": "unitCost",
+                "label": "Đơn giá",
+                "format": "money"
+              },
+              {
+                "key": "amount",
+                "label": "Giá trị",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "S3-HKD",
+            "title": "Sổ chi phí sản xuất, kinh doanh",
+            "rows": [],
+            "columns": [
+              {
+                "key": "date",
+                "label": "Ngày",
+                "format": "date"
+              },
+              {
+                "key": "code",
+                "label": "Chứng từ"
+              },
+              {
+                "key": "description",
+                "label": "Nội dung"
+              },
+              {
+                "key": "source",
+                "label": "Nguồn"
+              },
+              {
+                "key": "expense",
+                "label": "Chi phí",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "S4-HKD",
+            "title": "Sổ theo dõi nghĩa vụ thuế với NSNN",
+            "rows": [],
+            "columns": [
+              {
+                "key": "date",
+                "label": "Ngày",
+                "format": "date"
+              },
+              {
+                "key": "code",
+                "label": "Chứng từ"
+              },
+              {
+                "key": "description",
+                "label": "Nội dung"
+              },
+              {
+                "key": "taxMode",
+                "label": "Phương pháp"
+              },
+              {
+                "key": "vatOutput",
+                "label": "GTGT đầu ra",
+                "format": "money"
+              },
+              {
+                "key": "vatInput",
+                "label": "GTGT đủ điều kiện khấu trừ",
+                "format": "money"
+              },
+              {
+                "key": "pit",
+                "label": "TNCN",
+                "format": "money"
+              },
+              {
+                "key": "vatPaid",
+                "label": "GTGT đã nộp",
+                "format": "money"
+              },
+              {
+                "key": "pitPaid",
+                "label": "TNCN đã nộp",
+                "format": "money"
+              },
+              {
+                "key": "taxDue",
+                "label": "Thuế còn phải nộp",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "S5-HKD",
+            "title": "Sổ theo dõi tiền lương và các khoản trích theo lương",
+            "rows": [],
+            "columns": [
+              {
+                "key": "date",
+                "label": "Ngày",
+                "format": "date"
+              },
+              {
+                "key": "code",
+                "label": "Chứng từ"
+              },
+              {
+                "key": "description",
+                "label": "Nội dung"
+              },
+              {
+                "key": "hours",
+                "label": "Giờ công"
+              },
+              {
+                "key": "salary",
+                "label": "Tiền lương",
+                "format": "money"
+              },
+              {
+                "key": "contributions",
+                "label": "Các khoản trích",
+                "format": "money"
+              },
+              {
+                "key": "salaryPaid",
+                "label": "Đã trả",
+                "format": "money"
+              },
+              {
+                "key": "salaryDue",
+                "label": "Còn phải trả",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "S6-HKD",
+            "title": "Sổ quỹ tiền mặt",
+            "rows": [],
+            "columns": [
+              {
+                "key": "date",
+                "label": "Ngày",
+                "format": "date"
+              },
+              {
+                "key": "code",
+                "label": "Chứng từ"
+              },
+              {
+                "key": "description",
+                "label": "Nội dung"
+              },
+              {
+                "key": "accountName",
+                "label": "Tài khoản"
+              },
+              {
+                "key": "incoming",
+                "label": "Thu",
+                "format": "money"
+              },
+              {
+                "key": "outgoing",
+                "label": "Chi",
+                "format": "money"
+              },
+              {
+                "key": "balance",
+                "label": "Số dư",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "S7-HKD",
+            "title": "Sổ tiền gửi ngân hàng",
+            "rows": [
+              {
+                "id": "opening-0ee1dedc-977d-4ebb-8b19-0ce28a4adedb",
+                "date": "2026-12-31",
+                "code": "",
+                "description": "Số dư đầu kỳ",
+                "accountName": "QA2-IMPORT-1794335876907-BANK-A",
+                "incoming": 0,
+                "outgoing": 0,
+                "balance": 1206652
+              },
+              {
+                "id": "opening-823f1a22-55cc-4761-87ef-b75fb268c3ab",
+                "date": "2026-12-31",
+                "code": "",
+                "description": "Số dư đầu kỳ",
+                "accountName": "QA2-IMPORT-1794335876907-BANK-B",
+                "incoming": 0,
+                "outgoing": 0,
+                "balance": 1000000
+              }
+            ],
+            "columns": [
+              {
+                "key": "date",
+                "label": "Ngày",
+                "format": "date"
+              },
+              {
+                "key": "code",
+                "label": "Chứng từ"
+              },
+              {
+                "key": "description",
+                "label": "Nội dung"
+              },
+              {
+                "key": "accountName",
+                "label": "Tài khoản"
+              },
+              {
+                "key": "incoming",
+                "label": "Thu",
+                "format": "money"
+              },
+              {
+                "key": "outgoing",
+                "label": "Chi",
+                "format": "money"
+              },
+              {
+                "key": "balance",
+                "label": "Số dư",
+                "format": "money"
+              }
+            ]
+          }
+        ],
+        "from": "2026-12-31",
+        "to": "2026-01-01",
+        "generatedAt": "2026-11-10T18:37:59.014Z",
+        "legalBasis": "Bảng đối chiếu quản trị theo cấu trúc TT88 cũ; không phải bộ sổ HKD hiện hành. Từ 2026, chọn mẫu theo TT152/2025/TT-BTC và phương pháp thuế của đơn vị.",
+        "taxNote": "VAT đầu vào chỉ khấu trừ khi đánh dấu inputVatDeductible sau khi kiểm tra điều kiện. HKD tính riêng tỷ lệ GTGT/TNCN trên doanh thu."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/sme?from=banana&to=potato",
+      "status": 200,
+      "response": {
+        "from": "banana",
+        "to": "potato",
+        "books": [
+          {
+            "code": "SME-NKC",
+            "title": "Nhật ký nghiệp vụ quản trị",
+            "rows": [],
+            "columns": [
+              {
+                "key": "date",
+                "label": "Ngày",
+                "format": "date"
+              },
+              {
+                "key": "code",
+                "label": "Chứng từ"
+              },
+              {
+                "key": "description",
+                "label": "Nội dung"
+              },
+              {
+                "key": "debitAccount",
+                "label": "TK Nợ"
+              },
+              {
+                "key": "creditAccount",
+                "label": "TK Có"
+              },
+              {
+                "key": "debit",
+                "label": "Số tiền",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-TK",
+            "title": "Phát sinh tài khoản trong kỳ",
+            "rows": [],
+            "columns": [
+              {
+                "key": "account",
+                "label": "Tài khoản"
+              },
+              {
+                "key": "debit",
+                "label": "Phát sinh Nợ",
+                "format": "money"
+              },
+              {
+                "key": "credit",
+                "label": "Phát sinh Có",
+                "format": "money"
+              },
+              {
+                "key": "net",
+                "label": "Chênh lệch Nợ − Có",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-KHO",
+            "title": "Giá trị tồn nguyên vật liệu và thành phẩm",
+            "rows": [],
+            "columns": [
+              {
+                "key": "code",
+                "label": "Mã"
+              },
+              {
+                "key": "name",
+                "label": "Mặt hàng"
+              },
+              {
+                "key": "unit",
+                "label": "ĐVT"
+              },
+              {
+                "key": "stock",
+                "label": "Số lượng"
+              },
+              {
+                "key": "stockValue",
+                "label": "Giá trị tồn",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-GT",
+            "title": "Chi phí theo lệnh và sản xuất dở dang",
+            "rows": [],
+            "columns": [
+              {
+                "key": "code",
+                "label": "Lệnh"
+              },
+              {
+                "key": "productName",
+                "label": "Sản phẩm"
+              },
+              {
+                "key": "materialCost",
+                "label": "Vật tư",
+                "format": "money"
+              },
+              {
+                "key": "laborCost",
+                "label": "Nhân công",
+                "format": "money"
+              },
+              {
+                "key": "machineCost",
+                "label": "Máy phân bổ",
+                "format": "money"
+              },
+              {
+                "key": "finishedValue",
+                "label": "Đã nhập thành phẩm",
+                "format": "money"
+              },
+              {
+                "key": "wip",
+                "label": "Dở dang",
+                "format": "money"
+              }
+            ]
+          },
+          {
+            "code": "SME-CN",
+            "title": "Công nợ và tiền chưa phân bổ",
+            "rows": [],
+            "columns": [
+              {
+                "key": "name",
+                "label": "Đối tác"
+              },
+              {
+                "key": "type",
+                "label": "Loại"
+              },
+              {
+                "key": "opening",
+                "label": "Đầu kỳ",
+                "format": "money"
+              },
+              {
+                "key": "openBalance",
+                "label": "Còn nợ hóa đơn",
+                "format": "money"
+              },
+              {
+                "key": "unallocatedAdvance",
+                "label": "Tiền chưa phân bổ",
+                "format": "money"
+              }
+            ]
+          }
+        ],
+        "summary": {
+          "revenue": 0,
+          "cogs": 0,
+          "grossProfit": 0,
+          "operatingExpense": 0,
+          "financeExpense": 0,
+          "financeIncome": 0,
+          "operatingProfit": 0,
+          "rawMaterials": 0,
+          "finishedGoods": 0,
+          "wip": 0,
+          "debit": 0,
+          "credit": 0
+        },
+        "warnings": [],
+        "note": "Sổ quản trị SME từ các chứng từ đã ghi nhận. Chưa gồm khấu hao, trích trước, thuế TNDN và bút toán khóa sổ; không thay thế bộ báo cáo tài chính hoặc tờ khai thuế.",
+        "settings": {
+          "currency": "VND",
+          "taxMethod": "VAT_CREDIT",
+          "fiscalYearStart": "01-01",
+          "accountingRegime": "TT133",
+          "defaultWarehouse": "Kho chính",
+          "inventoryCostMethod": "MOVING_AVERAGE"
+        }
+      }
+    }
+  ]
+}
